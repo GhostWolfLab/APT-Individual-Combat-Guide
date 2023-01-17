@@ -28,6 +28,7 @@ SchTasks /Create /SC MINUTE /MO 2 /TN \"LocalReportHealth\" /TR \"cmd.exe /c cer
 4. BondUpdater木马文件会在受害者启用钓鱼文档的宏时下载两个文件:
 
 >	C:\ProgramData\WindowsAppPool\AppPool.vbs
+
 >	C:\ProgramData\WindowsAppPool\AppPool.ps1
 
 宏通过执行:wscript C:\ProgramData\WindowsAppPool\AppPool.vbs命令创建计划任务为cmd.exe /C schtasks /create /F /sc minute /mo 1 /tn "\WindowsAppPool\AppPool" /tr "wscript /b "C:\ProgramData\WindowsAppPool\AppPool.vbs""，使其BondUpdater含有持久性.
