@@ -5,6 +5,7 @@
 1. depended.exe负载会执行两个VBS脚本:
 
 > "CSIDL_SYSTEM\wscript.exe" CSIDL_PROFILE\appdata\roaming\reflect.rar //e:VBScript //b
+
 >	"CSIDL_SYSTEM\wscript.exe" CSIDL_PROFILE\appdata\local\temp\deep-thoughted. //e:VBScript //b
 
 然后会创建计划任务来确保持久性SCHTASKS /CREATE /sc minute /mo 10 /tn "deep-thoughted" /tr "wscript.exe " CSIDL_COMMON_PICTURES\deep-thoughted.ppt //e:VBScript //b" /F，该计划任务每10分钟运行一次.
