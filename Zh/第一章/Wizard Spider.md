@@ -54,7 +54,7 @@ del %0  //删除正在执行的.bat脚本
 
 2. 投递的TrickBot恶意软件会通过修改注册表HKLM\System\CurrentControlSet\Control\SecurityProviders\WDigest的UseLogonCredential值为1.将UseLogonCredential值设置为"1"可将Windows操作系统配置为将凭据以明文形式存储在内存中，然后通过使用凭据转储工具检索凭据.
 
-3. 通过Bazar加载Ryuk勒索软件会通过WMI尝试横向执行恶意DLL文件:wmic /node:"DC.example.domain" process call create "rundll32 C:\PerfLogs\arti64.dll, StartW".在横向时还会尝试使用powershell -nop -exec bypass -EncodedCommand Base64字符串，下载可执行文件和禁用Windows Defender.
+3. 通过Bazar加载Ryuk勒索软件会通过WMI尝试横向执行恶意DLL文件:wmic /node:"DC.example.domain" process call create "rundll32 C:\PerfLogs\arti64.dll, StartW".在横向时还会尝试使用"powershell -nop -exec bypass -EncodedCommand Base64字符串，下载可执行文件和禁用Windows Defender.
 
 然后该恶意软件会通过下载adfind.exe应用程序收集Active Directory信息.
 
