@@ -98,3 +98,4 @@ cat active
 
 for x in 80 8080 443; do nmap -Pn --host-timeout 201 --max-retries 0 -p $x IP地址段; done
 //枚举地址段端口状态
+```
