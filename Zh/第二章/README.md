@@ -152,6 +152,7 @@ ffuf -u IP地址或域名/FUZZ -w 字典文件 -recursion -e .文件后缀 -c
 #### 字典文件
 
 https://github.com/danielmiessler/SecLists/tree/master/Discovery/Web-Content
+https://github.com/danielmiessler/SecLists/tree/master/Discovery/DNS
 
 ### 2.指纹识别
 
