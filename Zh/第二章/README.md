@@ -152,6 +152,9 @@ ffuf -u IP地址或域名/FUZZ -w 字典文件 -recursion -e .文件后缀 -c
 #### 字典文件
 
 https://github.com/danielmiessler/SecLists/tree/master/Discovery/Web-Content
+https://github.com/danielmiessler/SecLists/tree/master/Discovery/DNS
+https://github.com/duyet/bruteforce-database/blob/master/subdomains-10000.txt
+https://wordlists.assetnote.io/
 
 ### 2.指纹识别
 
