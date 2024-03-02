@@ -159,13 +159,17 @@ PostgreSQL识别：
 
 ## 3.注入类型
 
-(1) MySQL注入
+(1) MySQL
 
 [MySQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/MySQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
 
 (2) Oracle
 
 [Oracle注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/Oracle%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+
+(3) SQL Server
+
+[SQL Server注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/SQL%20Server%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
 
 ## 4.身份验证绕过
 
