@@ -105,7 +105,7 @@ MySQL识别：
 Oracle识别：
 |描述|查询语句|
 |----|----|
-|字符串拼接|id='||'oracle' --|
+|字符串拼接|id='\|\|'oracle' --|
 |函数|BITAND(1,1) –|
 |默认表|id='UNION SELECT 1 FROM v$version --|
 |错误信息|id='|
