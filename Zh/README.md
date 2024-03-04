@@ -8,6 +8,6 @@
 
 > 用于信息收集的工具、代码和命令
 
-第三章： 漏洞识别
+第三章： [漏洞利用](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0)
 
 > Web漏洞进阶技巧以及服务漏洞、中间件漏洞、系统漏洞等常见APT漏洞利用技巧
