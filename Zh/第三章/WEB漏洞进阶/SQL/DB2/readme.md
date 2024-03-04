@@ -147,9 +147,9 @@ select name, deferred_value, dbpartitionnum from sysibmadm.dbcfg
 
 默认系统数据库
 
-> +SYSIBM
-> +SYSCAT
-> +SYSSTAT
-> +SYSPUBLIC
-> +SYSIBMADM
-> +SYSTOOLs
+> + SYSIBM
+> + SYSCAT
+> + SYSSTAT
+> + SYSPUBLIC
+> + SYSIBMADM
+> + SYSTOOLs
