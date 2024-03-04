@@ -159,15 +159,15 @@ PostgreSQL识别：
 
 ## 3.注入类型
 
-(1) MySQL
+(1)MySQL
 
 [MySQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/MySQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
 
-(2) Oracle
+(2)Oracle
 
 [Oracle注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/Oracle%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
 
-(3) SQL Server
+(3)SQL Server
 
 [SQL Server注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/SQL%20Server%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
 
@@ -201,3 +201,17 @@ Payload:
 
 [login_bypass](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/login_bypass.txt)<br>
 [login_bypass2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/login_bypass2.txt)<br>
+
+## 5.数据定位
+
+MySQL：
+|描述|查询语句|
+|----|----|
+|数据库大小|SELECT table_schema “数据库名称",sum( data_length + index_length ) / 1024 / 1024 “数据库大小MB",sum( data_free )/ 1024 / 1024 “可用空间MB" FROM information_schema.TABLES GROUP BY table_schema ;|
+|关键字数据库|SELECT table_schema “数据库名称" FROM information_schema.TABLES WHERE table_schema LIKE “%passwords%" GROUP BY table_schema ;|
+|关键字表名|SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema NOT LIKE “information_schema" AND table_name LIKE “%admin%“;|
+|关键字列名|SELECT column_name, table_name FROM information_schema.columns WHERE column_name LIKE “%password%“;|
+|正则表达式匹配列值|SELECT * from 表名 WHERE cc_number REGEXP '^4[0-9]{15}$';|
+
+Oracle:
+|描述|查询语句|
