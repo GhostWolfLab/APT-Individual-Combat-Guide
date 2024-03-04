@@ -161,39 +161,39 @@ PostgreSQL识别：
 
 (1)MySQL
 
-[MySQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/MySQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+[MySQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/MySQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B.md)
 
 (2)Oracle
 
-[Oracle注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/Oracle%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+[Oracle注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/Oracle%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B.md)
 
 (3)SQL Server
 
-[SQL Server注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/SQL%20Server%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+[SQL Server注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/SQL%20Server%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B.md)
 
 (4)PostgreSQL
 
-[PostgreSQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/PostgreSQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+[PostgreSQL注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/PostgreSQL%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B.md)
 
 (5)BigQuery
 
-[BigQuery注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/BigQuery%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B)
+[BigQuery注入类型](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/BigQuery%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B.md)
 
 (6)Cassandra
 
-[Cassandra注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/Cassandra)
+[Cassandra注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/Cassandra.md)
 
 (7)DB2
 
-[DB2注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/DB2)
+[DB2注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/DB2.md)
 
 (8)HQL
 
-[HQL注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/HQL)
+[HQL注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/HQL.md)
 
 (9)SQLite
 
-[SQLite注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/SQLite)
+[SQLite注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B/SQLite.md)
 
 ## 4.身份验证绕过
 
@@ -235,3 +235,5 @@ SQL Server:
 ## 6.读写文件
 
 MySQL:
+
+[MySQL读写文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/MySQL.md)
