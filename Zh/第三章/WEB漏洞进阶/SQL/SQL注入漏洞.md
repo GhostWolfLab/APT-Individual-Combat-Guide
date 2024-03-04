@@ -237,3 +237,11 @@ SQL Server:
 MySQL:
 
 [MySQL读写文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/MySQL.md)
+
+SQL Server
+
+[SQL Server读写文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/SQL%20Server.md)
+
+PostgreSQL:
+
+[PostgreSQL读写文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/PostgreSQL.md)
