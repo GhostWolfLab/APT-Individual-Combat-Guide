@@ -263,3 +263,7 @@ SQL Server:
 PostgreSQL:
 
 [PostgreSQL命令执行](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/PostgreSQL.md)
+
+SQLite:
+
+[SQLite命令执行](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/SQLite.md)
