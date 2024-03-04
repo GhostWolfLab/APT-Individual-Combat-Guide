@@ -219,4 +219,4 @@ Oracle:
 |查找敏感数据|SELECT owner,table_name,column_name FROM all_tab_columns WHERE column_name LIKE '%PASS%';|
 |查找特殊权限|SELECT * FROM session_privs<br>SELECT * FROM USER_SYS_PRIVS<br>SELECT * FROM USER_TAB_PRIVS<br>SELECT * FROM USER_TAB_PRIVS_MADE<br>SELECT * FROM USER_TAB_PRIVS_RECD<br>SELECT * FROM ALL_TAB_PRIVS<br>SELECT * FROM USER_ROLE_PRIVS|
 |提取存储过程|SELECT * FROM all_source WHERE owner NOT IN ('SYS','SYSTEM')<br>SELECT * FROM all_source WHERE TYPE LIKE '%JAVA %'<br>SELECT TO_CHAR(DBMS_METADATA.get_ddl('TABLE','DEPT','CONSUELA')) FROM dual|
-|正则表达式|^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$<br>^(\d{3}-?\d{2}-?\d{4}|XXX-XX-XXXX)$|
+|正则表达式|\^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$<br>^(\d{3}-?\d{2}-?\d{4}|XXX-XX-XXXX)$|
