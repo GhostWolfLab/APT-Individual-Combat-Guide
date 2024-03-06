@@ -290,7 +290,7 @@ MySQL
 
 SQL Server
 
-[SQL Server持久化](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%8C%81%E4%B9%85%E5%8C%96/SQL%20Serve.md)
+[SQL Server持久化](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%8C%81%E4%B9%85%E5%8C%96/SQL%20Server.md)
 
 Oracle
 
