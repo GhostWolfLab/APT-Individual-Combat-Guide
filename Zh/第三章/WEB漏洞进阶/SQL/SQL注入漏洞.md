@@ -284,6 +284,9 @@ PostgreSQL:
 
 ## 9.持久化
 
+SQL Server
+
+[SQL Server持久化]()
 
 
 ## 10.WAF绕过
