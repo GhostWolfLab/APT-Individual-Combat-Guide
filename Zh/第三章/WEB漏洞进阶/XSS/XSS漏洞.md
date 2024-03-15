@@ -703,6 +703,14 @@ javascript://--></title></style></textarea></script><svg "//' onclick=alert()//
 
 # 其它
 
+更多payload：
+
+[XSS](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/XSS/readme.md)
+
+WAF绕过
+
+[WAF](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/XSS/waf.md)
+
 XSS字典：
 
 [SecLists](https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/XSS)
