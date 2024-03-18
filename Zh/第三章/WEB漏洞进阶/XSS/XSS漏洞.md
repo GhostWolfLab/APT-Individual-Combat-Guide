@@ -714,3 +714,5 @@ WAF绕过
 XSS字典：
 
 [SecLists](https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/XSS)
+
+[500个XSS](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/XSS/500-xss.md)
