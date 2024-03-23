@@ -456,3 +456,7 @@ submitRequest();
   </body>
 </html>
 ```
+
+## 绕过
+
+[Bypass](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/CSRF/waf.md)
