@@ -250,11 +250,11 @@ HTTPServer(("", int(sys.argv[1])), Redirect).serve_forever()
 
 反斜杠技巧利用了 WHATWG URL 标准和 RFC3986 之间的差异。 RFC3986 是 URI 的通用框架，而 WHATWG 特定于 Web URL，并被现代浏览器采用。 主要区别在于 WHATWG 标准将反斜杠 (\) 识别为与正斜杠 (/) 等效，影响 URL 的解析方式，特别是标记从主机名到 URL 中的路径的转换
 
-[spec_difference](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/spec_difference.jpg)
+![spec_difference](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/spec_difference.jpg)
 
 ## 其它
 
-[ssrf](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/ssrf.png)
+![ssrf](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/ssrf.png)
 
 
 # 混合不同编码格式
