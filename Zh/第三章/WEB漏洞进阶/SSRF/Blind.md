@@ -427,7 +427,7 @@ echo($req);
 ```
 
 通过运行任意Docker镜像进行RCE
-```http
+```
 POST /containers/create?name=test HTTP/1.1
 Host: website.com
 Content-Type: application/json
