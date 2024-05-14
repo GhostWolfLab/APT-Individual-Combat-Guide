@@ -3,17 +3,38 @@
 ## 靶机
 
 [PortSwigger](https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-java-deserialization-with-apache-commons)
+
 [java deserialize webapp](https://github.com/hvqzao/java-deserialize-webapp)
 
 ## 工具
 
-[Ysoserial](https://github.com/frohoff/ysoserial)
+[ysoserial](https://github.com/frohoff/ysoserial)
+
+[ysoserial modified](https://github.com/pimps/ysoserial-modified)
+
+[JRE8u20 RCE Gadget](https://github.com/pwntester/JRE8u20_RCE_Gadget)
+
+[jexboss](https://github.com/joaomatosf/jexboss)
+
+[SerialBrute](https://github.com/NickstaDB/SerialBrute)
+
+[SerializationDumper](https://github.com/NickstaDB/SerializationDumper)
+
+[gadgetprobe](https://labs.bishopfox.com/gadgetprobe)
+
+[marshalsec](https://github.com/mbechler/marshalsec)
+
 
 ## 检测
 
 1.白盒
 
 在代码中查找实现 Serialized 接口的类和java.io.ObjectInputStream、readObject、readUnshare 函数的使用
+
+```bash
+find . -iname "*commons*collection*"
+grep -R InvokeTransformer .
+```
 
 2.黑盒
 
@@ -29,6 +50,18 @@
 javax.faces.ViewState=rO0ABXVyABNbTGphdmEubGFuZy5PYmplY3Q7kM5YnxBzKWwCAAB4cAAAAAJwdAAML2xvZ2luLnhodG1s
 ```
 
+Burp扩展利用工具
+[Java Serial Killer](https://github.com/NetSPI/JavaSerialKiller)
+
+[Java Deserialization Scanner](https://github.com/federicodotta/Java-Deserialization-Scanner)
+
+[burp ysoserial](https://github.com/summitt/burp-ysoserial)
+
+[SuperSerial](https://github.com/DirectDefense/SuperSerial)
+
+[SuperSerial Active](https://github.com/DirectDefense/SuperSerial-Active)
+
+## 简单漏洞利用
 
 Apache Commons Collections
 ```bash
