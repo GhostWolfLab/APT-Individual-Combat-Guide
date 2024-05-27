@@ -22,7 +22,11 @@
 
 第三章： [WEB漏洞进阶](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0)
 
-> Web漏洞进阶技巧以及服务漏洞、中间件漏洞、系统漏洞等常见APT漏洞利用技巧
+> 常见Web漏洞进阶技巧
+
+第四章： [服务漏洞进阶](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0)
+
+> APT组织使用的服务漏洞以及在攻击中的常见技巧
 
 ...
 
