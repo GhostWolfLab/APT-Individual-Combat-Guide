@@ -18,5 +18,5 @@ msf> use scanner/ssh/ssh_enumusers
 
 暴力破解
 
-[默认字典](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SSH/ssh-betterdefaultpasslist.txt) /br
-[20个最常用的](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SSH/top-20-common-SSH-passwords.txt) /br
+[默认字典](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SSH/ssh-betterdefaultpasslist.txt)
+[20个最常用的](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SSH/top-20-common-SSH-passwords.txt)
