@@ -42,4 +42,5 @@ msf> use scanner/ssh/ssh_identify_pubkeys
 ```
 
 Badkeys
+
 [静态SSH密钥用于主机和身份验证，已应用于软件和硬件产品中](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SSH/Authorized)
