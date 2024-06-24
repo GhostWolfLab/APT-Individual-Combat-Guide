@@ -732,6 +732,8 @@ chmod u+s /host/bash
 ---
 注意：
 可能无法挂载文件夹 /tmp，但可以挂载其他可写文件夹。可以使用以下命令查找可写目录：find / -writable -type d 2>/dev/null
+
 Linux 机器中并非所有目录都支持 suid 位，为了检查哪些目录支持 suid 位，请运行 mount | grep -v "nosuid" 例如，通常 /dev/shm 、 /run 、 /proc 、 /sys/fs/cgroup 和 /var/lib/lxcfs 不支持 suid 位
+
 如果可以挂载/etc或任何其他包含配置文件的文件夹，可以以 root 身份从 docker 容器更改它们，以便在主机中滥用它们并提升权限（可能修改 /etc/shadow）
 ---
