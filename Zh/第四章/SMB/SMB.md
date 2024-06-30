@@ -24,10 +24,13 @@ searchsploit microsoft smb
 ```Bash
 nmap -p 139,445 --script=smb-os-discovery.nse IP地址  //扫描IP地址的SMB服务及版本
 nmap --script smb-vuln* -p 139,445 IP地址  //检测SMB服务是否存在漏洞
+nmap --script smb-enum-shares -p139,445 IP地址  //列出共享
 enum4linux -a IP地址  //获取RID 范围、用户名、工作组、Nbtstat、会话、SID、系统等信息
 enum4linux -a -l -s IP地址  //枚举共享目录
 smbmap -H IP地址  //枚举整域共享和权限
 smbclient -L //<目标IP>  //列出目标系统上的SMB共享
+nmblookup -A IP地址 //枚举主机名
+nbtscan IP地址  //枚举主机名
 
 Metasploit
 auxiliary/scanner/smb/smb_version  //扫描版本
@@ -40,4 +43,29 @@ if [ ! -z $2 ]; then rport=$2; else rport=139; fi
 tcpdump -s0 -n -i tap0 src $rhost and port $rport -A -c 7 2>/dev/null | grep -i "samba\|s.a.m" | tr -d '.' | grep -oP 'UnixSamba.*[0-9a-z]' | tr -d '\n' & echo -n "$rhost: " &
 echo "exit" | smbclient -L $rhost 1>/dev/null 2>/dev/null
 echo "" && sleep .1
+```
+
+### 凭据枚举信息
+
+```Bash
+enum4linux -a -u 用户名 -p 密码 IP地址  //额外的组、组成员、SID等信息
+
+cd /usr/share/doc/python3-impacket/examples
+python samrdump.py -port 445 域/用户名:密码@目标IP地址  //列出所有系统共享、用户账户及目标IP地址在本地网络中存储的其它信息
+python rpcdump.py -port 445 域/用户名:密码@IP地址  //列出所有注册的RPC端点
+
+smbmap -H 192.168.1.17 -u [username] -p [password]  //枚举共享
+crackmapexec smb 192.168.1.0/24 -u 用户名 -p '密码' --shares  //列出共享
+
+# 枚举共享并连接和下载文件
+smbclient -L IP地址
+smbclient //IP地址/共享目录
+get file.txt
+
+# Metasploit枚举共享
+use auxiliary/scanner/smb/smb_enumshares
+set rhosts IP地址
+smbuser [username]
+smbuser [password]
+exploit
 ```
