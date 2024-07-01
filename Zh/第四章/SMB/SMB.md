@@ -69,3 +69,42 @@ smbuser [username]
 smbuser [password]
 exploit
 ```
+
+### 枚举用户
+
+```Bash
+crackmapexec smb IP地址 -u 用户名 -p 密码 --users  //枚举目标IP地址用户
+crackmapexec smb IP地址 -u 用户名 -p 密码 --groups  //枚举域组
+crackmapexec smb IP地址 -u 用户名 -p 密码 --groups --loggedon-users  //枚举域组和登录用户信息
+
+rpcclient -U "用户名%密码" IP地址
+enumdomusers  //列出域用户
+enumdomgroups  //列出域组
+netshareenum  //列出共享驱动器
+netshareenumall  //列出所有共享驱动器
+queryuser [RID]  //查看特定用户信息
+
+rpcclient -U "用户名%密码" -c '命令' <目标IP>  //登录到远程机器
+rpcclient -U "用户名%密码" -c 'enumdomusers' <目标IP>  //列出域用户
+rpcclient -U "用户名%密码" -c 'queryuser 用户ID' <目标IP>  //获取特定用户的信息
+
+
+Metaslpoit
+auxiliary/scanner/smb/smb_lookupsid
+
+/usr/share/doc/python3-impacket/examples
+python lookupsid.py 域/用户名:密码@目标IP地址  //枚举到的本地用户和域用户
+
+ldapsearch -x -b "DC=[Domain Name],DC=LOCAL" -s sub "(&(objectclass=user))" -h [IP地址] | grep -i samaccountname: | cut -f 2 -d " "
+
+for i in $(seq 500 1100);do rpcclient -N -U "" [IP地址] -c "queryuser 0x$(printf '%x\n' $i)" | grep "User Name\|user_rid\|group_rid" && echo "";done
+```
+
+### windows枚举
+
+```Bash
+net view \\IP地址 /all  //列出目标计算机上的所有共享
+nbtstat -A IP地址  //读取本地计算机和远程计算机的 NetBIOS 名称表
+net user \\IP地址\share  //连接指定共享目录
+net use
+```
