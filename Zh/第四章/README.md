@@ -9,3 +9,5 @@
 ### 4.4 [Docker服务](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/Docker/Docker.md)
 
 ### 4.5 [SMB服务](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/SMB/SMB.md)
+
+### 4.6 [Redis服务](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0/Redis/Redis.md)
