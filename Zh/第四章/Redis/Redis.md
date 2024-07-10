@@ -66,6 +66,8 @@ MODULE LOAD /etc/redis/malicious_module.so
 malicious_command
 ```
 
+[更多模块](https://github.com/n0b0dyCN/RedisModules-ExecuteCommand)
+
 3.
 ```Bash
 redis-cli CONFIG SET notify-keyspace-events "Ex"
