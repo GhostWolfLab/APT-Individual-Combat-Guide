@@ -14,4 +14,6 @@
 
 第四章： [服务漏洞进阶](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%9B%9B%E7%AB%A0)
 
+第五章： [木马](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0)
+
 > APT组织使用的服务漏洞以及在攻击中的常见技巧

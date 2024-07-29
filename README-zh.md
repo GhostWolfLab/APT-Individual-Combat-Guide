@@ -28,6 +28,10 @@
 
 > APT组织使用的服务漏洞以及在攻击中的常见技巧
 
+第五章： [木马](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0)
+
+> 编写恶意软件及恶意软件技巧
+
 ...
 
 ## 待更新......

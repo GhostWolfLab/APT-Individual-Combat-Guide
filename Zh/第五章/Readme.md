@@ -1,4 +1,4 @@
-# RAT制作
+## RAT介绍
 
 ## Shellcode
 
@@ -385,3 +385,9 @@ Cobalt Strike
 ```Bash
 在Cobalt Strike中，选择“Attacks” -> “Packages” -> “Payload Generator”，然后选择目标平台和Payload类型，生成Shellcode
 ```
+
+## APC注入
+
+### Early Bird APC队列代码注入
+
+[calc.cpp](calc.cpp)
