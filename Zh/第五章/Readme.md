@@ -390,4 +390,4 @@ Cobalt Strike
 
 ### Early Bird APC队列代码注入
 
-[calc.cpp](calc.cpp)
+[calc.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/APC/calc.cpp)
