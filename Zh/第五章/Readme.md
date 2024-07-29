@@ -391,3 +391,31 @@ Cobalt Strike
 ### Early Bird APC队列代码注入
 
 [calc.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/APC/calc.cpp)
+
+编译
+```Bash
+x86_64-w64-mingw32-gcc calc.cpp -o evil_calc.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc
+```
+
+### NtTestAlert函数
+
+[nttest.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/APC/nttest.cpp)
+
+编译
+```Bash
+x86_64-w64-mingw32-gcc calc.cpp -o evil_calc.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc
+```
+
+### 远程线程中的APC注入
+
+[rev.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/APC/rev.cpp)
+
+编译
+```Bash
+x86_64-w64-mingw32-g++ -O2 rev.cpp -o rev.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+目标主机
+```powershell
+.\rev.exe notepad.exe
+```
