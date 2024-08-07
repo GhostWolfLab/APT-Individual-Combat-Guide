@@ -443,3 +443,9 @@ x86_64-w64-mingw32-g++ -O2 msf.cpp -o msf.exe -mconsole -I /usr/share/mingw-w64/
 ```Bash
 x86_64-w64-mingw32-g++ -O2 thread_hijacking.cpp -o thread_hijacking.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 ```
+
+固定PID
+
+[ThreadHijacking.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ThreadHijacking.cpp)
+
+[TH.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/TH.cpp)
