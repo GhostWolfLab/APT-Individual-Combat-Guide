@@ -463,3 +463,5 @@ x86_64-w64-mingw32-g++ -O2 thread_hijacking.cpp -o thread_hijacking.exe -mconsol
 3.
 
 [Process-Hollowing](https://github.com/m0n0ph1/Process-Hollowing/)
+
+[ProcessHollowing.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ProcessHollowing.cpp)
