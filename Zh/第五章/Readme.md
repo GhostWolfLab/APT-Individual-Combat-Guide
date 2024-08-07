@@ -481,4 +481,10 @@ x86_64-w64-mingw32-g++ -O2 fibers.cpp -o fibers.exe -mconsole -I /usr/share/ming
 
 ### NtAllocateVirtualMemory
 
+1.
+
 [ntallocatevirtualmemory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ntallocatevirtualmemory.cpp)
+
+2.
+
+[Nt_AllocateVirtualMemory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Nt_AllocateVirtualMemory.cpp)
