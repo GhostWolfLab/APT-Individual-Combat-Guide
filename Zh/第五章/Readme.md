@@ -449,3 +449,17 @@ x86_64-w64-mingw32-g++ -O2 thread_hijacking.cpp -o thread_hijacking.exe -mconsol
 [ThreadHijacking.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ThreadHijacking.cpp)
 
 [TH.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/TH.cpp)
+
+### 进程空洞
+
+1.
+
+[process-hollowing.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/process-hollowing.cpp)
+
+2.
+
+[process_hollowing.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/process_hollowing.cpp)
+
+3.
+
+[Process-Hollowing](https://github.com/m0n0ph1/Process-Hollowing/)
