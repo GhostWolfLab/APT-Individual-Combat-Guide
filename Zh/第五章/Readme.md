@@ -465,3 +465,15 @@ x86_64-w64-mingw32-g++ -O2 thread_hijacking.cpp -o thread_hijacking.exe -mconsol
 [Process-Hollowing](https://github.com/m0n0ph1/Process-Hollowing/)
 
 [ProcessHollowing.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ProcessHollowing.cpp)
+
+### Windows Fibers
+
+[fibers.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/fibers.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 fibers.cpp -o fibers.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+固定PID
+
+[Windows-Fibers.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Windows-Fibers.cpp)
