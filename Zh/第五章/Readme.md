@@ -477,3 +477,8 @@ x86_64-w64-mingw32-g++ -O2 fibers.cpp -o fibers.exe -mconsole -I /usr/share/ming
 固定PID
 
 [Windows-Fibers.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Windows-Fibers.cpp)
+
+
+### NtAllocateVirtualMemory
+
+[ntallocatevirtualmemory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ntallocatevirtualmemory.cpp)
