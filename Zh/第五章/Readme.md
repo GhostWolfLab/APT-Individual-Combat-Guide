@@ -492,3 +492,9 @@ x86_64-w64-mingw32-g++ ntallocatevirtualmemory.cpp -o ntallocatevirtualmemory.ex
 2.
 
 [Nt_AllocateVirtualMemory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Nt_AllocateVirtualMemory.cpp)
+
+### Memory Sections
+
+1.
+
+[memory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/memory.cpp)
