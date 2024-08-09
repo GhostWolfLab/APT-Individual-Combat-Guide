@@ -544,3 +544,18 @@ x86_64-w64-mingw32-g++ zwcreatesection.cpp -o zwcreatesection.exe -mconsole -I /
 2.
 
 [Zw_CreateSection.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Zw_CreateSection.cpp)
+
+
+### ZwQueueApcThread
+
+1.
+
+[ZwQueueApcThread.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ZwQueueApcThread.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ ZwQueueApcThread.cpp -o ZwQueueApcThread.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+2.
+
+[Zw_QueueApcThread.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Zw_QueueApcThread.cpp)
