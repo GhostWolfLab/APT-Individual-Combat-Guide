@@ -518,6 +518,29 @@ memory.exe mspaint.exe
 
 [ntopenprocess.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ntopenprocess.cpp)
 
+```Bash
+x86_64-w64-mingw32-g++ ntopenprocess.cpp -o ntopenprocess.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+目标主机
+```Bash
+.\ntopenprocess.exe 进程PID值
+```
+
 2.
 
 [Nt_OpenProcess.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Nt_OpenProcess.cpp)
+
+### ZwCreateSection
+
+1.
+
+[zwcreatesection.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/zwcreatesection.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ zwcreatesection.cpp -o zwcreatesection.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+2.
+
+[Zw_CreateSection.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Zw_CreateSection.cpp)
