@@ -498,3 +498,26 @@ x86_64-w64-mingw32-g++ ntallocatevirtualmemory.cpp -o ntallocatevirtualmemory.ex
 1.
 
 [memory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/memory.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ memory.cpp -o memory.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-function-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+目标主机
+```Bash
+memory.exe mspaint.exe
+```
+
+2.
+
+[Memory_Section.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Memory_Section.cpp)
+
+### NtOpenProcess
+
+1.
+
+[ntopenprocess.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/ntopenprocess.cpp)
+
+2.
+
+[Nt_OpenProcess.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Nt_OpenProcess.cpp)
