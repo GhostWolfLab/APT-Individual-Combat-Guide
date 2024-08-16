@@ -571,3 +571,7 @@ x86_64-w64-mingw32-g++ ZwQueueApcThread.cpp -o ZwQueueApcThread.exe -mconsole -I
 [Zw_QueueApcThread.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Code_Injection/Zw_QueueApcThread.cpp)
 
 ## DLL注入
+
+### 简单DLL注入
+
+[wolf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Injection/wolf.cpp)
