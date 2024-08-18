@@ -644,6 +644,8 @@ x86_64-w64-mingw32-gcc -shared -o ReflectiveLoader.dll ReflectiveLoader.cpp
 x86_64-w64-mingw32-g++ -O2 ReflectiveInjector.cpp -o ReflectiveInjector.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 ```
 
+[ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection)
+
 ### Shellcode DLL反射
 
 ```Bash
@@ -661,5 +663,7 @@ x86_64-w64-mingw32-gcc -shared -o DLLReflective.dll DLLReflective.cpp
 ```Bash
 x86_64-w64-mingw32-g++ -O2 dll_reflective_injection.cpp -o dll_reflective_injection.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 ```
+
+[sRDI](https://github.com/monoxgas/sRDI)
 
 ### 先写到这，我感觉写完这里，我已经强的可怕
