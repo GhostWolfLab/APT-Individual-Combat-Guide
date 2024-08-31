@@ -673,3 +673,10 @@ x86_64-w64-mingw32-g++ -O2 dll_reflective_injection.cpp -o dll_reflective_inject
 [Process Monitor v4.01](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon)
 
 示例DLL劫持程序 [BgInfo v4.32](https://learn.microsoft.com/en-us/sysinternals/downloads/bginfo)
+
+查看目录读写权限
+```Bash
+icacls C:\Users\...\Downloads\BGInfo\
+```
+
+[SspiCli.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/SspiCli.cpp)
