@@ -762,3 +762,9 @@ malicious_dll.cpp
 v
 
 [malicious.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/malicious.cpp)
+
+```Bash
+cl /LD malicious_dll.cpp /link /DLL /OUT:target.dll
+```
+
+## 持久化
