@@ -680,3 +680,29 @@ icacls C:\Users\...\Downloads\BGInfo\
 ```
 
 [SspiCli.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/SspiCli.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc  SspiCli.cpp -shared -o SspiCli.dll
+```
+
+执行系统命令
+
+[dll_command.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/dll_command.cpp)
+
+### 导入函数
+
+[CFF Explorer](https://ntcore.com/explorer-suite/)
+
+malicious_dll.cpp
+
+[malicious_dll.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/malicious_dll.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc malicious_dll.cpp -shared -o malicious.dll
+```
+
+[inject.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/inject.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -O2 inject.cpp -o inject.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
