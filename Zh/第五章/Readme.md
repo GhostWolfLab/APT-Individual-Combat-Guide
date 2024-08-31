@@ -706,3 +706,59 @@ x86_64-w64-mingw32-gcc malicious_dll.cpp -shared -o malicious.dll
 ```Bash
 x86_64-w64-mingw32-gcc -O2 inject.cpp -o inject.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
 ```
+
+### 导出函数
+
+def.py
+
+[def.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/def.py)
+
+[import.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/import.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -shared -o import.dll import.cpp
+python3 def.py import.dll
+```
+
+import_hijack.cpp
+
+[import_hijack.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/import_hijack.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -O2 import_hijack.cpp -o import_hijack.exe -mconsole -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive >/dev/null 2>&1
+```
+
+evil.cpp
+
+[evil.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/evil.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o evil.dll evil.cpp import.def -s
+```
+
+### OEP
+
+oep.cpp
+
+[oep.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/oep.cpp)
+
+x86_64-w64-mingw32-g++ -shared -o oep.dll oep.cpp
+
+### Ghost DLL
+
+ghost_dll.cpp
+
+[ghost_dll.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/ghost_dll.cpp)
+
+```Bash
+cl /LD ghost_dll.cpp /link /DLL /OUT:target.dll
+```
+
+### DLL Main
+
+malicious_dll.cpp
+
+|
+v
+
+[malicious.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/DLL_Hijacking/malicious.cpp)
