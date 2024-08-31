@@ -666,4 +666,10 @@ x86_64-w64-mingw32-g++ -O2 dll_reflective_injection.cpp -o dll_reflective_inject
 
 [sRDI](https://github.com/monoxgas/sRDI)
 
-### 先写到这，我感觉写完这里，我已经强的可怕
+## DLL劫持
+
+### 实现DLL劫持
+
+[Process Monitor v4.01](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon)
+
+示例DLL劫持程序 [BgInfo v4.32](https://learn.microsoft.com/en-us/sysinternals/downloads/bginfo)
