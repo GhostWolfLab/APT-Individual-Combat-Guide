@@ -1038,3 +1038,16 @@ Stop-Service -Name Spooler -Force
 Copy-Item -Path "C:\Windows\System32\spoolsv.exe.bak" -Destination "C:\Windows\System32\spoolsv.exe" -Force
 Start-Service -Name Spooler
 ```
+
+### 默认文件扩展名劫持
+
+[txt.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/txt.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 txt.cpp -o txt.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions
+```
+
+```Bash
+reg query "HKCR\txtfile\shell\open\command" /s
+reg add "HKEY_CLASSES_ROOT\txtfile\shell\open\command" /ve /t REG_EXPAND_SZ /d "%SystemRoot%\system32\NOTEPAD.EXE %1"
+```
