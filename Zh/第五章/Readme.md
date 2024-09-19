@@ -1086,3 +1086,16 @@ $PROFILE | select *
 ```Bash
 x86_64-w64-mingw32-g++ -O2 config_powershell.cpp -o config_powershell.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 ```
+
+### 辅助功能
+
+[sethc.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/sethc.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 sethc.cpp -o sethc.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /s
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" -Force -Verbose
+```
