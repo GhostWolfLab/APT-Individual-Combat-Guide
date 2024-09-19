@@ -1051,3 +1051,21 @@ x86_64-w64-mingw32-g++ -O2 txt.cpp -o txt.exe -I/usr/share/mingw-w64/include/ -s
 reg query "HKCR\txtfile\shell\open\command" /s
 reg add "HKEY_CLASSES_ROOT\txtfile\shell\open\command" /ve /t REG_EXPAND_SZ /d "%SystemRoot%\system32\NOTEPAD.EXE %1"
 ```
+
+### IFEO
+
+[ifeo.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/ifeo.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 ifeo.cpp -o ifeo.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+[ifeo_debug.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/ifeo_debug.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 ifeo_debug.cpp -o ifeo_debug.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```Bash
+Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mspaint.exe" -Name 'Debugger'
+```
