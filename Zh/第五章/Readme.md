@@ -1253,3 +1253,11 @@ x86_64-w64-mingw32-g++ -O2 cleanup.cpp -o cleanup.exe -I /usr/share/mingw-w64/in
 ```powershell
 reg query "HKEY_CURRENT_USER\Software\Classes\CLSID\{8369AB20-56C9-11D0-94E8 -00AA0059CE02}" /s
 ```
+
+### LNK文件
+
+[wolf.ps1](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/wolf.ps1)
+
+```powershell
+Get-Content wolf.ps1 | PowerShell.exe -noprofile -
+```
