@@ -1261,3 +1261,11 @@ reg query "HKEY_CURRENT_USER\Software\Classes\CLSID\{8369AB20-56C9-11D0-94E8 -00
 ```powershell
 Get-Content wolf.ps1 | PowerShell.exe -noprofile -
 ```
+
+### 恶意符号链接
+
+[symlink.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/symlink.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 symlink.cpp -o symlink.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
