@@ -1118,3 +1118,16 @@ x86_64-w64-mingw32-g++ -O2 uninstall.cpp -o uninstall.exe -I /usr/share/mingw-w6
 ```powershell
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinRAR archiver" /v "UninstallString" /t REG_SZ /d "C:\Program Files\WinRAR\uninstall.exe" /f
 ```
+
+### 事件查看器
+
+[windows_event.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/windows_event.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 windows_event.cpp -o windows_event.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Event Viewer" /s
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Event Viewer" /v "MicrosoftRedirectionUrl" /t REG_SZ /d "http://go.microsoft.com/fwlink/events.asp" /f
+```
