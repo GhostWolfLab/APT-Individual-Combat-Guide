@@ -778,3 +778,18 @@ cl /LD malicious_dll.cpp /link /DLL /OUT:target.dll
 + HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce
 
 [wolf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/wolf.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 wolf.cpp -o wolf.exe -mwindows -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+[run.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/run.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 run.cpp -o run.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+Set-ItemProperty -Path "注册表路径" -Name "MaliciousSoftware" -Value "恶意文件目录"
+Remove-ItemProperty -Path "注册表路径" -Name "名称"
+```
