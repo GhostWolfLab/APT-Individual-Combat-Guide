@@ -1175,3 +1175,11 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start 
 reg query "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main" /s
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start Page" /t REG_SZ /d "about:blank" /f
 ```
+
+### 网络配置
+
+[edge.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/edge.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 edge.cpp -o edge.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
