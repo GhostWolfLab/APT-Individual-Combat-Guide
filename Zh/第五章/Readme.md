@@ -768,3 +768,13 @@ cl /LD malicious_dll.cpp /link /DLL /OUT:target.dll
 ```
 
 ## 持久化
+
+### 启动项持久化
+
+1、注册表Run
+
++ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
++ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
++ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce
+
+[wolf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/wolf.cpp)
