@@ -1294,3 +1294,22 @@ x86_64-w64-mingw32-g++ -O2 UIMLS.cpp -o UIMLS.exe -I/usr/share/mingw-w64/include
 reg query "HKCU\Environment" /s
 Remove-ItemProperty -Path "HKCU:\Environment" -Name "UserInitMprLogonScript"
 ```
+
+### CLSID
+
++	我的电脑：{20d04fe0-3aea-1069-a2d8-08002b30309d}
++	我的文档：{450d8fba-ad25-11d0-98a8-0800361b1103}
++	网上邻居：{208d2c60-3aea-1069-a2d7-08002b30309d}
++	网络计算机：{1f4de370-d627-11d1-ba4f-00a0c91eedba}
++	打印机和传真机：{2227a280-3aea-1069-a2de-08002b30309d}
++	回收站：{645ff040-5081-101b-9f08-00aa002f954e}
+
+[clsid.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/clsid.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 clsid.cpp -o clsid.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell" -s
+```
