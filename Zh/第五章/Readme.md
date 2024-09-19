@@ -1283,3 +1283,14 @@ reg query "HKLM\SOFTWARE\Microsoft\Cryptography\Offload" /s
 ```
 
 ### UserInitMprLogonScript
+
+[UIMLS.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/UIMLS.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 UIMLS.cpp -o UIMLS.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```powershell
+reg query "HKCU\Environment" /s
+Remove-ItemProperty -Path "HKCU:\Environment" -Name "UserInitMprLogonScript"
+```
