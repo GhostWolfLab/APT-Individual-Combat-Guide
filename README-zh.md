@@ -30,7 +30,11 @@
 
 第五章： [木马](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0)
 
-> 编写恶意软件及恶意软件技巧
+> APT组织编写的木马方式
+
+第六章： [恶意软件技巧](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0)
+
+> APT攻击中使用的恶意软件技巧实现
 
 ...
 
