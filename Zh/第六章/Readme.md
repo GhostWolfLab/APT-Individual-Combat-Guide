@@ -324,3 +324,41 @@ x86_64-w64-mingw32-g++ -O2 mc.cpp -o mc.exe -I/usr/share/mingw-w64/include/ -s -
 1. 获取网络适配器信息
 
 [GetAdaptersInfo.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/GetAdaptersInfo.cpp)
+
+2. 枚举网络资源
+
+[WNetEnumResourceA](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/WNetEnumResourceA.cpp)
+
+3. 枚举子网存活主机
+
+[枚举子网存活主机](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举子网存活主机.cpp)
+
+```bash
+cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib iphlpapi.lib
+```
+
+4. 开放端口扫描
+
+[开放端口扫描](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/开放端口扫描.cpp)
+
+```bash
+cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib iphlpapi.lib
+.\.exe可执行程序 IP地址 1 100 20
+```
+
+#### 服务枚举
+
+1. 枚举网络类型的提供程序名称
+
+[枚举网络类型的提供程序名称](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举网络类型的提供程序名称.cpp)
+
+2. 枚举服务
+
+[枚举服务](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举服务.cpp)
+
+```bash
+cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib iphlpapi.lib
+.\.exe可执行程序 IP地址 1 100 20
+```
+
+#### 流量分析
