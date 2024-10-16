@@ -471,3 +471,13 @@ x86_64-w64-mingw32-g++ -O2 i_token.cpp -o i_token.exe -I/usr/share/mingw-w64/inc
 Get-Process winlogon
 i_token.exe PID
 ```
+
+### 远程执行
+
+[ssh_execute.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/ssh_execute.cpp)
+
+```bash
+g++ ssh_execute.cpp -o ssh_execute -lssh2
+```
+
+## 数据窃取
