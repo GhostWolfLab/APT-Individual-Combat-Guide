@@ -395,3 +395,28 @@ cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib
 ```bash
 .\exe可执行程序 文件名 D:\
 ```
+
+#### 注册表枚举
+
++	系统启动项：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run和HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run。
++	网络配置：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters。
++	用户账户信息：HKEY_LOCAL_MACHINE\SAM\SAM\Domains\Account\Users。
++	用户最近使用的文件：HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs。
++	已安装的软件列表：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall和HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall
++	应用程序设置：HKEY_CURRENT_USER\Software（包含用户安装的应用程序的配置信息）。
++	浏览器历史记录和缓存：HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\TypedURLs和HKEY_CURRENT_USER\Software\Google\Chrome\PreferenceMACs。
++	远程桌面连接信息：HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default。
+
+[注册表枚举](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/注册表枚举.cpp)
+
+```bash
+.\可执行程序.exe HKEY_LOCAL_MACHINE SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run
+```
+
+#### 枚举系统信息
+
+[枚举系统信息](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举系统信息.cpp)
+
+[枚举系统设备驱动程序](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举系统设备驱动程序.cpp)
+
+[枚举磁盘卷空间信息](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举磁盘卷空间信息.cpp)
