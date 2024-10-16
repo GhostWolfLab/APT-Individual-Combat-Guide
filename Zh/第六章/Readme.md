@@ -316,3 +316,11 @@ x86_64-w64-mingw32-g++ -O2 mc.cpp -o mc.exe -I/usr/share/mingw-w64/include/ -s -
 ```
 
 ## 横向移动
+
+### 侦察
+
+#### 网络扫描
+
+1. 获取网络适配器信息
+
+[GetAdaptersInfo.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/GetAdaptersInfo.cpp)
