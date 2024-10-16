@@ -362,3 +362,36 @@ cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib
 ```
 
 #### 流量分析
+
+[监听流量](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/监听流量.cpp)
+
+```bash
+cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib iphlpapi.lib
+.\.exe可执行程序 监听协议 IP地址 80
+```
+
+#### 枚举进程
+
+[枚举进程](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举进程.cpp)
+
+```bash
+cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib iphlpapi.lib
+.\可执行程序 进程名称
+```
+
+#### 枚举文件
+
++	用户凭证：存储在C:\Users\<username>\AppData\Local\Microsoft\Credentials和C:\Users\<username>\AppData\Roaming\Microsoft\Credentials中的文件。
++	浏览器密码：存储在浏览器配置文件中的密码，如Google Chrome的Login Data文件。
++	系统配置文件：如C:\Windows\System32\config\SAM（安全帐户管理数据库）和C:\Windows\System32\config\SYSTEM（系统配置）。
++	应用程序配置文件：如IIS的配置文件C:\Windows\System32\inetsrv\config\applicationHost.config。
++	启动脚本：存储在C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup和C:\Windows\System32\GroupPolicy\User\Scripts\Logon中的脚本。
++	任务计划脚本：存储在C:\Windows\System32\Tasks中的任务计划脚本。
++	日志文件：如C:\Windows\System32\winevt\Logs中的事件日志文件。
++	注册表项：如HKEY_LOCAL_MACHINE\SYSTEM和HKEY_LOCAL_MACHINE\SOFTWARE中的注册表项，包含系统和应用程序的配置信息。
+
+[枚举文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/枚举文件.cpp)
+
+```bash
+.\exe可执行程序 文件名 D:\
+```
