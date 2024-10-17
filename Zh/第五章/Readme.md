@@ -1334,4 +1334,14 @@ x86_64-w64-mingw32-g++ -O2 SA.cpp -o SA.exe -I /usr/share/mingw-w64/include/ -s 
 reg query "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /s
 ```
 
-## 常见RAT
+### 注册表存储
+
+[regedit.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%BA%94%E7%AB%A0/Per/regedit.cpp)
+
+```Bash
+x86_64-w64-mingw32-g++ -O2 regedit.cpp -o regedit.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```Bash
+reg query "HKEY_CURRENT_USER\Software\ghostwolflab" /s
+```
