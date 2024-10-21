@@ -593,3 +593,83 @@ python3 py_server.py
 python3 https_server.py
 python3 https_client.py
 ```
+
+### 数据外传
+
+1. FTP数据外传
+
+[ftp_upload.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/ftp_upload.py)
+
+```bash
+pip3 install pyinstaller
+pyinstaller --onefile ftp_upload.py
+```
+
+2. HTTP/HTTPS数据外传
+
+```bash
+apt install python3.12-venv
+python3 -m venv flask
+cd flask
+./bin/pip3 install flask
+```
+
+[app.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/app.py)
+
+[http_upload.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/http_upload.py)
+
+```bash
+pyinstaller --onefile http_upload.py
+```
+
+3. 电子邮件数据外传
+
+[mail_upload.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/mail_upload.py)
+
+```bash
+pyinstaller --onefile mail_upload.py
+```
+
+4. 云存储
+
+[cloud.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/cloud.py)
+
+```bash
+pip install baidubce oss2 qiniu qcloud_cos bce-python-sdk oss2 cos-python-sdk-v5 botocore
+pyinstaller --onefile cloud.py
+```
+
+[国外云存储](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/国外云存储.py)
+
+5. API文件上传
+
+(1)Virus Total API文件上传
+
+[upload_vt.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/upload_vt.py)
+
+```bash
+pyinstaller --onefile upload_vt.py
+```
+
+(2)Discord Webhook
+
+[upload_to_discord.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/upload_to_discord.py)
+
+```bash
+pyinstaller --onefile .\upload_to_discord.py
+cd dist
+.\upload_to_discord.exe --command "whoami"
+```
+
+(3)Pastebin API
+
+[pastebin.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/pastebin.py)
+
+```bash
+pyinstaller --onefile .\pastebin.py
+```
+
+## 反取证
+
+
+## 免杀规避
