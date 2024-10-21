@@ -493,3 +493,19 @@ g++ ssh_execute.cpp -o ssh_execute -lssh2
 ```
 
 ## 数据窃取
+
+### 数据加密
+
+1. TEA加密
+
+[TEA加密指定文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/TEA加密指定文件.cpp)
+
+```bash
+cl /EHsc .cpp文件
+```
+
+```bash
+.exe可执行程序 加密 locale_file.txt encode_locale_file.txt 1234qwerasdfzxcv
+.exe可执行程序 解密 encode_locale_file.txt decrypte_locale_file.txt 1234qwerasdfzxcv
+type decrypte_locale_file.txt
+```
