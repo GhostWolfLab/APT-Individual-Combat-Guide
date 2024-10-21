@@ -509,3 +509,33 @@ cl /EHsc .cpp文件
 .exe可执行程序 解密 encode_locale_file.txt decrypte_locale_file.txt 1234qwerasdfzxcv
 type decrypte_locale_file.txt
 ```
+
+2. Madryga加密
+
+[madryga_encrypt.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/madryga_encrypt.cpp)
+
+```bash
+cl /EHsc madryga_encrypt.cpp
+```
+
+3. A5/1加密
+
+[a5_1_encrypt.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/a5_1_encrypt.cpp)
+
+```bash
+cl /EHsc a5_1_encrypt.cpp
+```
+
+```bash
+.\a5_1_encrypt.exe 加密 locale_file.txt encode.txt 123456789ABCDEF 1AC
+.\a5_1_encrypt.exe 解密 encode.txt decrypted.txt 123456789ABCDEF 1AC
+```
+
+4. 加密目录及目录中的所有文件
+
+[xor.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%95%B0%E6%8D%AE%E7%AA%83%E5%8F%96/xor.cpp)
+
+```bash
+.\xor.exe 加密 "C:\Users\snowwolf\Desktop\rat\tips\h\aes" "1234567890abcdef"
+.\xor.exe 解密 "C:\Users\snowwolf\Desktop\rat\tips\h\aes" "1234567890abcdef"
+```
