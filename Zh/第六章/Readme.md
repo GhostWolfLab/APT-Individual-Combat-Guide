@@ -671,5 +671,14 @@ pyinstaller --onefile .\pastebin.py
 
 ## 反取证
 
+### 反调试
+
+1. API调用检测
+
+[nqip.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/nqip.cpp)
+
+
+
+
 
 ## 免杀规避
