@@ -677,6 +677,68 @@ pyinstaller --onefile .\pastebin.py
 
 [nqip.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/nqip.cpp)
 
+2. 异常处理
+
+[eh.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/eh.cpp)
+
+3. 内存修改检测
+
+[check_memory.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/check_memory.cpp)
+
+4. 硬件断点检测
+
+[硬件断点检测](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/硬件断点检测.cpp)
+
+5. 全局标志集合
+
+[ngf.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/ngf.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+6. 检查代码更改来检测断点
+
+[检查代码更改来检测断点](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/检查代码更改来检测断点.cpp)
+
+7. 通过检查内存页面权限来检测断点
+
+[检查内存页面权限来检测断点](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/检查内存页面权限来检测断点.cpp)
+
+8. 创建中断
+
+[创建中断](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/创建中断.cpp)
+
+9. 自我调试
+
+[自我调试](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/自我调试.cpp)
+
+10. 执行时间
+
+[执行时间](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/执行时间.cpp)
+
+11. 隐藏调试器
+
+[隐藏调试器](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/隐藏调试器.cpp)
+
+12. 执行路径
+
+[执行路径](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/执行路径.cpp)
+
+13. TLS回调
+
+[TLS回调](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/TLS回调.cpp)
+
+14. 阻止用户输入
+
+[阻止用户输入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/阻止用户输入.cpp)
+
+15. 系统进程
+
+[系统进程](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E5%8F%96%E8%AF%81/系统进程.cpp)
+
+### 反虚拟化
+
 
 
 
