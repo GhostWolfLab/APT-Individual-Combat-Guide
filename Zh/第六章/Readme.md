@@ -789,7 +789,18 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 [检查特定注册表项](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查特定注册表项.cpp)
 
+8. 检查特定进程
 
+|  产品   | 进程名  |
+|  ----  | ----  |
+| JoeBox  | joeboxserver.exe<br>joeboxcontrol.exe  |
+| Parallels  | 	prl_cc.exe<br>prl_tools.exe  |
+| VirtualBox  | 	vboxservice.exe<br>vboxtray.exe  |
+| VirtualPC  | vmsrvc.exe<br>vmusrvc.exe  |
+| VMware  | 	vmtoolsd.exe<br>vmacthlp.exe<br>vmwaretray.exe<br>vmwareuser.exe<br>vmware.exe<br>vmount2.exe  |
+| Xen  | xenservice.exe<br>xsvc_depriv.exe  |
+| WPE Pro  | 	WPE Pro.exe  |
 
+[检查特定进程](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查特定进程.cpp)
 
 ## 免杀规避
