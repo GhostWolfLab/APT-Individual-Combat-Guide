@@ -766,7 +766,12 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 |  设备   | 路径  |
 |  ----  | ----  |
 | 常规  | c:\[60 random hex symbols]<br>c:\take_screenshot.ps1<br>c:\loaddll.exe<br>c:\email.doc<br>c:\email.htm<br>c:\123\email.doc<br>c:\123\email.docx<br>c:\a\foobar.bmp<br>c:\a\foobar.doc<br>c:\a\foobar.gif<br>c:\symbols\aagmmc.pdb |
-| 单元格  | 单元格 |
+| Parallels  | c:\windows\system32\drivers\prleth.sys<br>
+c:\windows\system32\drivers\prleth.sys<br>
+c:\windows\system32\drivers\prlmouse.sys<br>
+c:\windows\system32\drivers\prlvideo.sys<br>
+c:\windows\system32\drivers\prltime.sys<br>
+c:\windows\system32\drivers\prl_pv32.sys<br>c:\windows\system32\drivers\prl_paravirt_32.sys |
 | 单元格  | 单元格 |
 | 单元格  | 单元格 |
 | 单元格  | 单元格 |
