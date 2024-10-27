@@ -773,4 +773,23 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 [检测特定文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检测特定文件.cpp)
 
+7. 检查特定注册表项
+
+|  产品   | 注册表路径  |
+|  ----  | ----  |
+| 常规  | HKLM\Software\Classes\Folder\shell\sandbox  |
+| Hyper-V  | HKLM\SOFTWARE\Microsoft\Hyper-V<br>HKLM\SOFTWARE\Microsoft\VirtualMachine<br>HKLM\SOFTWARE\Microsoft\Virtual<br>Machine\Guest\Parameters<br>HKLM\SYSTEM\ControlSet001\Services\vmicheartbeat<br>HKLM\SYSTEM\ControlSet001\Services\vmicvss<br>HKLM\SYSTEM\ControlSet001\Services\vmicshutdown<br>HKLM\SYSTEM\ControlSet001\Services\vmicexchange  |
+| Parallels  | HKLM\SYSTEM\CurrentControlSet\Enum\PCI\VEN_1AB8*  |
+| Sandboxie  | HKLM\SYSTEM\CurrentControlSet\Services\SbieDrv<br>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sandboxie  |
+| VirtualBox  | HKLM\SYSTEM\CurrentControlSet\Enum\PCI\VEN_80EE*<br>HKLM\HARDWARE\ACPI\DSDT\VBOX__<br>HKLM\HARDWARE\ACPI\FADT\VBOX__<br>HKLM\HARDWARE\ACPI\RSDT\VBOX__<br>HKLM\SOFTWARE\Oracle\VirtualBox Guest Additions<br>HKLM\SYSTEM\ControlSet001\Services\VBoxGuest<br>HKLM\SYSTEM\ControlSet001\Services\VBoxMouse<br>HKLM\SYSTEM\ControlSet001\Services\VBoxService<br>HKLM\SYSTEM\ControlSet001\Services\VBoxSF<br>HKLM\SYSTEM\ControlSet001\Services\VBoxVideo  |
+| VirtualPC  | HKLM\SYSTEM\CurrentControlSet\Enum\PCI\VEN_5333*<br>HKLM\SYSTEM\ControlSet001\Services\vpcbus<br>HKLM\SYSTEM\ControlSet001\Services\vpc-s3<br>HKLM\SYSTEM\ControlSet001\Services\vpcuhub<br>HKLM\SYSTEM\ControlSet001\Services\msvmmouf  |
+| VMware  | HKLM\SYSTEM\CurrentControlSet\Enum\PCI\VEN_15AD*<br>HKCU\SOFTWARE\VMware, Inc.\VMware Tools<br>HKLM\SOFTWARE\VMware, Inc.\VMware Tools<br>HKLM\SYSTEM\ControlSet001\Services\vmdebug<br>HKLM\SYSTEM\ControlSet001\Services\vmmouse<br>HKLM\SYSTEM\ControlSet001\Services\VMTools<br>HKLM\SYSTEM\ControlSet001\Services\VMMEMCTL<br>HKLM\SYSTEM\ControlSet001\Services\vmware<br>HKLM\SYSTEM\ControlSet001\Services\vmci<br>HKLM\SYSTEM\ControlSet001\Services\vmx86<br>HKLM\SYSTEM\CurrentControlSet\Enum\IDE\CdRomNECVMWar_VMware_IDE_CD*<br>HKLM\SYSTEM\CurrentControlSet\Enum\IDE\CdRomNECVMWar_VMware_SATA_CD*<br>HKLM\SYSTEM\CurrentControlSet\Enum\IDE\DiskVMware_Virtual_IDE_Hard_Drive*<br>HKLM\SYSTEM\CurrentControlSet\Enum\IDE\DiskVMware_Virtual_SATA_Hard_Drive*  |
+| Wine  | HKCU\SOFTWARE\Wine<br>HKLM\SOFTWARE\Wine  |
+| Xen  | HKLM\HARDWARE\ACPI\DSDT\xen<br>HKLM\HARDWARE\ACPI\FADT\xen<br>HKLM\HARDWARE\ACPI\RSDT\xen<br>HKLM\SYSTEM\ControlSet001\Services\xenevtchn<br>HKLM\SYSTEM\ControlSet001\Services\xennet<br>HKLM\SYSTEM\ControlSet001\Services\xennet6<br>HKLM\SYSTEM\ControlSet001\Services\xensvc<br>HKLM\SYSTEM\ControlSet001\Services\xenvdb  |
+
+[检查特定注册表项](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查特定注册表项.cpp)
+
+
+
+
 ## 免杀规避
