@@ -745,6 +745,45 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 [检查硬盘序列号](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查硬盘序列号.cpp)
 
+2. 硬件资源检测
 
+[硬件资源检测](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/硬件资源检测.cpp)
+
+3. MAC地址
+
+[MAC地址](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/MAC地址.cpp)
+
+4. 检测特定虚拟设备
+
+[检测特定虚拟设备](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检测特定虚拟设备.cpp)
+
+5. VM特定工件
+
+[VM特定工件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/VM特定工件.cpp)
+
+6. 检测特定文件
+
+|  设备   | 路径  |
+|  ----  | ----  |
+| 常规  | c:\[60 random hex symbols]
+|       |c:\take_screenshot.ps1
+|       |c:\loaddll.exe
+|       |c:\email.doc
+|       |c:\email.htm
+|       |c:\123\email.doc
+|       |c:\123\email.docx
+|       |c:\a\foobar.bmp
+|       |c:\a\foobar.doc
+|       |c:\a\foobar.gif
+|       |c:\symbols\aagmmc.pdb |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
+
+[检测特定文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检测特定文件.cpp)
 
 ## 免杀规避
