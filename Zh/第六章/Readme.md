@@ -739,7 +739,11 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 ### 反虚拟化
 
+1. 检查特殊硬件信息
 
+[检测系统BIOS信息](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检测系统BIOS信息.cpp)
+
+[检查硬盘序列号](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查硬盘序列号.cpp)
 
 
 
