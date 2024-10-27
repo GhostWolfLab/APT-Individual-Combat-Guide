@@ -803,4 +803,15 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 [检查特定进程](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检查特定进程.cpp)
 
+### 反沙箱
+
+1. 检测硬件资源
+
+[检测硬件资源](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/检测硬件资源.cpp)
+
+
+
+
+
+
 ## 免杀规避
