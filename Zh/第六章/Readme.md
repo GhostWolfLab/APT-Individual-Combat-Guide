@@ -809,9 +809,82 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 [检测硬件资源](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/检测硬件资源.cpp)
 
+2. 应用程序名称和目录
 
+[应用程序名称和目录](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/应用程序名称和目录.cpp)
 
+3. 指定父进程
 
+[指定父进程](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/指定父进程.cpp)
 
+4. 已加载库
+
+[已加载库](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/已加载库.cpp)
+
+5. 窗口名称
+
+[窗口名称](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/窗口名称.cpp)
+
+6. 用户名、计算机名或域
+
+[用户名、计算机名或域](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/用户名、计算机名或域.cpp)
+
+7. 屏幕分辨率
+
+[屏幕分辨率](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/屏幕分辨率.cpp)
+
+8. USB存储记录
+
+[USB存储记录](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/USB存储记录.cpp)
+
+9. 时区
+
+[时区](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/时区.cpp)
+
+10. 互联网连接
+
+[互联网连接](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/互联网连接.cpp)
+
+[特定响应](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/特定响应.cpp)
+
+11. 用户交互
+
+[用户交互](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/用户交互.cpp)
+
+12. 鼠标移动距离
+
+[鼠标移动距离](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/鼠标移动距离.cpp)
+
+13. 先前用户交互记录
+
+[先前用户交互记录](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/先前用户交互记录.cpp)
+
+14. 进程数
+
+[进程数](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/进程数.cpp)
+
+15. 运行时间
+
+[运行时间](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/运行时间.cpp)
+
+16. 延迟执行
+
+[延迟执行](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/延迟执行.cpp)
+
+17. 内核用户共享数据
+
+[内核用户共享数据](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/内核用户共享数据.cpp)
+
+18. 检查和解除挂钩
+
+[检查和解除挂钩](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/检查和解除挂钩.cpp)
+
+[检测函数挂钩并修复](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/检测函数挂钩并修复.cpp)
+
+19. 直接系统调用
+
+[直接系统调用](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E6%B2%99%E7%AE%B1/直接系统调用.cpp)
+
+### 反静态
 
 ## 免杀规避
