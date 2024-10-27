@@ -766,18 +766,10 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 |  设备   | 路径  |
 |  ----  | ----  |
 | 常规  | c:\[60 random hex symbols]<br>c:\take_screenshot.ps1<br>c:\loaddll.exe<br>c:\email.doc<br>c:\email.htm<br>c:\123\email.doc<br>c:\123\email.docx<br>c:\a\foobar.bmp<br>c:\a\foobar.doc<br>c:\a\foobar.gif<br>c:\symbols\aagmmc.pdb |
-| Parallels  | c:\windows\system32\drivers\prleth.sys<br>
-c:\windows\system32\drivers\prleth.sys<br>
-c:\windows\system32\drivers\prlmouse.sys<br>
-c:\windows\system32\drivers\prlvideo.sys<br>
-c:\windows\system32\drivers\prltime.sys<br>
-c:\windows\system32\drivers\prl_pv32.sys<br>c:\windows\system32\drivers\prl_paravirt_32.sys |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
+| Parallels  | c:\windows\system32\drivers\prleth.sys<br>c:\windows\system32\drivers\prleth.sys<br>c:\windows\system32\drivers\prlmouse.sys<br>c:\windows\system32\drivers\prlvideo.sys<br>c:\windows\system32\drivers\prltime.sys<br>c:\windows\system32\drivers\prl_pv32.sys<br>c:\windows\system32\drivers\prl_paravirt_32.sys |
+| VirtualBox  | c:\windows\system32\drivers\VBoxMouse.sys<br>c:\windows\system32\drivers\VBoxGuest.sys<br>c:\windows\system32\drivers\VBoxSF.sys<br>c:\windows\system32\drivers\VBoxVideo.sys<br>c:\windows\system32\vboxdisp.dll<br>c:\windows\system32\vboxhook.dll<br>c:\windows\system32\vboxmrxnp.dll<br>c:\windows\system32\vboxogl.dll<br>c:\windows\system32\vboxoglarrayspu.dll<br>c:\windows\system32\vboxoglcrutil.dll<br>c:\windows\system32\vboxoglerrorspu.dll<br>c:\windows\system32\vboxoglfeedbackspu.dll<br>c:\windows\system32\vboxoglpackspu.dll<br>c:\windows\system32\vboxoglpassthroughspu.dll<br>c:\windows\system32\vboxservice.exe<br>c:\windows\system32\vboxtray.exe<br>c:\windows\system32\VBoxControl.exe<br>%PROGRAMFILES%\oracle\virtualbox guest additions\ |
+| VirtualPC  | c:\windows\system32\drivers\vmsrvc.sys<br>c:\windows\system32\drivers\vpc-s3.sys |
+| VMware  | c:\windows\system32\drivers\vmmouse.sys<br>c:\windows\system32\drivers\vmnet.sys<br>c:\windows\system32\drivers\vmxnet.sys<br>c:\windows\system32\drivers\vmhgfs.sys<br>c:\windows\system32\drivers\vmx86.sys<br>c:\windows\system32\drivers\hgfs.sys<br>%PROGRAMFILES%\VMware\ |
 
 [检测特定文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E8%99%9A%E6%8B%9F%E5%8C%96/检测特定文件.cpp)
 
