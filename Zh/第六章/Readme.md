@@ -1157,3 +1157,5 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MaliciousScript
 3. 进程注入
 
 [进程注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/进程注入.cpp)
+
+## 杂用技巧
