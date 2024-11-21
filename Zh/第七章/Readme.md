@@ -82,3 +82,16 @@ ngrok http 8080
 python3 c2_ngrok.py
 python3 change_command.py
 ```
+
+## 隐蔽通信
+
+[hide_wt.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E9%9A%90%E8%94%BD%E9%80%9A%E4%BF%A1/hide_wt.py)
+
+[hide_wt_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E9%9A%90%E8%94%BD%E9%80%9A%E4%BF%A1/hide_wt_client.py)
+
+```bash
+pip3 install dnspython
+python3 hide_wt.py
+python3 hide_wt_client.py
+python3 change_command.py
+```
