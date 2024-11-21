@@ -23,3 +23,7 @@
 第六章： [恶意软件技巧](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%85%AD%E7%AB%A0)
 
 > APT攻击中使用的恶意软件技巧实现
+
+第七章： [C2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0)
+
+> 学习APT攻击者构建自己的C2
