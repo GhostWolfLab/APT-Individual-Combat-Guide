@@ -109,3 +109,23 @@ python3 c2_control.py
 ```bash
 c2_exec.py
 ```
+
+## C2多阶段攻击
+
+### 持久性
+
+[c2_per.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/c2_per.py)
+
+```bash
+pip3 install tabulate
+```
+
+[per_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/per_client.py)
+
+```bash
+python3 c2_per.py
+```
+
+```bash
+python3 per_client.py
+```
