@@ -95,3 +95,17 @@ python3 hide_wt.py
 python3 hide_wt_client.py
 python3 change_command.py
 ```
+
+## C2命令执行
+
+[c2_control.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/c2_control.py)
+
+[c2_exec.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/c2_exec.py)
+
+```bash
+python3 c2_control.py
+```
+
+```bash
+c2_exec.py
+```
