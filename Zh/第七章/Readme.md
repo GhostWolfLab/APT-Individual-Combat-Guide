@@ -247,3 +247,9 @@ C2> Raw message from session 1: {"result": ""}
 ```
 
 ## 常见C2工具
+
+### Cobalt Strike
+
+破解版下载：
+
+[CobaltStrike4.9.1.zip](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E5%B8%B8%E8%A7%81C2%E5%B7%A5%E5%85%B7/CobaltStrike4.9.1.zip)
