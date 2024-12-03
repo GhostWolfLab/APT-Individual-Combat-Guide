@@ -253,3 +253,44 @@ C2> Raw message from session 1: {"result": ""}
 破解版下载：
 
 [CobaltStrike4.9.1.zip](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E5%B8%B8%E8%A7%81C2%E5%B7%A5%E5%85%B7/CobaltStrike4.9.1.zip)
+
+Profile:
+
+[Malleable-C2-Profiles](https://github.com/rsmudge/Malleable-C2-Profiles)
+
+[malleable-c2](https://github.com/threatexpress/malleable-c2)
+
+### Covenant
+
+```bash
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl enable docker --now
+docker
+apt install -y docker-ce docker-ce-cli containerd.io
+git clone --recurse-submodules https://github.com/cobbr/Covenant /usr/src/Covenant
+cd /usr/src/Covenant
+git config --global --add safe.directory /usr/src/Covenant
+git submodule update --init --recursive
+cd Covenant
+docker build -t covenant .
+docker run -it -p 7443:7443 -p 80:80 -p 443:443 --name covenant -v /usr/src/Covenant/Covenant/Data:/app/Data covenant
+docker start covenant -ai
+```
+
+文档：
+
+[Covenant](https://github.com/cobbr/Covenant/wiki)
+
+### sliver
+
+[sliver](https://github.com/BishopFox/sliver/releases)
+
+文档：
+
+[sliver docs](https://sliver.sh/docs)
+
+
+### C2Matrix
+
+[C2Matrix](https://docs.google.com/spreadsheets/d/1b4mUxa6cDQuTV2BPC6aA-GR4zGZi0ooPYtBe4IgPsSc/edit?gid=0#gid=0)
