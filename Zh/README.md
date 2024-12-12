@@ -27,3 +27,5 @@
 第七章： [C2](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%83%E7%AB%A0)
 
 > 学习APT攻击者构建自己的C2
+
+第八章： [木马投递]()
