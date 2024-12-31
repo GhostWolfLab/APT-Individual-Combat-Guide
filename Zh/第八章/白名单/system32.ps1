@@ -1,0 +1,1 @@
+$ExecutionContext.SessionState.LanguageMode
