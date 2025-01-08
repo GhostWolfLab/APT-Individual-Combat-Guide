@@ -1,0 +1,244 @@
+/*background*/
+body {
+    font-family: Helvetica,Arial,sans-serif;
+}
+
+.background {
+    z-index: -99999;
+    position: absolute;
+}
+
+/*headtop*/
+
+.headtop {
+  background-color: #f1f6f9;
+}
+
+.headtopcol1 {
+    padding-top: 0.7%;
+}
+
+.firebasehead1 {
+    font-size: 12px;
+    display: inline-block;
+    color: black;
+    margin-left: 13px;
+}
+
+.firebasehead2 {
+    font-size: 12px;
+    display: inline-block;
+    color: black;
+}
+
+.headtopcol2 {
+    padding-top: 0.55%;
+}
+
+.bottomHeader{
+  padding-bottom: 15px;
+
+}
+
+
+
+/*headbody*/
+.textinsearch{
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-top: 1.8%;
+  font-size: 12px;
+
+}
+
+
+p {
+    margin-bottom: 0px;
+}
+
+.headbody {
+    margin-right: 12px;
+    margin-left: 12px;
+    margin-top: -0.4%;
+
+}
+
+.arrow-icon {
+    margin-right: 13px;
+    margin-top: -2px;
+}
+
+.home {
+    border: 0.5px solid #d9d9d9;
+    height: 25px;
+    width: 62%;
+    display: inline;
+    margin-right: 10px;
+}
+
+.arrow {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: -0.3%;
+}
+
+.home-in {
+    margin-top: -0.3%;
+}
+
+.searchform {
+    border: 0.5px solid #d9d9d9;
+    height: 25px;
+    display: inline;
+    margin-left: 1%;
+    padding-left: 1%;
+}
+
+.searchinput {
+    border: 0;
+    font-size: 12px;
+    background: transparent;
+    margin-top: -0.7px;
+}
+
+.searchinput:active {
+    color: black;
+    background-color: white;
+    border-color: white;
+    outline: none;
+}
+
+.searchinput:focus {
+    color: black;
+    background-color: white;
+    border-color: white;
+    outline: none;
+}
+.searchbutton {
+    background-color: white;
+    border: 0;
+    background: transparent;
+    margin-top: -0.3px;
+    margin-right: -1px;
+
+}
+
+.search-- {
+    transform: rotate(90deg);
+}
+
+/*headfoot*/
+
+.headfoot {
+    padding-left: 1px;
+
+    padding-bottom: -10px;
+    height: 21px;
+}
+
+.headfootbutton {
+    border-radius: 0%;
+    font-size: 12px;
+    padding: 0px 5px;
+}
+
+
+
+/*body*/
+.compress{
+  padding-left: 5px;
+
+}
+.bodycolon1 {
+    font-size: 12px;
+    color: #666;
+    margin: 2px 6px;
+    margin-right: 10px;
+
+}
+
+.bodycolon2 {
+    margin-top: -1px;
+
+}
+
+.colonheight {
+    height: 22px;
+}
+
+.colonheights {
+    height: 22px;
+    margin-left: -1px;
+}
+
+.namelink {
+    color: #333 !important;
+}
+
+.textinsearch {
+    margin-top: 0px;
+}
+
+.link {
+    text-decoration: none;
+    color:#666;
+    font-size: 12px;
+    /* border-right: solid 1px; */
+
+}
+
+.link:hover{
+    color: #666;
+}
+
+
+.linkhover:hover {
+    background-color: rgb(229, 243, 255);
+    border: rgb(201, 231, 255);
+}
+
+.rowslink:hover {
+    background-color: rgb(247, 247, 247);
+    height: 22px;
+}
+
+.space:hover {
+    background-color: white;
+}
+
+.textlink {
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+    color: #333;
+}
+
+.file-icon {
+    margin-top: -1px;
+}
+
+.folder {
+    font-size: 12px;
+    color: #666;
+}
+
+.attribute {
+    font-size: 12px;
+    color: #666;
+}
+
+.imagenumber{
+    font-size: 12px;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/*foot*/
+
+.foot {
+    margin-top: 26%;
+}

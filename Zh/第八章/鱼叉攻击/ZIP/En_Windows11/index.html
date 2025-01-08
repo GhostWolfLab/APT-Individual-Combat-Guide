@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body >
+
+    <div>
+        <div class="file">
+
+            <!--headtop-->
+            <div class="headtop pt-1 px-3 ">
+                <div class="row">
+                    <div class="col-10 headtopcol1 d-flex">
+                        <img src="compressedfile.webp"  alt="test" width="16" height="16">
+                        <p>&nbsp;</p>
+                        <p class="firebasehead2">
+                            document.zip
+                        </p>
+                    </div>
+                    <div class="col headtopcol2 d-flex justify-content-end">
+                        <img src="minus.png" alt="" height="10" width="10">
+                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                        <img src="square.png" alt="" height="10" width="10">
+                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                        <img src="close.png" alt="" height="10" width="10">
+                    </div>
+                    <div class="bottomHeader">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--body-->
+            <div class="body">
+
+                <div class="row mt-2">
+                  <div class="headbody d-flex">
+
+                      <div class="d-flex align-items-center">
+                          <span class="arrow-icon">
+                              <img src="arrows.png" alt="" >
+                          </span>
+                      </div>
+
+                      <div class="home d-flex align-items-center">
+
+                          <a href="#" class="home-in">
+                              <span class='compress'>
+                                  <img src="compressedfile.webp" alt="" height='16px' >
+                              </span>
+                          </a>
+
+                          <span class="arrow">
+                              <svg aria-hidden='true' width="8px" height="8px" data-prefix='fas' data-icon='angle-right' class='svg-inline--fa fa-angle-right fa-w-8' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512'><path fill='gray' d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'/></svg>
+                          </span>
+
+                          <span class ="textinsearch">
+                            <p>Downloads</p>
+
+                          </span>
+                          <span class="arrow">
+                              <svg aria-hidden='true' width="8px" height="8px" data-prefix='fas' data-icon='angle-right' class='svg-inline--fa fa-angle-right fa-w-8' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512'><path fill='gray' d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'/></svg>
+                          </span>
+                          <span class ="textinsearch">
+                            <p>document.zip</p>
+                          </span>
+                          <span class="arrow">
+                              <svg aria-hidden='true' width="8px" height="8px" data-prefix='fas' data-icon='angle-right' class='svg-inline--fa fa-angle-right fa-w-8' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512'><path fill='gray' d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'/></svg>
+                          </span>
+                      </div>
+
+                      <div class="d-flex">
+                          <form class="searchform d-flex align-items-center justify-content-between">
+                              <input class="searchinput" placeholder="Search document.zip" type="text">
+                              <button class="searchbutton ms-5" type="submit">
+                                  <svg aria-hidden="true" width="14px" height="14px" focusable="false" data-prefix="fas" data-icon="search" class="search-- svg-inline--fa fa-search fa-w-16 fa-sm " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" color="#7d7d7d"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
+                              </button>
+                          </form>
+                      </div>
+
+                  </div>
+
+                  <!--headfoot-->
+                  <div class="headfoot d-flex bd-highlight">
+
+
+                      <div class="questionmarkicon ms-auto d-flex bd-highlight">
+
+                      </div>
+
+                  </div>
+                    <!--colon1-->
+                    <div class="col-auto bodycolon1">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    </div>
+                    <!--colon2-->
+                    <div class="col bodycolon2">
+
+                        <div class="row me-0">
+                            <div class="col-3 d-flex linkhover">
+                                <a href="#" class="link namelink">Name</a>
+                            </div>
+                            <div class="col-3 d-flex linkhover">
+                                <a href="#" class="link ">Created</a>
+                            </div>
+                            <div class="col-3 d-flex linkhover">
+                                <a href="#" class="link ">Type</a>
+                            </div>
+                            <div class="col-2 d-flex linkhover">
+                                <a href="#" class="link">Size</a>
+                            </div>
+                            <div class="col-1 d-flex linkhover">
+                                <a href="#" class="link ps-3">Actions</a>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row rowslink me-0">
+                            <div class="col-3 d-flex colonheight">
+                                <span class="file-icon">
+                                    <img src="pdf.png" width="16px">
+                                </span>
+                                <a href="#">
+                                    <p class="textlink ms-1 mt-1">document.pdf</p>
+                                </a>
+                            </div>
+                            <div class="col-3 d-flex colonheight">
+                                <p class="mt-1 folder">May 13, 2025</p>
+                            </div>
+                            <div class="col-3 d-flex colonheight">
+                                <p class="mt-1 folder">Folder</p>
+                            </div>
+                            <div class="col-2 d-flex colonheight space">
+
+                            </div>
+                            <div class="col-1 d-flex colonheight space">
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!--foot-->
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+</body>
+</html>
