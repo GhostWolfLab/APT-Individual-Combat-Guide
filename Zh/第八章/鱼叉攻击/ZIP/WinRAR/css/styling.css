@@ -1,0 +1,248 @@
+html,body{
+  font-family: "Segoe UI";
+  margin:0px;
+}
+
+#main {
+  margin: auto;
+  color: black;
+  background-color: #ebedf1;
+  border-color: transparent;
+  height: 600px; /* title bar height + content height */
+  width: 100%;
+  overflow: hidden;
+}
+
+#menu-bar {
+  color: black;
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+#winrar-options {
+  color: black;
+  display: flex;
+  flex-direction: row;
+}
+
+#title {
+  color: black;
+  text-align: center;
+  font-size: 16px;
+  margin-left: 40px;
+}
+
+#minimize {
+  color: black;
+  font-size: 12px;
+  padding: 9px 15px 7px 15px;
+}
+
+#square {
+  color: black;
+  font-size: 22px;
+  padding: 0px 15px 5px 15px;
+}
+
+#exit {
+  color: black;
+  font-size: 15px;
+  padding: 7px 17px 7px 17px;
+}
+
+.winrar-btn{
+  display: flex;
+  flex-direction: column;
+  padding:10px;
+  border: 1px solid transparent;
+}
+
+.winrar-btn:hover{
+  cursor: pointer;
+  background-color: #e6f7ff;
+  border: 1px solid #1890ff;
+}
+
+.winrar-txt{
+  font-size: 13px;
+  text-align: center;
+}
+
+.home {
+  margin-top: 8px;
+  background-color: white;
+  border: 0.5px solid #d9d9d9;
+  height: 25px;
+  width: 100%;
+  margin-right: 10px;
+  
+}
+
+#system-path{
+  font-size: 14px;
+  position: relative;
+  top:-4px;
+  letter-spacing: 0.25px;
+}
+
+.file-container{
+  height: 100%;
+  min-height: 100%;
+  margin-top: 2px;
+  border-top: 1px solid rgb(172, 168, 168);
+}
+
+.container{
+  height: 100%;
+  min-height: 100%;
+  background-color: white;
+}
+
+.files {
+  width: 75%;
+  border-collapse: collapse;
+}
+
+.files th {
+  font-size: 12px;
+  font-weight: normal;
+  padding: 5px; /* Add padding to the table headers */
+  border-right: 1px solid #f2f2f2;
+}
+
+.files td {
+  padding: 5px; /* Add padding to the table cells */
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.files tr{
+  width: 75%;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+
+.files tr td:first-child {
+  background-color: #f2f2f2;
+}
+
+.files tr:hover {
+  cursor: pointer;
+}
+
+.files tr.selected {
+  background-color: #0678a5;
+  color: white;
+}
+
+
+/* Warning box */
+
+#warningBox {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  font-size: 12px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#warningHeader {
+  position: relative;
+  margin: auto;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+}
+
+#warningHeader img {
+  margin-right: 10px;
+}
+
+#warningMessage {
+  padding: 20px;
+  color: #000;
+  display: flex;
+  flex-direction: row;
+}
+
+#warningFooter {
+  padding: 10px;
+  text-align: right;
+  background-color: #ebedf0;
+}
+
+#warningButton {
+  border: 2px solid #0078d7;
+  background-color: #ebedf0;
+  color: #000;
+  width: 75px;
+  height: 25px;
+  cursor: pointer;
+}
+
+/* Success box */
+
+#successBox {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  font-size: 12px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#successHeader {
+  position: relative;
+  margin: auto;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+}
+
+#successHeader img {
+  margin-right: 10px;
+}
+
+#successMessage {
+  padding: 20px;
+  color: #000;
+  display: flex;
+  flex-direction: row;
+}
+
+#successFooter {
+  padding: 10px;
+  text-align: right;
+  background-color: #ebedf0;
+}
+
+#successButton {
+  border: 2px solid #0078d7;
+  background-color: #ebedf0;
+  color: #000;
+  width: 75px;
+  height: 25px;
+  cursor: pointer;
+}

