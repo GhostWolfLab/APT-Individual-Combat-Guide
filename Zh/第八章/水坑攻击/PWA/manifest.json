@@ -1,0 +1,20 @@
+{
+  "name": "Microsoft Login",
+  "short_name": "Microsoft Login",
+  "start_url": "/PWA/microsoft.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#d3d3d3",
+  "icons": [
+    {
+      "src": "images/icons-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icons-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
