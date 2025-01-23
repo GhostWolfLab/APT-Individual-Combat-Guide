@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <script>
+        function markMainPageOpen() {
+            window.name = 'main';
+            localStorage.setItem('mainPageOpened', 'true');
+        }
+
+        function checkTwinPage() {
+            if (localStorage.getItem('twinPageOpened') === 'true') {
+                localStorage.setItem('showPhishing', 'true');
+            }
+        }
+
+        window.onload = function() {
+            markMainPageOpen();
+            checkTwinPage();
+            window.onbeforeunload = function() {
+                localStorage.removeItem('mainPageOpened');
+                localStorage.removeItem('showPhishing');
+            };
+        };
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Main Page</h1>
+</body>
+</html>

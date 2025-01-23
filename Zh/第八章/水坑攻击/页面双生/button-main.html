@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <script>
+        function openTwinPage() {
+            window.name = 'button-main';
+            window.localStorage.setItem('mainOpen', 'true');
+            window.onbeforeunload = function() {
+                window.localStorage.removeItem('mainOpen');
+            };
+            window.open('button-twin.html', 'twinPage');
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Main Page</h1>
+    <button onclick="openTwinPage()">Open Twin Page</button>
+</body>
+</html>

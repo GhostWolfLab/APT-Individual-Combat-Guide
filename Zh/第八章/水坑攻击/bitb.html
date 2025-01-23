@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Sign in</title>
+ <style>
+     body {
+         margin: 0;
+         font-family: sans-serif;
+         background-color: #f0f2f5;
+         overflow: hidden;
+     }
+     .fake-window {
+         position: fixed;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         width: 400px;
+         background-color: white;
+         border: 1px solid #ccc;
+         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+         border-radius: 5px;
+         overflow: hidden;
+         z-index: 9999;
+     }
+     .fake-titlebar {
+         background-color: #f0f0f0;
+         padding: 5px 10px;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         border-bottom: 1px solid #ccc;
+     }
+     .fake-title {
+         font-size: 14px;
+         font-weight: bold;
+     }
+     .fake-close {
+         cursor: pointer;
+         font-size: 20px;
+         margin-left: 10px;
+     }
+     .fake-addressbar {
+         padding: 5px 10px;
+         background-color: #eef1f5;
+         border-bottom: 1px solid #ccc;
+           display:flex;
+          align-items: center;
+     }
+
+     .fake-addressbar-icon {
+          display:inline-block;
+          width: 20px;
+          height: 20px;
+         margin-right: 5px;
+         background: url("icon.png") center/cover no-repeat;
+      }
+     .fake-addressbar-input {
+          flex: 1;
+           background-color: #fff;
+             border: 1px solid #ccc;
+            border-radius: 3px;
+             padding: 5px;
+     }
+     .fake-login-form {
+          padding: 20px;
+     }
+     .fake-input-group {
+         margin-bottom: 10px;
+     }
+     .fake-input-label {
+        display: block;
+           margin-bottom: 5px;
+        font-size: 14px;
+        font-weight: bold;
+     }
+    .fake-input {
+         width: 100%;
+          padding: 8px;
+         border: 1px solid #ccc;
+         border-radius: 3px;
+         box-sizing: border-box;
+    }
+     .fake-login-button {
+        padding: 10px 15px;
+         background-color: #1a73e8;
+         color: white;
+         border: none;
+         border-radius: 3px;
+         cursor: pointer;
+         font-size:14px;
+      }
+ </style>
+</head>
+<body>
+<div class="fake-window">
+   <div class="fake-titlebar">
+     <div class="fake-title">Sign in</div>
+        <div class="fake-close" onclick="document.getElementById('fake-login').remove()">X</div>
+     </div>
+    <div class="fake-addressbar">
+       <span class="fake-addressbar-icon"></span>
+       <input type="text" value="https://accounts.google.com" readonly class="fake-addressbar-input">
+      </div>
+    <div class="fake-login-form">
+         <form action="#" method="post">
+             <div class="fake-input-group">
+                 <label class="fake-input-label" for="username">Email or phone</label>
+               <input type="text" class="fake-input" id="username" name="username" required>
+             </div>
+             <div class="fake-input-group">
+               <label class="fake-input-label" for="password">Password</label>
+                <input type="password" class="fake-input" id="password" name="password" required>
+             </div>
+             <button type="submit" class="fake-login-button">Next</button>
+         </form>
+      </div>
+   </div>
+</body>
+</html>
