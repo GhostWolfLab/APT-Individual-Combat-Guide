@@ -1,0 +1,9 @@
+package: package
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends:
+Installed-Size: 512
+Maintainer: snowwolf@example.com
+Description: demo package
