@@ -31,3 +31,7 @@
 第八章： [木马投递](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E5%85%AB%E7%AB%A0)
 
 > APT攻击中使用的木马投递技巧
+
+第九章： [后渗透](第九章/Readme.md)
+
+> APT攻击中所使用的后渗透方法
