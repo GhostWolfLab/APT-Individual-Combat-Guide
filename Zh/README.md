@@ -1,6 +1,6 @@
 # 目录
 
-第一章：[APT](https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%80%E7%AB%A0)
+第一章：[APT](第一章)
 
 > 用于发起假旗攻击的代码和命令
 
