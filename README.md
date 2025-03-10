@@ -55,3 +55,7 @@
 <a href="https://item.jd.com/13867193.html">
     <img src="kali.jpg" width="50%">
 </a>
+
+<a href="https://ghostwolflab.com/reports/windows%e6%81%b6%e6%84%8f%e8%bd%af%e4%bb%b6%e5%b8%b8%e8%a7%81api%e4%b8%80%e8%a7%88/1783/">
+    <img src="winapi.png" width="50%">
+</a>
