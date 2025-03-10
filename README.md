@@ -61,5 +61,5 @@
 </a>
 
 <a href="https://ghostwolflab.com/reports/elf-%e4%ba%8c%e8%bf%9b%e5%88%b6%e6%96%87%e4%bb%b6%e6%84%9f%e6%9f%93/1809/">
-    <img src="elf.jpg" width="50%">
+    <img src="elf.png" width="50%">
 </a>
