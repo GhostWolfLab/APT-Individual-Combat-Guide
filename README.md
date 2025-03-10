@@ -52,4 +52,6 @@
 
 ### Ghost Wolf Lab 出版物：
 
-<img src="kali.jpg" width="50%">
+<a href="https://item.jd.com/13867193.html">
+    <img src="kali.jpg" width="50%">
+</a>
