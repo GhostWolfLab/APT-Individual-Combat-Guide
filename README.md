@@ -55,7 +55,7 @@
 更强大可实战化的代码，更多漏洞进阶方式，更多方法！
 
 <a href="https://mp.weixin.qq.com/s/gnseKfj623yMAC5iHxjm1w">
-    <img src="640.webp" width="50%">
+    <img src="课程呀.png" width="50%">
 </a>
 
 ### Ghost Wolf Lab 出版物：
